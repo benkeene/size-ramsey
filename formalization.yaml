@@ -27,7 +27,7 @@ classification:
 
 status:
   scope: >-
-    SCAFFOLD; lab status UNDER_REVIEW (2026-10-16). The five statements of record in Challenge.lean
+    SCAFFOLD; lab status VERIFIED as an ordinary theorem (2026-10-16), not formally verified. The five statements of record in Challenge.lean
     compile; Solution.lean proves the numerical equality from Corollary C and Theorem D and
     bridges the other four to admitted development interfaces. The informal structural
     argument (docs/PROOF.md) has passed one adversarial pass but not the full review protocol
@@ -119,10 +119,13 @@ review:
   status: self-assessed
   reviewers:
     - "Ben Keene"
+    - "GPT-6 Astra (adversary, reviewer x3, independent prover; 2026-10-16)"
   notes: >-
-    Scaffold stage. One adversarial pass on the informal proof is recorded in
-    docs/astra/2026-10-16_workflow_ramsey.md; the full adversary / response / reviewer /
-    independent-reconstruction protocol is outstanding. No maintainer review of Lean content.
+    The informal proof passed an adversary pass (objections answered), an independent
+    reconstruction from the statement alone, a reviewer pass and two confirming reviews (the
+    last a clean ACCEPT), recorded in the aiseminar claim_0004 packet. Small-case controls are
+    retained in aiseminar experiments/local/2026-10-16_ramsey_e1_small_cases. No external human
+    review. Nothing is Lean-verified yet.
 
 known_gaps:
   - "Theorems A, B, C and D are admitted in the development library (SizeRamsey.Proof.*)."

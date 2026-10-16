@@ -1,4 +1,4 @@
-# Informal proof (lab status UNDER_REVIEW, 2026-10-16)
+# Informal proof (lab status VERIFIED as an ordinary theorem, 2026-10-16; not formally verified)
 
 Source: Astra threads of 2026-10-16 (`docs/astra/2026-10-16_workflow_ramsey.md` §2 and the
 scaffold plan); revised after the adversary (transcript 20261016T191015) and reviewer
@@ -6,8 +6,12 @@ scaffold plan); revised after the adversary (transcript 20261016T191015) and rev
 (20261016T191015_independent_prover_claim_0004) agrees on every reduction and case. Labels are the intended Lean names. Every lemma must state the exact graph and
 vertex hypotheses, the residual graph and its vertex type, the exact number of removed edges,
 the transversal lifting map, any connectedness or non-isolation claim, and where induction is
-applied. Review gate before Theorem B is formalized: adversary → response → reviewer →
-independent reconstruction (aiseminar AGENTS.md §3–4).
+applied. Review record (aiseminar claim_0004): adversary 20261016T191015 (ACCEPT_WITH_FIXES 0.96,
+answered); independent reconstruction from the statement alone 20261016T191015 (agrees, 0.99);
+reviewer 20261016T191635 (ACCEPT_WITH_FIXES 0.96, applied); confirming reviews 20261016T192131
+(ACCEPT_WITH_FIXES 0.97, applied) and 20261016T192456 (ACCEPT 0.98). Lean formalization of
+Theorem B may now start. Novelty: A is a corollary of Alon–Mubayi–Thomas (2001); the new content
+is B and the value 17 (docs/STATUS_CHECK.md).
 
 ## Definitions and conventions
 τ₄, non-induced C₄, 4-matchings, red/blue as in `SizeRamsey/Defs.lean`. "Square-supported":

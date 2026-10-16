@@ -7,7 +7,10 @@ graph has no such colouring. The lower bound goes through a structural lemma: ev
 graph with at most 16 edges has a set of at most three vertices meeting every 4-cycle
 (4·τ₄(G) ≤ |E(G)| in general, with equality through 16 edges only for C₄, W₅, K₃,₃ − e, K₂,₂,₂).
 
-Status: PROOF_ATTEMPT (2026-10-16). Informal argument in `docs/`; scaffolding plan in `docs/astra/`.
+Status: informal proof VERIFIED by the aiseminar review protocol (2026-10-16; four Astra passes and an
+independent reconstruction); Lean development admitted. Informal argument in `docs/PROOF.md`;
+scaffolding plan in `docs/astra/`. Theorem A is a corollary of Alon–Mubayi–Thomas (2001); the new
+content is the equality classification B and the value 17.
 Template: `~/semigroup-betti` (Palomar entry PALOMAR-2026-10-07-000005).
 
 ## Layout
