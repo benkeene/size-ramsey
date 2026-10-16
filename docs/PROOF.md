@@ -1,4 +1,4 @@
-# Informal proof (PROOF_ATTEMPT, 2026-10-16)
+# Informal proof (lab status UNDER_REVIEW, 2026-10-16)
 
 Source: Astra threads of 2026-10-16 (`docs/astra/2026-10-16_workflow_ramsey.md` §2 and the
 scaffold plan); revised after the adversary (transcript 20261016T191015) and reviewer
@@ -31,8 +31,13 @@ isomorphism maps squares to squares and transversals to transversals both ways (
 
 ## Deletion (with lifting maps)
 * `tau4_delete_vertices_le`: for D ⊆ V(G), X ⊆ D meeting every square that meets D, and
-  H = G − D: τ₄(G) ≤ τ₄(H) + |X|, lifting map T ↦ T ∪ X (squares inside H meet T, all others meet
-  X); |E(H)| = |E(G)| − Σ_{u∈D} d(u) + e(D). Special case X = D.
+  H = G − D (induced on the subtype V ∖ D): τ₄(G) ≤ τ₄(H) + |X|, lifting map T ↦ ι(T) ∪ X with ι
+  the subtype inclusion (squares inside H meet T, all others meet D hence X);
+  |E(H)| = |E(G)| − Σ_{u∈D} d(u) + e(D). Special case X = D.
+* Cut lemma (`component_attachment_card_ge_two`): if G is connected and square-supported,
+  ∅ ≠ D ⊊ V(G), and C is a component of G − D, then at least two edges join C to D. Proof:
+  connectedness gives one such edge; if it were the only one it would be a bridge; but every
+  square-supported edge lies on a cycle and is not a bridge. Edges are counted, not endpoints.
 * `tau4_delete_non_square_edge`: if e lies on no square, G and G − e have the same squares, so
   τ₄(G − e) = τ₄(G) and |E| drops by 1.
 * `tau4_delete_leaf_vertex`: a vertex of degree ≤ 1 lies on no square; deleting it leaves the
@@ -49,16 +54,23 @@ A square lies inside one component, and a transversal is the disjoint union of i
 | adjacent degrees 2 and 3 (u, v) | G − {u, v} | τ(G) ≤ τ(H) + 1, m(H) + 4 = m(G) (u becomes a leaf after deleting v) |
 | connected, all degrees 2, square-supported | — | the component is C₄ |
 | cubic, chordless square abcd | G − {a,b,c,d}, charged set X = {a,c} | τ(G) ≤ τ(H) + 2, m(H) = m(G) − 8 (after deleting a, c the vertices b, d have ≤ 1 neighbour, so no remaining square meets {b,d}; 4·3 − 4 = 8 edges go) |
-| subcubic, square abcd with diagonal ac (one or two chords) | delete tip b, charged X = {b}; then triangle acd is sterile (a, c have no neighbours outside the square, so acd meets the rest only at d, and a square cannot enter and leave through one vertex) and its 3 edges are deleted by the non-square-edge rule | τ(G) ≤ τ(H) + 1, m(H) = m(G) − d_G(b) − 3, with d_G(b) ≥ 2, so ≥ 5 edges removed; K₄ included; invalid when Δ = 4 |
+| subcubic, square abcd with diagonal ac (one or two chords) | D = {a,b,c}, H = G − D (induced), charged X = {b}: subcubicity gives d(a) = d(c) = 3 with all neighbours inside the square, so after deleting b neither a nor c lies on a square (the triangle acd meets the rest only at d) and X meets every square that meets D | τ(G) ≤ τ(H) + 1, m(H) = m(G) − d_G(b) − 3 exactly, with d_G(b) ≥ 2, so ≥ 5 edges removed; K₄ included; invalid when Δ = 4 |
 A connected square-supported component with degrees in {2,3} is 2-regular, cubic, or has an
 adjacent 2/3 pair.
 
 ## Universal.four_mul_tau4_le_edgeCount (Theorem A)
-Strong induction on |E|: delete unsupported edges; otherwise pick a component with an edge and
-apply a reduction.
+Strong induction on |E|. Base m = 0: τ₄ = 0. If some edge lies on no square, delete it (τ₄
+unchanged, m − 1) and induct. Otherwise every vertex with an edge has degree ≥ 2; pick a component
+with an edge: if it has a vertex of degree ≥ 4 or is 2-regular (then it is a C₄ by the reduction
+table, removed by component additivity: τ₄ drops by 1, m by 4) or cubic or has an adjacent 2/3 pair,
+apply the corresponding reduction (r ≥ 4|X| edges removed) and induct:
+4τ(G) ≤ 4τ(H) + 4|X| ≤ m(H) + 4|X| ≤ m(G).
 
 ## Equality (Theorem B)
-Tightness: `equality_square_supported`, `equality_max_degree_le_four`,
+Tightness (G connected, 0 < m ≤ 16, 4τ₄ = m): `equality_square_supported` (deleting an
+unsupported edge keeps τ₄ and gives 4τ₄(G) ≤ m − 1, contradicting A for G − e... i.e. contradicting
+tightness), `equality_max_degree_le_four` (a vertex of degree d ≥ 5 gives 4τ₄(G) ≤ 4τ₄(G − v) + 4 ≤
+m − d + 4 < m), hence minimum degree ≥ 2 by connectedness, positive edge count and square-support;
 `equality_residual_components` (from 4τ(G) ≤ 4c + 4τ(H) ≤ 4c + m(H) = m(G) and
 Σ_C (m(C) − 4τ(C)) = 0 with nonnegative summands by A; zero-edge components are not fed to B;
 note C₄ ⊔ K₁ is tight with an isolate), `square_supported_no_bridge`,
@@ -87,7 +99,8 @@ transversal through any prescribed vertex.
   t to be adjacent to both a and b (the squares through va, vb must close through u–t), impossible
   in that C₄; with residual cycle a,t,b,s,a the reconstruction has bipartition {v,t,s} ⊔ {u,a,b}
   and the single missing cross edge su, i.e. K₃,₃ − e. (The exclusion t = b is symmetric to t = a.)
-* `equality_cubic_impossible`: m = 12, n = 8; delete all four vertices of a chordless square;
+* `equality_cubic_impossible`: 3 | m (handshake, 3n = 2m), 4 | m (tightness) and 0 < m ≤ 16
+  force m = 12, n = 8; delete all four vertices of a chordless square;
   residual C₄; cross edges a perfect matching μ; a mixed square crosses an even number of times and
   not four (consecutive matching edges at a vertex are impossible), so exactly twice, with one
   internal edge in each square; the square through an internal edge at c contains μ(c); hence
@@ -95,15 +108,15 @@ transversal through any prescribed vertex.
 * `equality_two_regular_case`: the component is C₄.
 * The four graphs are tight, with the prescribed-vertex property: C₄: any single vertex, and no
   empty set works. W₅ (center h, rim 0123): {h, any rim vertex} is a transversal; deleting any one
-  vertex leaves a square (delete h: the rim; delete a rim vertex i: h with the other three rim
-  vertices contains a square h,i+1,i+2,i+3 ... more simply h and any two non-adjacent surviving rim
-  vertices plus a third form one), so τ₄ = 2. K₃,₃ − e (parts A, B, missing a₀b₀): two vertices of
+  vertex leaves a square (delete h: the rim; delete rim vertex i: the square h, i+1, i+2, i+3, h
+  with indices mod 4), so τ₄ = 2. K₃,₃ − e (parts A, B, missing a₀b₀): two vertices of
   one part form a transversal (the remainder is a star plus one vertex, square-free); deleting any
   single vertex leaves K₂,₃ or K₂,₃ − e, which contains a square; so τ₄ = 2 and through any
-  prescribed vertex (take its part). Octahedron (parts {0,1},{2,3},{4,5}): every 4-vertex subset
-  contains a square (it meets at least two parts in two vertices each, or three parts, and either
-  way spans a C₄), so τ₄ ≥ 3; deleting a whole part and one more vertex leaves a path, so τ₄ = 3,
-  through any prescribed vertex.
+  prescribed vertex (take its part). Octahedron (parts {0,1},{2,3},{4,5}): a 4-vertex subset meets the parts as 2+2
+  (a C₄ between the two parts) or 2+1+1 (a C₄ through the full part and the two singles), so every
+  4-subset contains a square and τ₄ ≥ 3; deleting a whole part and one more vertex leaves a path,
+  so τ₄ = 3, and the prescribed-vertex property follows by deleting the part containing the
+  prescribed vertex plus one more vertex.
 
 ## Coloring (Corollary C)
 `connected_transversal_le_three` (a set of AT MOST three vertices; K₁, K₂ have no 3-subset) from A
@@ -111,9 +124,13 @@ and B (τ₄ = 4 forces m = 16, excluded by B);
 `avoiding_coloring_of_transversal`: edges at S red, rest blue; a red matching injects into S.
 
 ## Upper (Theorem D)
-A pairwise-intersecting edge family in a bipartite graph is a star (empty family handled);
+Star lemma: in a triangle-free (in particular bipartite) graph, a family of edges with no two
+disjoint shares a common vertex unless it is empty: for two distinct intersecting edges xy, xz,
+any further edge meeting both but avoiding x would be yz, a triangle; empty and singleton families
+are immediate. Hence a red graph without a 2-matching is a star (or empty);
 deleting any vertex of K₃,₃ − e leaves a square; hence K₃,₃ − e → (2K₂, C₄); two copies joined by
 a bridge give a red 4-matching with eight distinct endpoints. Bridge colour irrelevant.
 
 ## Endpoint
-`connectedSizeRamsey_eq_seventeen` from C and D (proved in Solution.lean).
+`connectedSizeRamsey_eq_seventeen` from C and D: the Lean deduction in Solution.lean is complete
+but conditional on the admitted development interfaces for A–D (axiom audit lists sorryAx).

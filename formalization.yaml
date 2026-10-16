@@ -27,7 +27,7 @@ classification:
 
 status:
   scope: >-
-    PROOF_ATTEMPT / SCAFFOLD (2026-10-16). The five statements of record in Challenge.lean
+    SCAFFOLD; lab status UNDER_REVIEW (2026-10-16). The five statements of record in Challenge.lean
     compile; Solution.lean proves the numerical equality from Corollary C and Theorem D and
     bridges the other four to admitted development interfaces. The informal structural
     argument (docs/PROOF.md) has passed one adversarial pass but not the full review protocol
