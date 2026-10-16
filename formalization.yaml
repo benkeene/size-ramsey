@@ -68,6 +68,25 @@ sources:
     relationship: background
     note: "The n = 3 case; the 2018 correction (doi:10.1007/s12044-018-0375-6) is still to be audited."
 
+  - title: "Large induced forests in sparse graphs"
+    authors: ["Noga Alon", "Dhruv Mubayi", "Robin Thomas"]
+    type: "article"
+    id: "https://doi.org/10.1002/jgt.1028"
+    relationship: background
+    note: "Theorem 1.5 (feedback vertex number of subcubic graphs) implies Theorem A; this project gives its own proof of A as the engine of the equality classification B."
+  - title: "All Ramsey (2K2, C4)-minimal graphs"
+    authors: ["Kristiana Wijaya", "Lyra Yulianti", "Edy Tri Baskoro", "Hilda Assiyatun", "Djoko Suprijanto"]
+    type: "article"
+    id: "Journal of Algorithms and Computation 46 (2015) 9-25"
+    relationship: background
+    note: "Theorem 2.6: K_{3,3} minus an edge arrows (2K2, C4)."
+  - title: "Size Ramsey numbers involving matchings"
+    authors: ["Paul Erdős", "Ralph J. Faudree"]
+    type: "article"
+    id: "Colloquia Mathematica Societatis Janos Bolyai 37 (1984) 247-264"
+    relationship: background
+    note: "Theorem 3: the ordinary size-Ramsey number of (nK2, C4) is 4n, giving the lower bound 16 for n = 4."
+
 related_formalizations:
   - id: "https://palomar-registry.org/entry?id=PALOMAR-2026-10-07-000005&version=1"
     relationship: other
@@ -107,12 +126,12 @@ review:
 
 known_gaps:
   - "Theorems A, B, C and D are admitted in the development library (SizeRamsey.Proof.*)."
-  - "The 2018 correction to the n = 3 paper and two 2025 computational papers (Dzido) have not been read."
-  - "Novelty of the transversal bound and of the equality classification is unaudited."
+  - "The two 2025 computational papers by Dzido were seen only in abstract (scope: 3K2 and 2K2 versus cycles)."
+  - "Novelty of the equality classification B is unestablished (literature audit 2026-10-16, confidence 0.75)."
 
 limitations:
+  - "Theorem A follows from Alon-Mubayi-Thomas (2001); the K_{3,3}-e lemma and the 17-edge construction are known (Wijaya et al. 2015; Wang-Song-Zhang-Zhang 2025); the lower bound 16 is Erdős-Faudree (1984). Only B, and through it the value 17, is proposed as new."
   - "No novelty claim is made by this scaffold."
-  - "The literature status check (docs/STATUS_CHECK.md) is incomplete."
 
 alignment:
   namespace: "SizeRamsey"
