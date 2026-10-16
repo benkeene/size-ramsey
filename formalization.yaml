@@ -1,0 +1,129 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+# formalization.yaml v0.4 — adopted from https://github.com/mathlib-initiative/formalization.yaml
+version: "v0.4"
+
+project:
+  name: "The connected size-Ramsey number of a four-edge matching versus a quadrilateral"
+  description: >-
+    A Lean 4 / Mathlib formalization project for the connected size-Ramsey equality
+    rhat_c(4K2, C4) = 17. The intended proof uses a universal C4 vertex-transversal bound
+    4 tau_4(G) <= |E(G)|, a classification of the connected equality cases through sixteen
+    edges (C4, the 4-wheel, K_{3,3} minus an edge, the octahedron), an avoiding-colouring
+    construction from a three-vertex transversal, and an explicit twelve-vertex,
+    seventeen-edge host. The development is currently a scaffold: statements of record are
+    fixed and compile, the development library is admitted.
+  authors:
+    - "Ben Keene"
+  license: "Apache-2.0"
+  responsible_maintainers:
+    - "Ben Keene"
+
+repository:
+  role: substantive-development
+
+classification:
+  arxiv: [math.CO]
+  msc2020: ["05C55", "05D10", "05C35"]
+
+status:
+  scope: >-
+    PROOF_ATTEMPT / SCAFFOLD (2026-10-16). The five statements of record in Challenge.lean
+    compile; Solution.lean proves the numerical equality from Corollary C and Theorem D and
+    bridges the other four to admitted development interfaces. The informal structural
+    argument (docs/PROOF.md) has passed one adversarial pass but not the full review protocol
+    (adversary, response, reviewer, independent reconstruction). No complete formal proof,
+    Comparator acceptance or independent kernel replay is claimed.
+  sorry_count: 12
+  sorry_in_definitions: 0
+  axioms: ["propext", "Classical.choice", "Quot.sound", "sorryAx"]
+  main_results:
+    - "SizeRamsey.four_mul_tau4_le_edgeCount"
+    - "SizeRamsey.equality_classification"
+    - "SizeRamsey.avoiding_coloring_le_sixteen"
+    - "SizeRamsey.F17_spec"
+    - "SizeRamsey.connectedSizeRamsey_eq_seventeen"
+
+fidelity:
+  divergences: >-
+    Statements of record use graphs on Fin n. Copies of the matching and of the
+    quadrilateral are non-induced (injective vertex maps with the required adjacencies).
+    Equality cases are whole-graph isomorphism classes (SimpleGraph.Iso). The connected
+    size-Ramsey number is defined as a natural-number infimum over connected graphs on
+    some Fin n; the defining set is proved nonempty by the explicit witness.
+
+sources:
+  - title: "Connected size Ramsey numbers of matchings versus a small path or cycle"
+    authors: ["Sha Wang", "Ruyu Song", "Yixin Zhang", "Yanbo Zhang"]
+    type: "article"
+    id: "https://doi.org/10.5614/ejgta.2025.13.1.11"
+    relationship: background
+    note: >-
+      Theorem 1.3 supplies the upper construction (copies of K_{3,3} minus an edge) and
+      Conjecture 1 predicts rhat_c(nK2, C4) = floor((9n-1)/2). This project gives its own
+      elementary proof of the upper block and a structural proof of the lower bound for n = 4.
+  - title: "Connected size Ramsey number for matchings vs. small stars or cycles"
+    authors: ["Budi Rahadjeng", "Edy Tri Baskoro", "Hilda Assiyatun"]
+    type: "article"
+    id: "https://doi.org/10.1007/s12044-017-0366-z"
+    relationship: background
+    note: "The n = 3 case; the 2018 correction (doi:10.1007/s12044-018-0375-6) is still to be audited."
+
+related_formalizations:
+  - id: "https://palomar-registry.org/entry?id=PALOMAR-2026-10-07-000005&version=1"
+    relationship: other
+    note: "Template for layout, module conventions, metadata and verification scripts."
+
+automation:
+  methods:
+    - method: agent
+      models: ["GPT-6 Astra (OpenAI)", "Claude Fable 5.1 (Anthropic)"]
+      framework: "Codex app-server (for GPT-6 Astra); Claude Code"
+      tool_setup: >-
+        GPT-6 Astra as independent prover and adversarial reviewer of the informal argument
+        and as repository/Mathlib auditor (read-only); Claude Code writing the Lean scaffold
+        against a pinned local Lean/Mathlib toolchain with lake build feedback.
+      cost:
+        wall_time: "not tracked"
+        spend_usd: "subscription-based"
+        hardware: "local machine (Apple silicon Mac) plus subscription model access"
+      prompting_notes: >-
+        Astra role prompts (independent prover, adversary, reviewer); never told that a
+        proposed argument was probably right.
+  spend_usd: "subscription-based"
+  notes: >-
+    The structural proof attempt was found by GPT-6 Astra (2026-10-16) and adversarially
+    checked once by an independent Astra subagent; the scaffold plan is docs/astra/.
+    Lean source written by Claude Code under the direction of the author. Agent agreement
+    is not evidence; theorem status follows the review protocol of the aiseminar laboratory.
+
+review:
+  status: self-assessed
+  reviewers:
+    - "Ben Keene"
+  notes: >-
+    Scaffold stage. One adversarial pass on the informal proof is recorded in
+    docs/astra/2026-10-16_workflow_ramsey.md; the full adversary / response / reviewer /
+    independent-reconstruction protocol is outstanding. No maintainer review of Lean content.
+
+known_gaps:
+  - "Theorems A, B, C and D are admitted in the development library (SizeRamsey.Proof.*)."
+  - "The 2018 correction to the n = 3 paper and two 2025 computational papers (Dzido) have not been read."
+  - "Novelty of the transversal bound and of the equality classification is unaudited."
+
+limitations:
+  - "No novelty claim is made by this scaffold."
+  - "The literature status check (docs/STATUS_CHECK.md) is incomplete."
+
+alignment:
+  namespace: "SizeRamsey"
+  statements:
+    - source: "Theorem A: 4 tau_4(G) <= |E(G)| for every finite simple graph G"
+      lean: "SizeRamsey.four_mul_tau4_le_edgeCount"
+    - source: "Theorem B: connected equality cases through 16 edges are C4, W5, K33-e, K222"
+      lean: "SizeRamsey.equality_classification"
+    - source: "Corollary C: every connected graph with at most 16 edges has an avoiding colouring"
+      lean: "SizeRamsey.avoiding_coloring_le_sixteen"
+    - source: "Theorem D: the explicit 17-edge graph is connected and arrows (4K2, C4)"
+      lean: "SizeRamsey.F17_spec"
+    - source: "rhat_c(4K2, C4) = 17"
+      lean: "SizeRamsey.connectedSizeRamsey_eq_seventeen"
