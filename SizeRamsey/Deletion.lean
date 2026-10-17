@@ -260,7 +260,35 @@ theorem erase_singleton_counts (v : V) :
       edgeCount (G.deleteIncidenceSet v) ∧
     tau4 (erase G {v}) =
       tau4 (G.deleteIncidenceSet v) := by
-  sorry
+  have h0 : edgeCount (G.induce ((({v} : Finset V)) : Set V)) = 0 := by
+    rw [edgeCount_eq_card, Finset.card_eq_zero, Finset.eq_empty_iff_forall_notMem]
+    intro e he
+    induction e using Sym2.ind with
+    | _ a b =>
+      rw [SimpleGraph.mem_edgeFinset, SimpleGraph.mem_edgeSet] at he
+      have ha := a.2; have hb := b.2
+      simp only [Finset.coe_singleton, Set.mem_singleton_iff] at ha hb
+      exact he.ne (Subtype.ext (ha.trans hb.symm))
+  have h1 : edgeCount (erase G {v}) + G.degree v = edgeCount G := by
+    have := erase_edgeCount G {v}
+    rw [Finset.sum_singleton, h0] at this
+    exact this
+  have hle : G.degree v ≤ edgeCount G := by omega
+  refine ⟨h1, ?_, ?_⟩
+  · have h2 : edgeCount (G.deleteIncidenceSet v) = edgeCount G - G.degree v := by
+      rw [edgeCount_eq_card, edgeCount_eq_card, SimpleGraph.card_edgeFinset_deleteIncidenceSet]
+    omega
+  · refine tau4_erase_eq_of G _ {v} (fun f hf i => ?_) (fun a b ha hb => ?_)
+    · obtain ⟨_, h01, h12, h23, h30⟩ := hf
+      rw [Finset.mem_singleton]
+      fin_cases i
+      · exact (SimpleGraph.deleteIncidenceSet_adj.mp h01).2.1
+      · exact (SimpleGraph.deleteIncidenceSet_adj.mp h12).2.1
+      · exact (SimpleGraph.deleteIncidenceSet_adj.mp h23).2.1
+      · exact (SimpleGraph.deleteIncidenceSet_adj.mp h30).2.1
+    · rw [Finset.mem_singleton] at ha hb
+      rw [SimpleGraph.deleteIncidenceSet_adj]
+      exact ⟨fun h => h.1, fun h => ⟨h, ha, hb⟩⟩
 
 theorem erase_degree
     (D : Finset V) (v : {x : V // x ∉ D}) :
