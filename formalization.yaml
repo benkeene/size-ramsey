@@ -90,6 +90,14 @@ fidelity:
     formalized and not claimed.
 
 sources:
+  - title: "The connected size-Ramsey number of a four-edge matching versus a quadrilateral, rhat_c(4K2, C4) = 17 (result first presented by this formalization)"
+    authors: ["Ben Keene"]
+    type: "original-proof"
+    relationship: other
+    note: >-
+      Unpublished; the informal argument is docs/PROOF.md and the write-up is paper/. The value 17
+      is the n = 4 case of Conjecture 1 of Wang-Song-Zhang-Zhang (2025), which proves only the
+      upper bound; the equality classification B and the lower bound are this project's own.
   - title: "Connected size Ramsey numbers of matchings versus a small path or cycle"
     authors: ["Sha Wang", "Ruyu Song", "Yixin Zhang", "Yanbo Zhang"]
     type: "article"
