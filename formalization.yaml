@@ -10,9 +10,9 @@ project:
     4 tau_4(G) <= |E(G)|, a classification of the connected equality cases through sixteen
     edges (C4, the 4-wheel, K_{3,3} minus an edge, the octahedron), an avoiding-colouring
     construction from a three-vertex transversal, and an explicit twelve-vertex,
-    seventeen-edge host. The development library is sorry-free as of commit a73d95a
-    (2026-10-17); formal review is in progress (adversary pass 1 ACCEPT_WITH_FIXES) and the CI
-    comparator is pending.
+    seventeen-edge host. Proofs are complete as of commit a73d95a (2026-10-17); the proof
+    certificate is Solution.lean and its dependency closure. Formal adversary pass 1 and reviewer
+    pass 1 are ACCEPT_WITH_FIXES (fixes applied); the full CI comparator pipeline has not run.
   authors:
     - "Ben Keene"
   license: "Apache-2.0"
@@ -28,10 +28,16 @@ classification:
 
 status:
   scope: >-
-    Sorry-free Lean development, kernel-replayed locally (per-module leanchecker, 25 modules);
-    adversary pass 1 ACCEPT_WITH_FIXES (meaning 0.97, trust 0.98, 2026-10-17; documentation fixes
-    applied); independent statement reconstruction done (CORRESPONDENCE.md section 13); reviewer
-    pass and CI comparator pending; not formally verified. Informal proof: lab status
+    The proof certificate is Solution.lean and its dependency closure (the SizeRamsey library),
+    which does not import Challenge.lean: "lake build Solution" reports zero sorry warnings. The
+    default "lake build" also builds Challenge.lean, whose five deliberate sorry warnings are the
+    statements of record, so the default build is not described as sorry-free. Kernel-replayed
+    locally (leanchecker, 25 modules); adversary pass 1 ACCEPT_WITH_FIXES (meaning 0.97, trust
+    0.98) and reviewer pass 1 ACCEPT_WITH_FIXES (0.98), 2026-10-17, documentation fixes applied;
+    independent statement reconstruction done (CORRESPONDENCE.md section 13). The reviewer
+    recommends FORMALLY_VERIFIED for A, B, C (via two declarations), D for the fixed host and E;
+    the endpoint-universal reading of D is not formalized. The lab status promotion has not been
+    made; not yet a claim of formal verification. Informal proof: lab status
     VERIFIED as an ordinary theorem (2026-10-16, aiseminar claim_0004). At commit a73d95a
     (2026-10-17) the five statements of record in Challenge.lean (deliberate sorry) are restated
     and proved in Solution.lean, and #print axioms of all five is [propext, Classical.choice,
@@ -55,11 +61,16 @@ fidelity:
     Equality cases are whole-graph isomorphism classes (SimpleGraph.Iso). The connected
     size-Ramsey number is defined as a natural-number infimum over connected graphs on
     some Fin n; the defining set is proved nonempty by the explicit witness. The Corollary C
-    record states only the avoiding-colouring conclusion; the three-vertex transversal
-    conclusion of the informal C is proved as SizeRamsey.connected_transversal_le_three but is
-    not a statement of record (TODO(ben): packaging decision). The Theorem D record is one
-    specific host (bridge from vertex 5, degree 3 in its copy, to vertex 6, degree 2 in its
-    copy); the informal D is read with these endpoints, which suffices for E.
+    record states only the avoiding-colouring conclusion; it omits the separately proved
+    three-vertex transversal conclusion SizeRamsey.connected_transversal_le_three, and the two
+    declarations together cover the informal C (sixth record optional, TODO(ben)). The informal
+    D (CLAIM.md, amended 2026-10-17) names a fixed host: two vertex-disjoint copies of K_{3,3}-e
+    (parts {0,1,2}, {3,4,5}, missing edge {0,3}) joined by one bridge from vertex 5 of the first
+    copy (degree 3 in its copy) to vertex 0 of the second copy (degree 2 in its copy); 12
+    vertices, 17 edges. The record F17 is this host with the second copy relabelled 6..11
+    (bridge {5,6}). The endpoint-universal statement is mathematically straightforward (each
+    copy forces a red 2-matching or a blue C4; the bridge only gives connectedness) but is not
+    formalized and not claimed.
 
 sources:
   - title: "Connected size Ramsey numbers of matchings versus a small path or cycle"
@@ -76,7 +87,7 @@ sources:
     type: "article"
     id: "https://doi.org/10.1007/s12044-017-0366-z"
     relationship: background
-    note: "The n = 3 case; the 2018 correction (doi:10.1007/s12044-018-0375-6) is still to be audited."
+    note: "The n = 3 case. The 2018 correction (doi:10.1007/s12044-018-0375-6), retrieved by the 2026-10-16 novelty thread, restricts the claw result rhat_c(nK2, K_{1,3}) = 4n - 1 to n >= 4 and leaves rhat_c(3K2, C4) = 13 standing (docs/STATUS_CHECK.md)."
 
   - title: "Large induced forests in sparse graphs"
     authors: ["Noga Alon", "Dhruv Mubayi", "Robin Thomas"]
@@ -142,6 +153,7 @@ review:
     - "Ben Keene"
     - "GPT-6 Astra (adversary, reviewer x3, independent prover; 2026-10-16)"
     - "GPT-6 Astra (formal adversary pass 1: meaning, trust; statement reconstruction; 2026-10-17)"
+    - "GPT-6 Astra (formal reviewer pass 1, ACCEPT_WITH_FIXES 0.98; 2026-10-17)"
   notes: >-
     The informal proof passed an adversary pass (objections answered), an independent
     reconstruction from the statement alone, a reviewer pass and two confirming reviews (the
@@ -157,13 +169,17 @@ review:
     (GPT-6 Astra, meaning ACCEPT_WITH_FIXES 0.97, trust ACCEPT_WITH_FIXES 0.98, 2026-10-17) found
     no mathematical counterexample and no verification-chain escape; its documentation fixes are
     applied. Independent statement reconstruction (2026-10-17, confidence 0.97, not elaborated by
-    its author) is compared item by item in CORRESPONDENCE.md section 13. Reviewer pass pending;
-    this is not a claim of formal verification.
+    its author) is compared item by item in CORRESPONDENCE.md section 13. Formal reviewer pass 1
+    (GPT-6 Astra, ACCEPT_WITH_FIXES 0.98, 2026-10-17) found no mathematical or verification-chain
+    defect, reproduced "lake build Solution" with zero sorry warnings and the recursive
+    comparison/axiom check, and recommends FORMALLY_VERIFIED for A, B, C (two declarations),
+    fixed-host D and E; its documentation fixes are applied. The lab status promotion has not
+    been made; this is not yet a claim of formal verification.
 
 known_gaps:
-  - "CI comparator (Linux, bubblewrap) not run: Challenge/Solution statement and definition agreement is not machine-checked yet."
-  - "No reviewer pass on the formal development yet (adversary pass 1 done, ACCEPT_WITH_FIXES; statement reconstruction done)."
-  - "Corollary C statement of record covers only the colouring half; the transversal half (SizeRamsey.connected_transversal_le_three) is proved but not recorded (TODO(ben))."
+  - "The full sandboxed CI comparator/export pipeline has not run; existing elaborated declarations passed recursive statement/definition comparison and axiom checking."
+  - "Corollary C statement of record omits the separately proved transversal conclusion (SizeRamsey.connected_transversal_le_three); a sixth record is optional packaging (TODO(ben))."
+  - "Endpoint-universal Theorem D (arbitrary bridge endpoints) is not formalized; only the fixed host of CLAIM.md's D is."
   - "AxiomAudit.lean prints axioms without failing on sorryAx, and leanchecker accepts sorryAx-dependent declarations; their outputs must be inspected."
   - "leanchecker --fresh, NanoDa and con-ron not run."
   - "The two 2025 computational papers by Dzido were seen only in abstract (scope: 3K2 and 2K2 versus cycles)."
@@ -182,7 +198,9 @@ alignment:
       lean: "SizeRamsey.equality_classification"
     - source: "Corollary C (colouring half only): every connected graph with at most 16 edges has an avoiding colouring"
       lean: "SizeRamsey.avoiding_coloring_le_sixteen"
-    - source: "Theorem D: the explicit 17-edge graph is connected and arrows (4K2, C4)"
+    - source: "Corollary C (transversal half, not a statement of record): every connected graph with at most 16 edges has a C4-transversal of at most three vertices"
+      lean: "SizeRamsey.connected_transversal_le_three"
+    - source: "Theorem D (fixed host: two copies of K33-e, parts {0,1,2},{3,4,5}, missing edge {0,3}, bridge from vertex 5 of the first copy to vertex 0 of the second): the 12-vertex, 17-edge graph is connected and arrows (4K2, C4)"
       lean: "SizeRamsey.F17_spec"
     - source: "rhat_c(4K2, C4) = 17"
       lean: "SizeRamsey.connectedSizeRamsey_eq_seventeen"
