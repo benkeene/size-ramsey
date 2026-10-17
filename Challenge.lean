@@ -24,14 +24,18 @@ Statements of record (all with non-induced copies, graphs on `Fin n`):
 * `SizeRamsey.four_mul_tau4_le_edgeCount` (Theorem A): `4 · τ₄(G) ≤ |E(G)|`.
 * `SizeRamsey.equality_classification` (Theorem B): for connected `G` with `0 < |E(G)| ≤ 16`,
   equality holds iff `G` is `C₄`, `W₅`, `K₃,₃ − e` or the octahedron.
-* `SizeRamsey.avoiding_coloring_le_sixteen` (Corollary C): every connected `F` with at most 16
-  edges has `R ≤ F` with no red 4-matching and no blue `C₄`.
+* `SizeRamsey.connected_transversal_le_three` (Corollary C, transversal half): every connected `G`
+  with at most 16 edges has a set of at most three vertices meeting every `C₄`.
+* `SizeRamsey.avoiding_coloring_le_sixteen` (Corollary C, colouring half): every connected `F` with
+  at most 16 edges has `R ≤ F` with no red 4-matching and no blue `C₄`.
 * `SizeRamsey.F17_spec` (Theorem D): the explicit 12-vertex, 17-edge graph is connected and
   arrows `(4K₂, C₄)`.
 * `SizeRamsey.connectedSizeRamsey_eq_seventeen`: `r̂_c(4K₂, C₄) = 17`.
 
 Status 2026-10-16: the informal structural argument (docs/PROOF.md) is verified by the aiseminar
 review protocol (ordinary theorem, not formally verified); this file states the targets. Proofs are in `Solution.lean`.
+The sixth record (transversal half of C) was added 2026-10-17; it was proved in the library from the
+start and is registered so that the comparator checks its statement too.
 -/
 
 @[expose] public section
@@ -114,7 +118,14 @@ theorem equality_classification {n : ℕ} (G : SimpleGraph (Fin n))
       Nonempty (G ≃g k33MinusEdge) ∨ Nonempty (G ≃g octahedron) := by
   sorry
 
-/-- Corollary C: an avoiding colouring for every small connected host. -/
+/-- Corollary C (transversal half): every small connected host has a quadrilateral-transversal of
+at most three vertices. -/
+theorem connected_transversal_le_three {n : ℕ} (G : SimpleGraph (Fin n))
+    (hconn : G.Connected) (hle : edgeCount G ≤ 16) :
+    ∃ S : Finset (Fin n), c4Transversal G S ∧ S.card ≤ 3 := by
+  sorry
+
+/-- Corollary C (colouring half): an avoiding colouring for every small connected host. -/
 theorem avoiding_coloring_le_sixteen {n : ℕ} (F : SimpleGraph (Fin n))
     (hconn : F.Connected) (hle : edgeCount F ≤ 16) :
     ∃ R : SimpleGraph (Fin n), R ≤ F ∧ ¬ HasMatching4 R ∧ ¬ HasC4 (F \ R) := by

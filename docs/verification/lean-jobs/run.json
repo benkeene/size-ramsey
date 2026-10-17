@@ -1,0 +1,154 @@
+{
+ "run": "2026-10-16_ramsey-astra",
+ "repo": "/Users/ben/size-ramsey",
+ "claim": "claim_0004",
+ "snapshots": {
+  "A": {
+   "worktree": "/Users/ben/size-ramsey-astraA",
+   "base_sha": "404f34b",
+   "branch": "lean/stream-A"
+  },
+  "B": {
+   "worktree": "/Users/ben/size-ramsey-astraB",
+   "base_sha": "d1c156b",
+   "branch": "lean/stream-B"
+  }
+ },
+ "concurrent_opus_agents": {
+  "stream-A": "DONE A1\u2013A6 at 404f34b (Theorem A axiom-clean); A7 Tightness left to Astra",
+  "stream-B": "DONE B1\u2013B5 at 3d9711b (Theorem D axiom-clean; Common/Extension/DegreeFour proved modulo A contracts); B6\u2013B9 left to Astra"
+ },
+ "stage": "PROMOTED",
+ "jobs": [
+  {
+   "key": "ramsey-A7-r1",
+   "snapshot": "A",
+   "targets": "SizeRamsey/Tightness.lean (4)",
+   "job": "size-ramsey/20261016T235201_a7-tightness-prover-r1-4-sorries-404f34b",
+   "status": "completed",
+   "result": "all targets PROVED per Astra; judged PROVED"
+  },
+  {
+   "key": "ramsey-B67-r1",
+   "snapshot": "B",
+   "targets": "Equality/Mixed.lean (1), Equality/Cubic.lean (2)",
+   "job": "size-ramsey/20261016T235202_b6-b7-mixed-cubic-prover-r1-3-sorries-d1c156b",
+   "status": "completed",
+   "result": "all targets PROVED per Astra; judged PROVED"
+  },
+  {
+   "key": "ramsey-B89-r1",
+   "snapshot": "B",
+   "targets": "Equality/TwoRegular.lean (1), Equality.lean (1), Coloring.lean (1)",
+   "job": "size-ramsey/20261016T235202_b8-b9-tworegular-equality-coloring-prover-r1-3-s",
+   "status": "completed",
+   "result": "all targets PROVED per Astra; judged PROVED",
+   "note": "brief mislabelled target .2 as classification_of_step (already proved; generator regex spanned theorems); Astra flagged the sig mismatch and supplied the equality_classification body in a note; applier refused the mislabelled block and the note body was applied after confirming sig dd75a2f3"
+  },
+  {
+   "role": "adversary",
+   "framing": "meaning",
+   "pass": 1,
+   "commit": "a470609",
+   "job": "size-ramsey/20261017T001310_adversary-meaning-claim-0004-formal-r-c-4k2-c4-1",
+   "brief": "briefs/adversary-meaning-r1.md",
+   "status": "completed",
+   "verdict": "ACCEPT_WITH_FIXES",
+   "confidence": 0.97,
+   "note": "no theorem/trust defect; fixes: PROOF.md endpoint paragraph, replay row 24\u219225 modules literal argv, audit wording, Corollary C record omits transversal half (packaging TODO(ben))"
+  },
+  {
+   "role": "adversary",
+   "framing": "trust",
+   "pass": 1,
+   "commit": "a470609",
+   "job": "size-ramsey/20261017T001310_adversary-trust-claim-0004-formal-r-c-4k2-c4-17",
+   "brief": "briefs/adversary-trust-r1.md",
+   "status": "completed",
+   "verdict": "ACCEPT_WITH_FIXES",
+   "confidence": 0.98,
+   "note": "no theorem/trust defect; fixes: PROOF.md endpoint paragraph, replay row 24\u219225 modules literal argv, audit wording, Corollary C record omits transversal half (packaging TODO(ben))"
+  },
+  {
+   "role": "statement_recon",
+   "cwd": "isolated/statement-recon",
+   "job": "size-ramsey/20261017T002007_independent-formal-statements-r-c-4k2-c4-17-a-e",
+   "status": "completed",
+   "confidence": 0.97,
+   "note": "A,B,E equivalent; C stated with both halves (ours: colouring half only, transversal half proved as connected_transversal_le_three); D quantified over all bridge endpoints (ours: fixed host, deg-3 to deg-2 bridge) \u2014 recorded in CORRESPONDENCE"
+  },
+  {
+   "role": "reviewer",
+   "pass": 1,
+   "commit": "134d223",
+   "job": "size-ramsey/20261017T002905_reviewer-claim-0004-formal-r-c-4k2-c4-17-pass-1",
+   "brief": "briefs/reviewer-r1.md",
+   "status": "completed",
+   "verdict": "ACCEPT_WITH_FIXES",
+   "confidence": 0.98,
+   "note": "no math/trust defect; recommends FORMALLY_VERIFIED for A,B,C(two decls),fixed-host D,E; fixes: yaml:164 false clause, CORRESPONDENCE:44 K7 strictness, README novelty overclaim, yaml:79 stale, PROOF.md:17 stale, build-scope wording, CLAIM D fixed host"
+  }
+ ],
+ "judge": "apply blocks on branch astra/<key> cut from the live stream head (rebase onto the Opus agents' commits), lake build, cheat scan --diff, #print axioms (sorryAx allowed only via named admitted contracts), lake env leanchecker <touched modules>, frozen-file check; then ff/merge into the stream branch",
+ "review_passes": [
+  {
+   "pass": 1,
+   "kind": "adversary",
+   "framings": [
+    "meaning",
+    "trust"
+   ],
+   "verdicts": [
+    "ACCEPT_WITH_FIXES 0.97",
+    "ACCEPT_WITH_FIXES 0.98"
+   ],
+   "substantive": true,
+   "why": "forced PROOF.md and CORRESPONDENCE changes"
+  },
+  {
+   "pass": 2,
+   "kind": "reviewer",
+   "verdict": "ACCEPT_WITH_FIXES 0.98",
+   "substantive": true,
+   "why": "forced CORRESPONDENCE/CLAIM D wording changes"
+  }
+ ],
+ "integration": "stream-A and stream-B merged into main after independent verification (see size-ramsey git log)",
+ "judge_result": {
+  "bodies": 10,
+  "helpers": 7,
+  "sorry_after_outside_Challenge": 0,
+  "records_axioms": [
+   "propext",
+   "Classical.choice",
+   "Quot.sound"
+  ],
+  "leanchecker_touched_rc": 0,
+  "scan": "0/0/0",
+  "full_sweep": {
+   "modules": 24,
+   "leanchecker_rc": 0,
+   "wall": "1m20s",
+   "commit": "a73d95a"
+  }
+ },
+ "pending": [
+  "leanchecker --fresh",
+  "NanoDa/con-ron",
+  "TODO(ben) packaging items (see RESPONSE_CLAUDE.md)"
+ ],
+ "records_commit": "a470609",
+ "records_commit_2": "134d223",
+ "promotion": {
+  "claim": "claim_0004",
+  "to": "FORMALLY_VERIFIED",
+  "aiseminar_commit": "f9cd162",
+  "date": "2026-10-17"
+ },
+ "ci_comparator": {
+  "commit": "a988d32",
+  "result": "passed",
+  "url": "https://github.com/benkeene/size-ramsey/actions/runs/39005389761",
+  "date": "2026-10-17"
+ }
+}

@@ -2,7 +2,7 @@
 
 Lean (2026-10-17): proofs complete at commit `a73d95a`; the proof certificate is `Solution.lean`
 and its dependency closure (`lake build Solution`: zero `sorry` warnings; the default `lake build`
-also shows the five deliberate `Challenge.lean` warnings). Kernel-replayed locally (leanchecker,
+also shows the deliberate `Challenge.lean` warnings, six since the sixth record of 2026-10-17). Kernel-replayed locally (leanchecker,
 25 modules); formal adversary pass 1 and reviewer pass 1 ACCEPT_WITH_FIXES (fixes applied);
 independent statement reconstruction done (`CORRESPONDENCE.md` §13); CI comparator passed at
 `a988d32` (2026-10-17; con-ron, nanoda and the Lean default kernel accepted; `CORRESPONDENCE.md`
@@ -133,7 +133,7 @@ transversal through any prescribed vertex.
   prescribed vertex plus one more vertex.
 
 ## Coloring (Corollary C)
-`connected_transversal_le_three` (a set of AT MOST three vertices; K₁, K₂ have no 3-subset) from A
+`Proof.connected_transversal_le_three` (a set of AT MOST three vertices; K₁, K₂ have no 3-subset) from A
 and B (τ₄ = 4 forces m = 16, excluded by B);
 `avoiding_coloring_of_transversal`: edges at S red, rest blue; a red matching injects into S.
 
@@ -147,13 +147,14 @@ a bridge give a red 4-matching with eight distinct endpoints. Bridge colour irre
 
 ## Endpoint
 `connectedSizeRamsey_eq_seventeen` from C and D: the Lean deduction in Solution.lean is complete
-and unconditional. As of commit `a73d95a` all five statements of record are proved in
-`Solution.lean`, whose dependency closure contains no `sorry` (`lake build Solution`: zero
-`sorry` warnings; only `Challenge.lean` carries the five deliberate ones);
+and unconditional. As of commit `a73d95a` all five statements of record then registered are
+proved in `Solution.lean`, whose dependency closure contains no `sorry` (`lake build Solution`:
+zero `sorry` warnings; only `Challenge.lean` carries the deliberate ones);
 `#print axioms` of each is `[propext, Classical.choice, Quot.sound]`, and every built project
-module (25) is kernel-replayed by `leanchecker` (`CORRESPONDENCE.md` §10). The C record is the
-colouring consequence only; it omits the separately proved three-vertex transversal
-`connected_transversal_le_three` (`CORRESPONDENCE.md` §8). D is formalized for the fixed host of
+module (25) is kernel-replayed by `leanchecker` (`CORRESPONDENCE.md` §10). Since 2026-10-17 both
+halves of C are records: the three-vertex transversal `connected_transversal_le_three` is the
+sixth statement of record, proved from the library lemma `Proof.connected_transversal_le_three`
+(`CORRESPONDENCE.md` §8). D is formalized for the fixed host of
 CLAIM.md's D (bridge from vertex 5 of the first copy to vertex 0 of the second); the
 endpoint-universal statement is not formalized. Formal adversary pass 1 and reviewer pass 1 are
 ACCEPT_WITH_FIXES (fixes applied); the CI comparator passed at `a988d32` (2026-10-17,

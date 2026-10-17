@@ -74,10 +74,10 @@ E).
 | `Plan.equality_two_regular_case` | B | Equality/TwoRegular.lean | proved (Astra) |
 | `Plan.classification_of_step` | B | Equality.lean | proved |
 | `Proof.equality_classification` (Theorem B) | B | Equality.lean | proved (Astra) |
-| `connected_transversal_le_three` | B | Coloring.lean | proved (Astra) |
-| `Proof.avoiding_coloring_le_sixteen` (Corollary C) | B | Coloring.lean | proved (from `connected_transversal_le_three`) |
+| `Proof.connected_transversal_le_three` (Corollary C, transversal half; sixth record since 2026-10-17) | B | Coloring.lean | proved (Astra) |
+| `Proof.avoiding_coloring_le_sixteen` (Corollary C, colouring half) | B | Coloring.lean | proved (from `Proof.connected_transversal_le_three`) |
 | (final exports) | B | Main.lean | public imports only |
-| five statements of record, `connectedSizeRamsey_eq_seventeen` | B | Solution.lean | proved; endpoint from C and D |
+| six statements of record, `connectedSizeRamsey_eq_seventeen` | B | Solution.lean | proved; endpoint from C and D |
 | axiom audit | B | AxiomAudit.lean | imports `Solution`; not imported by `SizeRamsey` |
 
 ## Import DAG

@@ -4,6 +4,7 @@
   "theorem_names": [
     "SizeRamsey.four_mul_tau4_le_edgeCount",
     "SizeRamsey.equality_classification",
+    "SizeRamsey.connected_transversal_le_three",
     "SizeRamsey.avoiding_coloring_le_sixteen",
     "SizeRamsey.F17_spec",
     "SizeRamsey.connectedSizeRamsey_eq_seventeen"

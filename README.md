@@ -10,15 +10,16 @@ graph with at most 16 edges has a set of at most three vertices meeting every 4-
 Status: informal proof VERIFIED by the aiseminar review protocol (2026-10-16; four Astra passes and an
 independent reconstruction). Lean: the proof certificate is `Solution.lean` and its dependency
 closure (the `SizeRamsey` library), which does not import `Challenge.lean`; `lake build Solution`
-reports zero `sorry` warnings, and the five records in `Solution.lean` depend on
+reports zero `sorry` warnings, and the six records in `Solution.lean` depend on
 `[propext, Classical.choice, Quot.sound]` only. The default `lake build` also builds
-`Challenge.lean`, whose five deliberate `sorry`s (the statements of record) give five warnings, so
+`Challenge.lean`, whose six deliberate `sorry`s (the statements of record) give six warnings, so
 the default build is not sorry-free. Proofs complete at `a73d95a` (2026-10-17), kernel-replayed
 locally (leanchecker, 25 modules); formal adversary pass 1 and reviewer pass 1 both
 ACCEPT_WITH_FIXES (reviewer 0.98, 2026-10-17; fixes applied); independent statement
 reconstruction done (`CORRESPONDENCE.md` §13). The reviewer recommends FORMALLY_VERIFIED for A,
 B, C (via two declarations), D for the fixed host of CLAIM.md, and E; the endpoint-universal
-reading of D is not formalized. Lab status (aiseminar claim_0004, 2026-10-17): FORMALLY_VERIFIED
+reading of D is not formalized. Since 2026-10-17 (after `a988d32`) both halves of C are records:
+the transversal half `SizeRamsey.connected_transversal_le_three` is the sixth record. Lab status (aiseminar claim_0004, 2026-10-17): FORMALLY_VERIFIED
 with exactly that scope. CI comparator passed at `a988d32` (2026-10-17, GitHub Actions run
 https://github.com/benkeene/size-ramsey/actions/runs/39005389761): statement and axiom check
 passed, and con-ron, nanoda and the Lean default kernel accepted the solution; `leanchecker
@@ -29,29 +30,55 @@ unestablished; no novelty claim is made).
 Template: `~/semigroup-betti` (Palomar entry PALOMAR-2026-10-07-000005).
 
 ## Layout
-- `Challenge.lean` — the five statements of record (Mathlib-only imports, deliberate `sorry`s).
-- `Solution.lean` — the same statements proved: the numerical equality from C and D, the other four
+- `Challenge.lean` — the six statements of record (Mathlib-only imports, deliberate `sorry`s).
+- `Solution.lean` — the same statements proved: the numerical equality from C and D, the other five
   by thin calls into `SizeRamsey.Proof.*` (proved, no `sorry`).
 - `SizeRamsey/` — development library in dependency order (Defs, Basic, SmallGraphs, Deletion,
   Components, Reductions, Universal, FiniteChecks, Equality, Coloring, Upper, Main); `NOTES.md`
   maps informal labels to declarations; `AxiomAudit.lean` prints the axioms of record.
 - `docs/PROOF.md` — the labelled informal argument (VERIFIED by the lab protocol); `docs/STATUS_CHECK.md`;
-  `docs/astra/` — the Astra workflow and scaffold reports; `CORRESPONDENCE.md`.
+  `docs/astra/` — the Astra workflow and scaffold reports; `docs/verification/` — the Astra review
+  transcripts, Lean job briefs and replies, and paper reviews (indexed in its README); `CORRESPONDENCE.md`.
 
 ## Building and checking
 
 ```
 lake exe cache get      # on a clean machine; locally .lake/packages is cloned from ~/semigroup-betti
 lake build Solution      # the proof certificate: zero sorry warnings
-lake build               # also builds Challenge.lean: five deliberate sorry warnings (statements of record)
+lake build               # also builds Challenge.lean: six deliberate sorry warnings (statements of record)
 python3 scripts/check-lean-sources.py
 ruby scripts/validate-formalization.rb
-lake env lean SizeRamsey/AxiomAudit.lean   # [propext, Classical.choice, Quot.sound] for all five records
-./scripts/verify-comparator.sh          # Linux with bubblewrap only; passed in CI at a988d32
+lake env lean SizeRamsey/AxiomAudit.lean   # [propext, Classical.choice, Quot.sound] for all six records
+./scripts/verify-comparator.sh          # Linux with bubblewrap only; passed in CI at a988d32 (five records); re-run pending for six
 ```
 
 Pinned toolchain `leanprover/lean4:v4.35.0-rc3`, Mathlib `v4.35.0-rc3`
 (`c55e6e786f49471c72fbddbec5415808896aec1e`), the same as PALOMAR-2026-10-07-000005. Never commit `.lake`.
+
+## Provenance (who wrote what)
+
+Every commit has Ben Keene as git author; the `Co-Authored-By` trailer names the Claude Code
+session that **committed** the work, which is not always the model that wrote it. The map below is
+the record; `formalization.yaml` `automation.notes` states the same division of labour, and
+`docs/verification/README.md` indexes the Astra transcripts, briefs and replies cited here.
+
+| commits | content | written by | judged and committed by |
+|---|---|---|---|
+| `3147493`, `0981429`, `b17d1fa` (`docs/astra/`) | status check, scaffold plan, two-stream Lean plan | GPT-6 Astra (Codex jobs; thread and job ids in each file's first line) | Claude Fable 5.1 |
+| `820f196`, `a979fb0` | Lean scaffold: frozen definitions, statements of record, admitted library chain | Claude Fable 5.1 | Claude Fable 5.1 |
+| `c6d5490` … `c577bce` | the informal proof `docs/PROOF.md` and its review fixes | structural argument found by GPT-6 Astra (independent prover); fixes written by Claude Fable 5.1 in response to the Astra adversary and reviewer transcripts | Claude Fable 5.1 |
+| `37132ee` (`docs/tooling/`) | proof-loop design merged from three assessments | three Claude assessment subagents (A, B, C), merged by Claude Fable 5.1 | Claude Fable 5.1 |
+| `lean/stream-A`: `98f36bf` … `404f34b` (18 commits) | Basic, SmallGraphs, FiniteChecks, Deletion, Components, Reductions, Universal (Theorem A) | Claude Opus 5.5 coding agents in a worktree (two commits carry their trailer; the rest carry the orchestrator's) | Claude Fable 5.1 |
+| `lean/stream-B`: `ead8772` … `3d9711b` (13 commits) | Upper (Theorem D), ColoringBase, Coloring assembly, Equality/Common, Extension, DegreeFour | Claude Opus 5.5 coding agents in a worktree | Claude Fable 5.1 |
+| `18be166`, `c2525c3` | merges of the two streams | — | Claude Fable 5.1 |
+| `a73d95a` | Tightness, Equality/Mixed, Equality/Cubic, Equality/TwoRegular, body of `equality_classification`, `connected_transversal_le_three` | GPT-6 Astra (three concurrent Codex jobs, `docs/verification/lean-jobs/`), applied mechanically | Claude Fable 5.1 |
+| `a470609` … `82cbe1f` | records: CORRESPONDENCE.md, formalization.yaml, README, fixes from the formal adversary and reviewer passes | Claude Fable 5.1, responding to GPT-6 Astra transcripts (`docs/verification/transcripts/`) | Claude Fable 5.1 (one by Claude Opus 5.5) |
+| `155b5a7` (`paper/`) | LaTeX writeup | Claude Fable 5.1, with two GPT-6 Astra reviews applied (`docs/verification/paper-reviews/`) | Claude Fable 5.1 |
+| after `155b5a7` | sixth statement of record, provenance section, `docs/verification/` | Claude Fable 5.1 | Claude Fable 5.1 |
+
+Agent agreement is never treated as evidence (`formalization.yaml` `automation.notes`); the
+guarantee is the Lean kernel and the CI comparator. Decisions of scope, promotion and submission
+are Ben Keene's.
 
 ## Submission
 Palomar submissions go through https://submit.palomar-registry.org/ with the full 40-character commit SHA. This repository is
@@ -62,7 +89,7 @@ decisions: repository visibility (currently private; the registry must be able t
 human read of `CORRESPONDENCE.md`, and the optional packaging items in `CORRESPONDENCE.md` §8 and
 aiseminar claim_0004 `RESPONSE_CLAUDE.md` (`TODO(ben)`). `leanchecker --fresh` has not run
 (optional; the registry's comparator performs independent replay). Formal adversary pass 1 and reviewer
-pass 1 are done (ACCEPT_WITH_FIXES; fixes applied). The Corollary C record omits the separately
-proved transversal conclusion `SizeRamsey.connected_transversal_le_three`; adding it as a sixth
-record is optional packaging (`CORRESPONDENCE.md` §8, `TODO(ben)`). See `status.scope` and `known_gaps` in
-`formalization.yaml` and `CORRESPONDENCE.md` §10.
+pass 1 are done (ACCEPT_WITH_FIXES; fixes applied). The transversal half of Corollary C,
+`SizeRamsey.connected_transversal_le_three`, was added as the sixth record on 2026-10-17 after
+`a988d32`; local checks pass and the CI comparator must re-run on that commit
+(`CORRESPONDENCE.md` §8, §10). See `status.scope` and `known_gaps` in `formalization.yaml`.
