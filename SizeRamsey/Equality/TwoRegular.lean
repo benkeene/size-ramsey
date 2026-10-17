@@ -24,6 +24,6 @@ theorem equality_two_regular_case
     (ht : Tight G)
     (h2 : ∀ v, G.degree v = 2) :
     Nonempty (G ≃g SimpleGraph.cycleGraph 4) := by
-  sorry
+  exact two_regular_square_supported G hc (equality_square_supported G ht) h2
 
 end SizeRamsey.Plan

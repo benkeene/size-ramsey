@@ -64,6 +64,19 @@ theorem equality_classification
       Nonempty (G ≃g wheel5) ∨
       Nonempty (G ≃g k33MinusEdge) ∨
       Nonempty (G ≃g octahedron) := by
-  sorry
+  classical
+  refine ⟨?_, Plan.classified_tight G⟩
+  intro ht
+  apply Plan.classification_of_step (G := G) _ hconn hpos hle ht
+  intro W inst H hc hp hm ht ih
+  by_cases hfour : ∃ v, H.degree v = 4
+  · exact Plan.equality_degree_four_case H hc hp hm ht ih hfour
+  · have hthree : ∀ v, H.degree v ≤ 3 := by
+      intro v; have := Plan.equality_max_degree_le_four H ht v; have : H.degree v ≠ 4 := fun hv => hfour ⟨v, hv⟩; omega
+    have hcases : ∀ v, H.degree v = 2 ∨ H.degree v = 3 := by intro v; have := Plan.equality_min_degree H hc hp ht v; have := hthree v; omega
+    rcases Plan.degree_two_three_cases H hc hcases with htwo | hthree' | hmixed
+    · exact Or.inl (Plan.equality_two_regular_case H hc hp ht htwo)
+    · exact (Plan.equality_cubic_impossible H hc hp hm ht ih hthree').elim
+    · exact Or.inr (Or.inr (Or.inl (Plan.equality_mixed_degree_case H hc hp hm ht ih hthree hmixed)))
 
 end SizeRamsey.Proof
