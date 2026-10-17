@@ -18,8 +18,8 @@ locally (leanchecker, 25 modules); formal adversary pass 1 and reviewer pass 1 b
 ACCEPT_WITH_FIXES (reviewer 0.98, 2026-10-17; fixes applied); independent statement
 reconstruction done (`CORRESPONDENCE.md` §13). The reviewer recommends FORMALLY_VERIFIED for A,
 B, C (via two declarations), D for the fixed host of CLAIM.md, and E; the endpoint-universal
-reading of D is not formalized. The lab status promotion has not been made, so this is not yet a
-claim of formal verification. Informal argument in `docs/PROOF.md`; plan in `docs/astra/`; audit
+reading of D is not formalized. Lab status (aiseminar claim_0004, 2026-10-17): FORMALLY_VERIFIED with
+exactly that scope; CI comparator, `leanchecker --fresh` and NanoDa/con-ron remain unrun. Informal argument in `docs/PROOF.md`; plan in `docs/astra/`; audit
 record in `CORRESPONDENCE.md` §10. Theorem A is a corollary of Alon–Mubayi–Thomas (2001); the
 proposed new content is the equality classification B and, through it, the value 17 (novelty of B
 unestablished; no novelty claim is made).
