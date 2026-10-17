@@ -1,9 +1,11 @@
 # Informal proof (lab status VERIFIED as an ordinary theorem, 2026-10-16; not formally verified)
 
-Lean (2026-10-17): sorry-free Lean development at commit `a73d95a`, kernel-replayed locally
-(per-module leanchecker, 25 modules); adversary pass 1 on the formal development
-ACCEPT_WITH_FIXES; independent statement reconstruction done (`CORRESPONDENCE.md` §13); reviewer
-pass and CI comparator pending (`CORRESPONDENCE.md` §10).
+Lean (2026-10-17): proofs complete at commit `a73d95a`; the proof certificate is `Solution.lean`
+and its dependency closure (`lake build Solution`: zero `sorry` warnings; the default `lake build`
+also shows the five deliberate `Challenge.lean` warnings). Kernel-replayed locally (leanchecker,
+25 modules); formal adversary pass 1 and reviewer pass 1 ACCEPT_WITH_FIXES (fixes applied);
+independent statement reconstruction done (`CORRESPONDENCE.md` §13); full CI comparator not run
+(`CORRESPONDENCE.md` §10).
 
 Source: Astra threads of 2026-10-16 (`docs/astra/2026-10-16_workflow_ramsey.md` §2 and the
 scaffold plan); revised after the adversary (transcript 20261016T191015) and reviewer
@@ -14,9 +16,11 @@ the transversal lifting map, any connectedness or non-isolation claim, and where
 applied. Review record (aiseminar claim_0004): adversary 20261016T191015 (ACCEPT_WITH_FIXES 0.96,
 answered); independent reconstruction from the statement alone 20261016T191015 (agrees, 0.99);
 reviewer 20261016T191635 (ACCEPT_WITH_FIXES 0.96, applied); confirming reviews 20261016T192131
-(ACCEPT_WITH_FIXES 0.97, applied) and 20261016T192456 (ACCEPT 0.98). Lean formalization of
-Theorem B may now start. Novelty: A is a corollary of Alon–Mubayi–Thomas (2001); the new content
-is B and the value 17 (docs/STATUS_CHECK.md).
+(ACCEPT_WITH_FIXES 0.97, applied) and 20261016T192456 (ACCEPT 0.98). (Historical, 2026-10-16:
+"Lean formalization of Theorem B may now start"; it has since been completed, see the Endpoint
+section.) Novelty: A is a corollary of Alon–Mubayi–Thomas (2001); the proposed new content is B
+and, through it, the value 17 (novelty of B unestablished; no novelty claim is made;
+docs/STATUS_CHECK.md).
 
 ## Definitions and conventions
 τ₄, non-induced C₄, 4-matchings, red/blue as in `SizeRamsey/Defs.lean`. "Square-supported":
@@ -142,9 +146,14 @@ a bridge give a red 4-matching with eight distinct endpoints. Bridge colour irre
 
 ## Endpoint
 `connectedSizeRamsey_eq_seventeen` from C and D: the Lean deduction in Solution.lean is complete
-and unconditional. As of commit `a73d95a` all five statements of record are proved sorry-free;
+and unconditional. As of commit `a73d95a` all five statements of record are proved in
+`Solution.lean`, whose dependency closure contains no `sorry` (`lake build Solution`: zero
+`sorry` warnings; only `Challenge.lean` carries the five deliberate ones);
 `#print axioms` of each is `[propext, Classical.choice, Quot.sound]`, and every built project
 module (25) is kernel-replayed by `leanchecker` (`CORRESPONDENCE.md` §10). The C record is the
-colouring consequence only; the three-vertex transversal is `connected_transversal_le_three`
-(`CORRESPONDENCE.md` §8). Formal review is in progress (adversary pass 1 ACCEPT_WITH_FIXES;
-reviewer pass and CI comparator pending); this is not a claim of formal verification.
+colouring consequence only; it omits the separately proved three-vertex transversal
+`connected_transversal_le_three` (`CORRESPONDENCE.md` §8). D is formalized for the fixed host of
+CLAIM.md's D (bridge from vertex 5 of the first copy to vertex 0 of the second); the
+endpoint-universal statement is not formalized. Formal adversary pass 1 and reviewer pass 1 are
+ACCEPT_WITH_FIXES (fixes applied); the full CI comparator has not run; the lab status promotion
+has not been made, so this is not yet a claim of formal verification.

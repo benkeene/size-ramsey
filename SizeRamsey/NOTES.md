@@ -16,9 +16,11 @@ State as of `a73d95a` (2026-10-17): every development declaration is proved; no 
 assembled-from-stubs declaration remains. The only `sorry`s in the project are the five
 deliberate statements of record in `Challenge.lean`. `#print axioms` of the five records in
 `Solution.lean` is `[propext, Classical.choice, Quot.sound]`; `lake env leanchecker` on all 25
-built project modules (literal argv in `CORRESPONDENCE.md` §10) exits 0. Sorry-free Lean
-development, kernel-replayed locally; adversary pass 1 ACCEPT_WITH_FIXES; independent statement
-reconstruction done; reviewer pass and CI comparator pending; not formally verified.
+built project modules (literal argv in `CORRESPONDENCE.md` §10) exits 0. The proof certificate
+is `Solution.lean` and its dependency closure (`lake build Solution`: zero `sorry` warnings); the
+default `lake build` also shows the five deliberate `Challenge.lean` warnings. Adversary pass 1
+and reviewer pass 1 ACCEPT_WITH_FIXES (fixes applied); independent statement reconstruction done;
+full CI comparator not run; lab status promotion not made, so not yet formally verified.
 
 ## Status
 

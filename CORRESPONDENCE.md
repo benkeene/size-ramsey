@@ -1,11 +1,17 @@
 # Correspondence: informal theorem ↔ formal statement (2026-10-16; updated 2026-10-17)
 
-Status: sorry-free Lean development at `a73d95a`, kernel-replayed locally (per-module
-leanchecker, all 25 built project modules); adversary pass 1 on the formal development
-ACCEPT_WITH_FIXES (meaning 0.97, trust 0.98; fixes applied 2026-10-17); independent statement
-reconstruction done (§13); reviewer pass and CI comparator pending. Not formally verified.
+Status: the proof certificate is `Solution.lean` and its dependency closure (the `SizeRamsey`
+library), which does not import `Challenge.lean`: `lake build Solution` reports zero `sorry`
+warnings (§10). The default `lake build` also builds `Challenge.lean`, whose five deliberate
+`sorry`s give five warnings; it is not described as sorry-free. Proofs complete at `a73d95a`,
+kernel-replayed locally (leanchecker, all 25 built project modules); formal adversary pass 1
+ACCEPT_WITH_FIXES (meaning 0.97, trust 0.98) and reviewer pass 1 ACCEPT_WITH_FIXES (0.98), fixes
+applied 2026-10-17; independent statement reconstruction done (§13); full CI comparator not run.
+The reviewer recommends FORMALLY_VERIFIED for A, B, C (two declarations), fixed-host D and E;
+the lab status promotion has not been made, so this is not yet a claim of formal verification.
 Sections 1–7 are the correspondence argument as written at the scaffold, with the Corollary C
-record scope made explicit after adversary pass 1 (§1, §2, §8); no statement or definition has
+record scope made explicit after adversary pass 1 (§1, §2, §8) and D's fixed host made explicit
+after reviewer pass 1 (§1); no statement or definition has
 changed since the stream base `b17d1fa`. §10 is the audit record.
 
 ## 1. Informal statements
@@ -21,10 +27,14 @@ necessarily induced) 4-cycle, and |E(G)| its number of edges.
   (CLAIM.md wording). **The statement of record for C is only the colouring conclusion**; the
   transversal conclusion is proved in the library as `SizeRamsey.connected_transversal_le_three`
   but is not a statement of record (§2, §8).
-* **D.** F₁₇ (two vertex-disjoint copies of K₃,₃ − e joined by a bridge; 12 vertices, 17 edges)
-  is connected and every red/blue colouring of its edges has a red 4-matching or a blue C₄.
-  The record fixes the bridge endpoints (§5, §13): vertex 5 (degree 3 in its copy) to vertex 6
-  (vertex 0 of the second copy, degree 2); CLAIM.md's D is to be read with these endpoints.
+* **D.** F₁₇ is connected and every red/blue colouring of its edges has a red 4-matching or a
+  blue C₄, where F₁₇ is the fixed host of CLAIM.md's D (amended 2026-10-17 at the reviewer's
+  request): two vertex-disjoint copies of K₃,₃ − e (parts {0,1,2}, {3,4,5}, missing edge {0,3})
+  joined by one bridge from vertex 5 of the first copy (degree 3 in its copy) to vertex 0 of the
+  second copy (degree 2 in its copy); 12 vertices, 17 edges. In `F17` the second copy is
+  relabelled 6..11, so the bridge is {5,6} (§5, §13). The endpoint-universal statement (any
+  bridge) is mathematically straightforward (each copy forces a red 2-matching or a blue C₄; the
+  bridge only gives connectedness) but is **not** formalized and not claimed.
 * **E.** r̂_c(4K₂, C₄) = 17.
 
 ## 2. Statement table
@@ -41,8 +51,11 @@ necessarily induced) 4-cycle, and |E(G)| its number of edges.
 `SizeRamsey.connected_transversal_le_three` is generic in a finite vertex type `V`:
 `G.Connected → edgeCount G ≤ 16 → ∃ S : Finset V, c4Transversal G S ∧ S.card ≤ 3`; its
 `#print axioms` is `[propext, Classical.choice, Quot.sound]` (adversary-meaning run, 2026-10-17).
-The two halves are not interchangeable (K₇ with every edge red avoids both colours, yet no three
-vertices meet all its 4-cycles), so the C record is strictly weaker than CLAIM.md's C.
+The C record omits the separately proved transversal conclusion
+(`SizeRamsey.connected_transversal_le_three`); CLAIM.md's C is covered by the two declarations
+together. (K₇ with every edge red avoids both colours yet no three vertices meet all its 4-cycles;
+K₇ has 21 edges and lies outside C's hypotheses, so it separates only the unrestricted conclusion
+predicates, not the statements under C's hypotheses.)
 
 Scope of the five records against CLAIM.md (adversary pass 1 comparison, 2026-10-17):
 
@@ -50,8 +63,8 @@ Scope of the five records against CLAIM.md (adversary pass 1 comparison, 2026-10
 |---|---|
 | A | equal, after relabelling an arbitrary finite vertex type by `Fin n` (§4) |
 | B | stronger than CLAIM.md's literal "only for": the record is an iff (converse included); equal to §1's iff |
-| C | weaker as stated: the colouring conclusion only; the transversal half is proved but unrecorded |
-| D | equal, for the explicitly specified bridge endpoints |
+| C | the record states the colouring conclusion only and omits the transversal conclusion, proved separately as `connected_transversal_le_three`; the two declarations together cover CLAIM.md's C |
+| D | equal to CLAIM.md's D as amended to the fixed host (2026-10-17); the endpoint-universal statement is not formalized |
 | E | equal to the stated finite connected size-Ramsey minimum |
 
 ## 3. Definition audit
@@ -100,7 +113,10 @@ support; B's `↔` includes the converse, which requires the four transversal nu
 As of `a73d95a` (2026-10-17) every declaration of the development library and of `Solution.lean`
 is proved: the only `sorry`s in the project are the five deliberate ones in `Challenge.lean` (the
 statements of record), and `#print axioms` of the five records in `Solution.lean` is
-`[propext, Classical.choice, Quot.sound]`. No custom axioms, no `native_decide`.
+`[propext, Classical.choice, Quot.sound]`. No custom axioms, no `native_decide`. The proof
+certificate is `Solution.lean` and its dependency closure, which does not import `Challenge.lean`
+(`lake build Solution`: zero `sorry` warnings); the default `lake build` includes the five
+deliberate `Challenge.lean` warnings and is not called sorry-free.
 `Challenge.lean`, `SizeRamsey/Defs.lean`, `Shared.lean` and `AInterface.lean` are byte-identical
 to the stream base `b17d1fa`, which differs from the bootstrap `a979fb0` only by a status
 docstring edit; the statements of record and the frozen definitions are therefore unchanged.
@@ -109,20 +125,26 @@ Corollary C record scope: the statement of record `SizeRamsey.avoiding_coloring_
 the colouring consequence only. The transversal statement of CLAIM.md's C is proved and named
 (`SizeRamsey.connected_transversal_le_three`, Coloring.lean, axiom-clean) but is in neither
 `Challenge.lean` nor `comparator.json`. `TODO(ben)`: packaging decision whether to add it as a
-sixth statement of record (Challenge.lean, Solution.lean, comparator.json, AxiomAudit.lean);
-until then CLAIM.md's C is covered by the record only in its colouring half.
+sixth statement of record (Challenge.lean, Solution.lean, comparator.json, AxiomAudit.lean); the
+reviewer (pass 1) calls this optional packaging. CLAIM.md's C is formally proved by the two
+declarations together; the record alone states only the colouring half.
 
 Comparator wording: the docstrings of `Solution.lean` (line 42) and `SizeRamsey/Defs.lean`
 (line 15) say "the comparator checks" agreement. That describes the comparator's function, not a
 completed run: the CI comparator has not run. The files are left unedited (Defs.lean is frozen).
 The trust adversary separately ran the toolchain's `Lake.Check.compareAt` and `checkAxioms` on
 the existing Challenge and Solution environments (`Except.ok ()` for both); that is a check over
-existing `.olean`s, not the sandboxed CI comparator run.
+existing `.olean`s, not the sandboxed CI comparator run. The reviewer (pass 1) independently
+reproduced both with a wrapper failing on any error (`Except.ok ()`). So: the full sandboxed CI
+comparator/export pipeline has not run; existing elaborated declarations passed recursive
+statement/definition comparison and axiom checking.
 
-Gaps: the CI comparator (statement/definition agreement between Challenge and Solution) has not
-run; adversary pass 1 on the formal development is done (ACCEPT_WITH_FIXES; aiseminar
-`agents/astra/transcripts/20261017T001309_adversary-{meaning,trust}_claim_0004.md`), the reviewer
-pass is pending; the independent statement reconstruction is done and compared in §13 (not
+Gaps: the full sandboxed CI comparator/export pipeline has not run (the local recursive
+comparison and axiom check above passed); adversary pass 1 on the formal development is done
+(ACCEPT_WITH_FIXES; aiseminar
+`agents/astra/transcripts/20261017T001309_adversary-{meaning,trust}_claim_0004.md`), and so is
+reviewer pass 1 (ACCEPT_WITH_FIXES 0.98;
+`agents/astra/transcripts/20261017T002905_reviewer-formal_claim_0004.md`); the independent statement reconstruction is done and compared in §13 (not
 elaborated by its author); `leanchecker --fresh`, NanoDa and con-ron have not run.
 `AxiomAudit.lean` prints axioms and does not fail on `sorryAx`, and `leanchecker` accepts
 declarations that depend on `sorryAx` (the trust adversary's synthetic test); both outputs must be
@@ -156,6 +178,10 @@ manifest copied from PALOMAR-2026-10-07-000005 with the root renamed.
 | 2026-10-17 | `lake build` | `a470609` | exit 0, 1228 jobs |
 | 2026-10-17 | `lake env lean SizeRamsey/AxiomAudit.lean` | `a470609` | exit 0; `[propext, Classical.choice, Quot.sound]` for all five records (output inspected) |
 | 2026-10-17 | literal replay, argv below (25 modules) | `a470609` | exit 0, no output; `time`: 1:54.79 wall |
+| 2026-10-17 | `lake build` (reviewer pass 1) | `134d223` | exit 0, 1228 jobs; five deliberate `Challenge.lean` sorry warnings |
+| 2026-10-17 | `lake build Solution` (reviewer pass 1) | `134d223` | exit 0, 1225 jobs; zero sorry warnings |
+| 2026-10-17 | recursive `Lake.Check.compareAt` + `checkAxioms` (three-axiom allowlist), failing on error (reviewer pass 1) | `134d223` | `Except.ok ()` for both |
+| 2026-10-17 | `lake build Solution` (after reviewer fixes; Lean text unchanged since `134d223`) | `134d223` + docs | exit 0, 1225 jobs; `declaration uses 'sorry'`: 0 (linter warnings only) |
 
 Literal replay (2026-10-17, HEAD `a470609`, after `lake build`): the module list is the root
 `SizeRamsey`, `Challenge`, `Solution`, and every `SizeRamsey.*` module with a `.olean` under
@@ -179,9 +205,9 @@ independently ran `lake env leanchecker -v SizeRamsey Solution Challenge`, exit 
 same 25 modules. Normal replay trusts imported Mathlib declarations; it does not replay from an
 empty environment (`--fresh`) and does not elaborate sources.
 
-Not run: CI comparator (Linux, bubblewrap), `leanchecker --fresh`, NanoDa, con-ron; reviewer pass
-on the formal development. Independent statement reconstruction: done 2026-10-17 (§13). Adversary
-pass 1 (meaning, trust): done 2026-10-17, ACCEPT_WITH_FIXES. Lean sources differ between `a73d95a`
+Not run: full CI comparator pipeline (Linux, bubblewrap), `leanchecker --fresh`, NanoDa, con-ron.
+Independent statement reconstruction: done 2026-10-17 (§13). Adversary pass 1 (meaning, trust):
+done 2026-10-17, ACCEPT_WITH_FIXES. Reviewer pass 1: done 2026-10-17, ACCEPT_WITH_FIXES 0.98. Lean sources differ between `a73d95a`
 and `a470609` only in the `Solution.lean` module docstring: one comment line ("currently
 admitted") replaced by two comment lines ("sorry-free as of `a73d95a`"); no statement, definition
 or proof changed.
@@ -197,7 +223,8 @@ have τ₄ ≤ 2. None of this is Lean evidence.
 `~/aiseminar/agents/shared/claim_0004/` (informal proof VERIFIED; `STATUS.yaml` carries a
 `formalization:` key with the Lean state, `EVIDENCE.md` the 2026-10-17 Lean audit); history in
 `docs/STATUS_CHECK.md`. Formal adversary pass 1: aiseminar
-`agents/astra/transcripts/20261017T001309_adversary-{meaning,trust}_claim_0004.md`.
+`agents/astra/transcripts/20261017T001309_adversary-{meaning,trust}_claim_0004.md`. Formal
+reviewer pass 1: `agents/astra/transcripts/20261017T002905_reviewer-formal_claim_0004.md`.
 Astra run directory for the formal proofs:
 `~/aiseminar/agents/runs/2026-10-16_ramsey-astra/` (replies `reply_ramsey-{A7,B67,B89}-r1.md`).
 
@@ -238,7 +265,8 @@ unavailable in its sandbox); the comparison below is by reading, plus the edge-l
    `F17.Adj (emb u) (emb v) ↔ theirs(p := 5, q := 0)` for all `u v : Fin 2 × Fin 6`, with
    `emb (c, i) = 6c + i` (same scratch run). **Modelling choice:** D-of-record is this one
    17-edge host, which is all E needs (E's infimum needs one witness); it is a specialisation of
-   the reconstruction's endpoint-universal D. (Their D also states the vertex count 12, fixed by
+   the reconstruction's endpoint-universal D. At the reviewer's request (pass 1) CLAIM.md's D was
+   amended to name this fixed host; the endpoint-universal D is not formalized. (Their D also states the vertex count 12, fixed by
    our type `Fin 12`.)
 7. *E.* Same domain (`Fin n` for all `n`, connected, arrowing) and infimum. Their E adds an
    explicit `connectedRamseySizes.Nonempty` conjunct; ours discharges nonemptiness inside the
