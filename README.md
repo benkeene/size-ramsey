@@ -85,13 +85,14 @@ are Ben Keene's.
 
 ## Submission
 Palomar submissions go through https://submit.palomar-registry.org/ with the full 40-character commit SHA. This repository is
-ready for submission from the registry's side: the CI comparator passed at `38bd345`
-(2026-10-17, https://github.com/benkeene/size-ramsey/actions/runs/39005389761; con-ron, nanoda
-and the Lean default kernel accepted the solution). Remaining before submitting, all the owner's
-decisions: repository visibility (currently private; the registry must be able to clone), a
-human read of `CORRESPONDENCE.md`, and the optional packaging items in `CORRESPONDENCE.md` §8 and
-aiseminar claim_0004 `RESPONSE_CLAUDE.md` (`TODO(ben)`). `leanchecker --fresh` has not run
-(optional; the registry's comparator performs independent replay). Formal adversary pass 1 and reviewer
-pass 1 are done (ACCEPT_WITH_FIXES; fixes applied). The transversal half of Corollary C,
-`SizeRamsey.connected_transversal_le_three`, was added as the sixth record on 2026-10-17
-(`cc2aec2`); the CI comparator passed with six records at `46bf2d0` (`CORRESPONDENCE.md` §8, §10). See `status.scope` and `known_gaps` in `formalization.yaml`.
+ready for submission from the registry's side: the CI comparator passed with all six statements of
+record on the rewritten main `8b937da` (2026-10-17,
+https://github.com/benkeene/size-ramsey/actions/runs/39036224257; con-ron, nanoda and the Lean
+default kernel accepted the solution), after earlier passes at `38bd345` (five records) and
+`46bf2d0` (six). Formal adversary pass 1 and reviewer pass 1 are done (ACCEPT_WITH_FIXES; fixes
+applied); they saw five records, and the sixth (`SizeRamsey.connected_transversal_le_three`, added
+at `cc2aec2`) is a one-line call into a library lemma they covered. Remaining before submitting,
+the owner's decisions: repository visibility (currently private; the registry must be able to
+clone) and a human read of `CORRESPONDENCE.md`. `leanchecker --fresh` has not run (optional; the
+registry's comparator performs independent replay). Submit the full SHA of the main head at
+submission time. See `status.scope` and `known_gaps` in `formalization.yaml`.
