@@ -1,4 +1,4 @@
-# Informal proof (lab status VERIFIED as an ordinary theorem, 2026-10-16; not formally verified)
+# Informal proof and correspondence to the Lean formalization (lab status VERIFIED 2026-10-16; formalized and FORMALLY_VERIFIED 2026-10-17, see below)
 
 Lean (2026-10-17): proofs complete at commit `c8d54e2`; the proof certificate is `Solution.lean`
 and its dependency closure (`lake build Solution`: zero `sorry` warnings; the default `lake build`

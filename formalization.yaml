@@ -57,8 +57,9 @@ status:
     the Challenge and Solution environments; 25-module leanchecker replay exit 0) and the CI
     comparator then passed with six records at 46bf2d0 (2026-10-17, GitHub Actions run
     39034260971: con-ron accepted 8175 declarations with --verified, nanoda and the Lean default
-    kernel accepted; "Your solution is okay!"). Remaining before submission: repository
-    visibility (currently private). CORRESPONDENCE.md was read in full by Ben Keene on 2026-10-17.
+    kernel accepted; "Your solution is okay!"). Registered on Palomar as PALOMAR-2026-10-17-000012 version 1
+    (2026-10-17, commit 3233dcdd4807cbc808f68582d913c4f463047de2); the repository was made public for the
+    submission. CORRESPONDENCE.md was read in full by Ben Keene on 2026-10-17.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: ["propext", "Classical.choice", "Quot.sound"]
@@ -216,9 +217,12 @@ review:
     declarations (--verified), nanoda and the Lean default kernel accepted.
     After the attribution rewrite of 2026-10-17 (CORRESPONDENCE.md section 14) the CI comparator
     passed again on the rewritten main 8b937da (run 39036224257, same tree; six records).
+    Palomar PALOMAR-2026-10-17-000012 version 1 (registered 2026-10-17,
+    https://palomar-registry.org/entry?id=PALOMAR-2026-10-17-000012&version=1) pins commit 3233dcdd4807cbc808f68582d913c4f463047de2; Palomar
+    mechanical verification run 39039625237 (nanoda, con-ron); registry review outcome "neutral"
+    (no blocking problem; by Palomar's policy this is not an acceptance or endorsement).
 
 known_gaps:
-  - "Repository is private (owner's decision); the registry must be able to clone it before submission."
   - "The sixth record (SizeRamsey.connected_transversal_le_three, transversal half of Corollary C, added 2026-10-17 at cc2aec2) postdates the formal adversary and reviewer passes, which saw five records; the CI comparator passed with six records at 46bf2d0."
   - "Endpoint-universal Theorem D (arbitrary bridge endpoints) is not formalized; only the fixed host of CLAIM.md's D is."
   - "AxiomAudit.lean prints axioms without failing on sorryAx, and leanchecker accepts sorryAx-dependent declarations; their outputs must be inspected."

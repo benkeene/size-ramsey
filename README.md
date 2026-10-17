@@ -25,10 +25,11 @@ with exactly that scope. CI comparator passed at `38bd345` (2026-10-17, GitHub A
 https://github.com/benkeene/size-ramsey/actions/runs/39005389761): statement and axiom check
 passed, and con-ron, nanoda and the Lean default kernel accepted the solution; `leanchecker
 --fresh` remains not run (optional). Informal argument in `docs/PROOF.md`; plan in `docs/astra/`;
-audit record in `CORRESPONDENCE.md` §10. Theorem A is a corollary of Alon–Mubayi–Thomas (2001); the
-proposed new content is the equality classification B and, through it, the value 17 (novelty of B
-unestablished; no novelty claim is made).
-Template: `~/semigroup-betti` (Palomar entry PALOMAR-2026-10-07-000005).
+audit record in `CORRESPONDENCE.md` §10. Theorem A is a corollary of Alon–Mubayi–Thomas (2001). This development
+proves the equality classification B and derives the value 17; novelty of B is unestablished, and no
+novelty claim is made.
+Template: [benkeene/semigroup-betti](https://github.com/benkeene/semigroup-betti) (Palomar entry PALOMAR-2026-10-07-000005).
+Registered on Palomar as PALOMAR-2026-10-17-000012 v1 (2026-10-17; see below).
 
 ## Layout
 - `Challenge.lean` — the six statements of record (Mathlib-only imports, deliberate `sorry`s).
@@ -83,16 +84,32 @@ Agent agreement is never treated as evidence (`formalization.yaml` `automation.n
 guarantee is the Lean kernel and the CI comparator. Decisions of scope, promotion and submission
 are Ben Keene's.
 
+## Palomar entry and citation
+This formalization is hosted on Palomar as
+[PALOMAR-2026-10-17-000012 v1](https://palomar-registry.org/entry?id=PALOMAR-2026-10-17-000012&version=1).
+Version 1 pins commit `3233dcdd4807cbc808f68582d913c4f463047de2` (the main head when it was submitted; the
+README and `formalization.yaml` at that commit still describe the repository as private, which it
+was until submission). Palomar's mechanical verification (https://github.com/PalomarRegistry/PalomarSubmission/actions/runs/39039625237) checked the six
+statements of record with Comparator, nanoda and con-ron; the pinned commit is preserved in
+https://github.com/PalomarArchive/benkeene--size-ramsey--8458867bc4a3. Registration is not a review of novelty: no novelty claim is made.
+To cite it:
+```bibtex
+@misc{palomar-2026-10-17-000012-v1,
+  author = {{Ben Keene}},
+  title = {{The connected size-Ramsey number of a four-edge matching versus a quadrilateral}},
+  year = {2026},
+  howpublished = {Palomar, PALOMAR-2026-10-17-000012 v1},
+  url = {https://palomar-registry.org/entry?id=PALOMAR-2026-10-17-000012&version=1},
+}
+```
+
 ## Submission
-Palomar submissions go through https://submit.palomar-registry.org/ with the full 40-character commit SHA. This repository is
-ready for submission from the registry's side: the CI comparator passed with all six statements of
-record on the rewritten main `8b937da` (2026-10-17,
-https://github.com/benkeene/size-ramsey/actions/runs/39036224257; con-ron, nanoda and the Lean
-default kernel accepted the solution), after earlier passes at `38bd345` (five records) and
-`46bf2d0` (six). Formal adversary pass 1 and reviewer pass 1 are done (ACCEPT_WITH_FIXES; fixes
-applied); they saw five records, and the sixth (`SizeRamsey.connected_transversal_le_three`, added
-at `cc2aec2`) is a one-line call into a library lemma they covered. Remaining before submitting,
-the owner's decisions: repository visibility (currently private; the registry must be able to
-clone). Ben Keene read `CORRESPONDENCE.md` in full on 2026-10-17. `leanchecker --fresh` has not run (optional; the
-registry's comparator performs independent replay). Submit the full SHA of the main head at
-submission time. See `status.scope` and `known_gaps` in `formalization.yaml`.
+Palomar submissions (including new versions of this entry) go through https://submit.palomar-registry.org/ with the
+full 40-character commit SHA. Before the submission the CI comparator passed with all six statements of
+record on `8b937da` (2026-10-17, https://github.com/benkeene/size-ramsey/actions/runs/39036224257;
+con-ron, nanoda and the Lean default kernel accepted the solution); the pinned commit `3233dcd`
+differs from it only in records (`formalization.yaml`, README, `CORRESPONDENCE.md`, `paper/`).
+Formal adversary pass 1 and reviewer pass 1 saw five records; the sixth
+(`SizeRamsey.connected_transversal_le_three`, added at `cc2aec2`) is a one-line call into a
+library lemma they covered. `leanchecker --fresh` has not run (optional). Commits on main after
+`3233dcd` are not part of version 1. See `status.scope` and `known_gaps` in `formalization.yaml`.

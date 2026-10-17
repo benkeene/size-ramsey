@@ -1,5 +1,7 @@
 # Status check (incomplete, 2026-10-16)
 
+> Historical literature audit (2026-10-16). The project has since proved the value 17 (Solution.lean; Palomar PALOMAR-2026-10-17-000012 v1); the statements below about an unknown value describe the literature search at that date. Novelty of B remains unestablished.
+
 Verified: Wang–Song–Zhang–Zhang, EJGTA 13(1) (2025) 163–170, doi:10.5614/ejgta.2025.13.1.11,
 Theorem 1.3 (upper bound ⌊(9n−1)/2⌋) and Conjecture 1 (equality); McKay's catalogue lists
 8,037,472 connected graphs with 16 edges.
