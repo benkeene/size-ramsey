@@ -131,7 +131,14 @@ theorem matching2_union {V W : Type*}
     (hH : ∀ ⦃a b⦄,
       H.Adj a b → F.Adj (j a) (j b)) :
     HasMatching2 G → HasMatching2 H → HasMatching4 F := by
-  sorry
+  rintro ⟨f, hf, hf01, hf23⟩ ⟨g, hg, hg01, hg23⟩
+  have hdis' : ∀ a b, j b ≠ i a := fun a b h => hdis a b h.symm
+  refine ⟨![i (f 0), i (f 1), i (f 2), i (f 3), j (g 0), j (g 1), j (g 2), j (g 3)],
+    ?_, by simpa using hG hf01, by simpa using hG hf23, by simpa using hH hg01,
+    by simpa using hH hg23⟩
+  intro a b h
+  fin_cases a <;> fin_cases b <;>
+    simp_all [hi.eq_iff, hj.eq_iff, hf.eq_iff, hg.eq_iff]
 
 end SizeRamsey.Plan
 
