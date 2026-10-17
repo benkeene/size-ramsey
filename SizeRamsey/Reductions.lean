@@ -25,24 +25,107 @@ section FiniteGraph
 
 variable {V : Type*} [Fintype V] (G : SimpleGraph V)
 
+/-! ### Local counting helpers -/
+
+theorem degree_ge_card_of_subset (x : V) (s : Finset V) (hs : ∀ y ∈ s, G.Adj x y) :
+    s.card ≤ G.degree x := by
+  rw [← G.card_neighborFinset_eq_degree]
+  exact Finset.card_le_card fun y hy => (G.mem_neighborFinset x y).mpr (hs y hy)
+
+theorem two_le_degree_of_adj {x a b : V} (ha : G.Adj x a) (hb : G.Adj x b) (hab : a ≠ b) :
+    2 ≤ G.degree x := by
+  have := degree_ge_card_of_subset G x {a, b} (by simp [ha, hb])
+  rwa [Finset.card_pair hab] at this
+
+theorem three_le_degree_of_adj {x a b c : V} (ha : G.Adj x a) (hb : G.Adj x b)
+    (hc : G.Adj x c) (hab : a ≠ b) (hac : a ≠ c) (hbc : b ≠ c) :
+    3 ≤ G.degree x := by
+  have := degree_ge_card_of_subset G x {a, b, c} (by simp [ha, hb, hc])
+  rwa [Finset.card_insert_of_notMem (by simp [hab, hac]), Finset.card_pair hbc] at this
+
+theorem four_le_degree_of_adj {x a b c d : V} (ha : G.Adj x a) (hb : G.Adj x b)
+    (hc : G.Adj x c) (hd : G.Adj x d) (hab : a ≠ b) (hac : a ≠ c) (had : a ≠ d)
+    (hbc : b ≠ c) (hbd : b ≠ d) (hcd : c ≠ d) :
+    4 ≤ G.degree x := by
+  have := degree_ge_card_of_subset G x {a, b, c, d} (by simp [ha, hb, hc, hd])
+  rwa [Finset.card_insert_of_notMem (by simp [hab, hac, had]),
+    Finset.card_insert_of_notMem (by simp [hbc, hbd]), Finset.card_pair hcd] at this
+
+theorem two_mul_edgeCount_induce (D : Finset V) :
+    2 * edgeCount (G.induce (D : Set V)) =
+      ∑ x ∈ D, ∑ y ∈ D, if G.Adj x y then 1 else 0 := by
+  rw [edgeCount_eq_card, ← SimpleGraph.sum_degrees_eq_twice_card_edges]
+  have hD : Finset.univ.filter (· ∈ D) = D := by ext; simp
+  refine Eq.trans ?_ (Finset.sum_subtype (p := (· ∈ D)) (F := inferInstance) D (fun _ => Iff.rfl)
+    (fun x => ∑ y ∈ D, if G.Adj x y then 1 else 0)).symm
+  refine Finset.sum_congr rfl fun x _ => ?_
+  rw [induce_finset_degree_eq G D x, card_filter_neighborFinset, hD]
+
+omit [Fintype V] in
+theorem IsC4Map.adj_at {g : Fin 4 → V} (hg : IsC4Map G g) (k : Fin 4) :
+    G.Adj (g k) (g (k + 1)) ∧ G.Adj (g (k + 1)) (g (k + 2)) ∧
+      G.Adj (g (k + 2)) (g (k + 3)) ∧ G.Adj (g (k + 3)) (g k) := by
+  have h := (isC4Map_iff_cyclic.mp hg).2
+  refine ⟨h k, ?_, ?_, ?_⟩
+  · have := h (k + 1); rwa [add_assoc, show (1 + 1 : Fin 4) = 2 from rfl] at this
+  · have := h (k + 2); rwa [add_assoc, show (2 + 1 : Fin 4) = 3 from rfl] at this
+  · have := h (k + 3); rwa [add_assoc, show (3 + 1 : Fin 4) = 0 from rfl, add_zero] at this
+
+omit [Fintype V] in
+theorem IsC4Map.ne_at {g : Fin 4 → V} (hg : IsC4Map G g) (k : Fin 4) {a b : Fin 4}
+    (h : a ≠ b) : g (k + a) ≠ g (k + b) := fun he => h (add_left_cancel (hg.1 he))
+
 theorem square_supported_degree_ge_two
     (hs : SquareSupported G) (v : V)
     (hv : 0 < G.degree v) :
     2 ≤ G.degree v := by
-  sorry
+  obtain ⟨w, hw⟩ := (G.degree_pos_iff_exists_adj v).mp hv
+  obtain ⟨g, hg, rfl, rfl⟩ := hs hw
+  obtain ⟨-, -, -, h30⟩ := IsC4Map.adj_at G hg 0
+  have hne := IsC4Map.ne_at G hg 0 (a := 1) (b := 3) (by decide)
+  simp only [zero_add] at h30 hne
+  exact two_le_degree_of_adj G hw h30.symm hne
 
 theorem degree_four_reduction
     (v : V) (hdeg : 4 ≤ G.degree v) :
     tau4 G ≤ tau4 (erase G {v}) + 1 ∧
     edgeCount (erase G {v}) + 4 ≤ edgeCount G := by
-  sorry
+  refine ⟨?_, ?_⟩
+  · have := tau4_delete_vertices_le G {v} {v} subset_rfl fun f _ h => h
+    simpa using this
+  · have := (erase_singleton_counts G v).1
+    omega
 
 theorem mixed_reduction
     {u v : V} (h : G.Adj u v)
     (hu : G.degree u = 2) (hv : G.degree v = 3) :
     tau4 G ≤ tau4 (erase G {u,v}) + 1 ∧
     edgeCount (erase G {u,v}) + 4 = edgeCount G := by
-  sorry
+  have huv : u ≠ v := h.ne
+  refine ⟨?_, ?_⟩
+  · have hHit : HitsDeleted G {u, v} {v} := by
+      intro g hg ⟨k, hk⟩
+      by_cases hv' : ∃ i, g i = v
+      · obtain ⟨i, hi⟩ := hv'
+        exact ⟨i, by simp [hi]⟩
+      · push Not at hv'
+        exfalso
+        have hk' : g k = u := by
+          rcases Finset.mem_insert.mp hk with h' | h'
+          · exact h'
+          · exact absurd (Finset.mem_singleton.mp h') (hv' k)
+        obtain ⟨h1, -, -, h3⟩ := IsC4Map.adj_at G hg k
+        have hne := IsC4Map.ne_at G hg k (a := 1) (b := 3) (by decide)
+        rw [hk'] at h1 h3
+        have := three_le_degree_of_adj G h h1 h3.symm (hv' _).symm (hv' _).symm hne
+        omega
+    have := tau4_delete_vertices_le G {u, v} {v} (by simp) hHit
+    simpa using this
+  · have h1 := erase_edgeCount G {u, v}
+    have h2 := two_mul_edgeCount_induce G {u, v}
+    rw [Finset.sum_pair huv, hu, hv] at h1
+    simp only [Finset.sum_pair huv, SimpleGraph.irrefl, h, h.symm, if_true, if_false] at h2
+    omega
 
 theorem two_regular_square_supported
     (hcon : G.Connected) (hsq : SquareSupported G)
@@ -78,7 +161,18 @@ theorem degree_two_three_cases
     (∀ v, G.degree v = 3) ∨
     ∃ u v, G.Adj u v ∧
       G.degree u = 2 ∧ G.degree v = 3 := by
-  sorry
+  by_cases h2 : ∀ v, G.degree v = 2
+  · exact Or.inl h2
+  by_cases h3 : ∀ v, G.degree v = 3
+  · exact Or.inr (Or.inl h3)
+  push Not at h2 h3
+  obtain ⟨a, ha⟩ := h2
+  obtain ⟨b, hb⟩ := h3
+  have hb2 : G.degree b = 2 := (hdeg b).resolve_right hb
+  obtain ⟨p⟩ := hcon.preconnected b a
+  obtain ⟨⟨⟨x, y⟩, hxy⟩, -, hx, hy⟩ :=
+    p.exists_boundary_dart {w | G.degree w = 2} hb2 ha
+  exact Or.inr (Or.inr ⟨x, y, hxy, hx, (hdeg y).resolve_left hy⟩)
 
 theorem square_component_reduction
     (C : G.ConnectedComponent)
