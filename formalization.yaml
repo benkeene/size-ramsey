@@ -12,7 +12,7 @@ project:
     construction from a three-vertex transversal, and an explicit twelve-vertex,
     seventeen-edge host. Proofs are complete as of commit a73d95a (2026-10-17); the proof
     certificate is Solution.lean and its dependency closure. Formal adversary pass 1 and reviewer
-    pass 1 are ACCEPT_WITH_FIXES (fixes applied); the full CI comparator pipeline has not run.
+    pass 1 are ACCEPT_WITH_FIXES (fixes applied); the CI comparator passed at a988d32 (2026-10-17).
   authors:
     - "Ben Keene"
   license: "Apache-2.0"
@@ -36,14 +36,17 @@ status:
     0.98) and reviewer pass 1 ACCEPT_WITH_FIXES (0.98), 2026-10-17, documentation fixes applied;
     independent statement reconstruction done (CORRESPONDENCE.md section 13). The reviewer
     recommends FORMALLY_VERIFIED for A, B, C (via two declarations), D for the fixed host and E;
-    the endpoint-universal reading of D is not formalized. The lab status promotion has not been
-    made; not yet a claim of formal verification. Informal proof: lab status
+    the endpoint-universal reading of D is not formalized. Lab status (aiseminar claim_0004,
+    2026-10-17): FORMALLY_VERIFIED with exactly that scope. Informal proof: lab status
     VERIFIED as an ordinary theorem (2026-10-16, aiseminar claim_0004). At commit a73d95a
     (2026-10-17) the five statements of record in Challenge.lean (deliberate sorry) are restated
     and proved in Solution.lean, and #print axioms of all five is [propext, Classical.choice,
     Quot.sound]. sorry_count counts occurrences outside Challenge.lean, whose five sorry bodies
-    are the statements of record and are excluded by convention. No Comparator acceptance is
-    claimed.
+    are the statements of record and are excluded by convention. CI comparator at a988d32
+    (2026-10-17, GitHub Actions run 39005389761): "Your solution is okay!"; con-ron (8174
+    declarations, --verified), nanoda and the Lean default kernel accepted the solution. Ready
+    for submission from the registry's side; remaining: repository visibility (currently
+    private), a human read of CORRESPONDENCE.md, optional packaging (TODO(ben)).
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: ["propext", "Classical.choice", "Quot.sound"]
@@ -173,18 +176,19 @@ review:
     (GPT-6 Astra, ACCEPT_WITH_FIXES 0.98, 2026-10-17) found no mathematical or verification-chain
     defect, reproduced "lake build Solution" with zero sorry warnings and the recursive
     comparison/axiom check, and recommends FORMALLY_VERIFIED for A, B, C (two declarations),
-    fixed-host D and E; its documentation fixes are applied. The lab status promotion has not
-    been made; this is not yet a claim of formal verification.
+    fixed-host D and E; its documentation fixes are applied.
     Lab status (aiseminar claim_0004 STATUS.yaml, 2026-10-17, commit f9cd162): FORMALLY_VERIFIED with
-    scope A, B, C via two declarations, fixed-host D, E; endpoint-universal D not claimed. CI comparator,
-    leanchecker --fresh and NanoDa/con-ron remain unrun (additional assurance, not required by AGENTS.md §3).
+    scope A, B, C via two declarations, fixed-host D, E; endpoint-universal D not claimed.
+    CI comparator passed at a988d32 (2026-10-17,
+    https://github.com/benkeene/size-ramsey/actions/runs/39005389761): con-ron, nanoda and
+    the Lean default kernel accepted. leanchecker --fresh not run (optional).
 
 known_gaps:
-  - "The full sandboxed CI comparator/export pipeline has not run; existing elaborated declarations passed recursive statement/definition comparison and axiom checking."
+  - "Repository is private (owner's decision); the registry must be able to clone it before submission."
   - "Corollary C statement of record omits the separately proved transversal conclusion (SizeRamsey.connected_transversal_le_three); a sixth record is optional packaging (TODO(ben))."
   - "Endpoint-universal Theorem D (arbitrary bridge endpoints) is not formalized; only the fixed host of CLAIM.md's D is."
   - "AxiomAudit.lean prints axioms without failing on sorryAx, and leanchecker accepts sorryAx-dependent declarations; their outputs must be inspected."
-  - "leanchecker --fresh, NanoDa and con-ron not run."
+  - "leanchecker --fresh not run (optional; NanoDa and con-ron ran in the CI comparator at a988d32)."
   - "The two 2025 computational papers by Dzido were seen only in abstract (scope: 3K2 and 2K2 versus cycles)."
   - "Novelty of the equality classification B is unestablished (literature audit 2026-10-16, confidence 0.75)."
 
