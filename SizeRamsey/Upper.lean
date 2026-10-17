@@ -167,7 +167,22 @@ theorem F17_connected :
 theorem k33MinusEdge_arrows_matching2_c4 :
     ∀ R : SimpleGraph (Fin 6), R ≤ k33MinusEdge →
       HasMatching2 R ∨ HasC4 (k33MinusEdge \ R) := by
-  sorry
+  intro R hR
+  by_cases hm : HasMatching2 R
+  · exact Or.inl hm
+  right
+  have htri : ∀ a b c, R.Adj a b → R.Adj b c → ¬ R.Adj c a :=
+    fun a b c hab hbc hca => Plan.k33_triangle_free a b c (hR hab) (hR hbc) (hR hca)
+  rcases Plan.star_or_empty R htri hm with hbot | ⟨v, hv⟩
+  · obtain ⟨f, ⟨hf, h01, h12, h23, h30⟩, -⟩ := Plan.k33_square_avoids_vertex 0
+    subst hbot
+    exact ⟨f, hf, by simpa using h01, by simpa using h12, by simpa using h23,
+      by simpa using h30⟩
+  · obtain ⟨f, ⟨hf, h01, h12, h23, h30⟩, hfv⟩ := Plan.k33_square_avoids_vertex v
+    have blue : ∀ a b : Fin 4, k33MinusEdge.Adj (f a) (f b) →
+        (k33MinusEdge \ R).Adj (f a) (f b) := fun a b h =>
+      ⟨h, fun hr => (hv _ _ hr).elim (hfv a) (hfv b)⟩
+    exact ⟨f, hf, blue _ _ h01, blue _ _ h12, blue _ _ h23, blue _ _ h30⟩
 
 theorem F17_arrows_matching4_c4 :
     ArrowsMatching4C4 F17 := by
