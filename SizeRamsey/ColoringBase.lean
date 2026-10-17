@@ -66,7 +66,17 @@ theorem transversal_no_blue_square {V : Type*}
     (F : SimpleGraph V) (S : Finset V)
     (h : c4Transversal F S) :
     ¬ HasC4 (F \ incidentRed F S) := by
-  sorry
+  rintro ⟨f, hf, h01, h12, h23, h30⟩
+  have hF : IsC4Map F f := ⟨hf, h01.1, h12.1, h23.1, h30.1⟩
+  have red : ∀ a b : Fin 4, (F \ incidentRed F S).Adj (f a) (f b) →
+      f a ∈ S → False := fun a b hab ha =>
+    hab.2 ((incidentRed_adj F S _ _).2 ⟨hab.1, Or.inl ha⟩)
+  obtain ⟨i, hi⟩ := h f hF
+  fin_cases i
+  · exact red _ _ h01 hi
+  · exact red _ _ h12 hi
+  · exact red _ _ h23 hi
+  · exact red _ _ h30 hi
 
 end SizeRamsey.Plan
 
