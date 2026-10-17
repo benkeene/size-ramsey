@@ -201,6 +201,7 @@ manifest copied from PALOMAR-2026-10-07-000005 with the root renamed.
 | 2026-10-17 | `#check @SizeRamsey.connected_transversal_le_three` under `set_option pp.all true` in two scratch files, one importing `Challenge`, one importing `Solution`; outputs diffed | `cc2aec2` | identical |
 | 2026-10-17 | `ruby scripts/validate-formalization.rb` (sixth record) | `cc2aec2` | passes |
 | 2026-10-17 | CI `scripts/verify-comparator.sh` (GitHub Actions, Linux, bubblewrap; job "Check statement against solution", run https://github.com/benkeene/size-ramsey/actions/runs/39034260971; all four jobs success) | `46bf2d0` (Lean text = `cc2aec2`) | build 1225 jobs; six records plus `propext`, `Quot.sound`, `Classical.choice` exported; con-ron accepted 8175 declarations (`--verified`), nanoda accepted, Lean default kernel accepted; `Your solution is okay!` |
+| 2026-10-17 | CI `scripts/verify-comparator.sh` on the rewritten main (GitHub Actions, run https://github.com/benkeene/size-ramsey/actions/runs/39036224257; all four jobs success) | `8b937da` (post-rewrite; Lean text = `cc2aec2`) | build 1225 jobs; six records exported; con-ron accepted 8175 declarations (`--verified`), nanoda accepted, Lean default kernel accepted; `Your solution is okay!` |
 
 Literal replay (2026-10-17, HEAD `a3a3f04`, after `lake build`): the module list is the root
 `SizeRamsey`, `Challenge`, `Solution`, and every `SizeRamsey.*` module with a `.olean` under
