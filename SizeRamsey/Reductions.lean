@@ -61,6 +61,9 @@ theorem two_mul_edgeCount_induce (D : Finset V) :
   refine Finset.sum_congr rfl fun x _ => ?_
   rw [induce_finset_degree_eq G D x, card_filter_neighborFinset, hD]
 
+theorem sum_fin_four (c : Fin 4 → ℕ) : ∑ i, c i = c 0 + c 1 + c 2 + c 3 := by
+  rw [Finset.sum_fin_eq_sum_range]; simp [Finset.sum_range_succ]
+
 omit [Fintype V] in
 theorem IsC4Map.adj_at {g : Fin 4 → V} (hg : IsC4Map G g) (k : Fin 4) :
     G.Adj (g k) (g (k + 1)) ∧ G.Adj (g (k + 1)) (g (k + 2)) ∧
@@ -142,7 +145,46 @@ theorem cubic_chordless_reduction
     tau4 G ≤ tau4 (erase G (Finset.univ.image f)) + 2 ∧
     edgeCount (erase G (Finset.univ.image f)) + 8 =
       edgeCount G := by
-  sorry
+  have hinj := hf.1
+  obtain ⟨-, h01, h12, h23, h30⟩ := hf
+  have hne : ∀ i j : Fin 4, i ≠ j → f i ≠ f j := fun i j h => hinj.ne h
+  refine ⟨?_, ?_⟩
+  · have hHit : HitsDeleted G (Finset.univ.image f) {f 0, f 2} := by
+      intro g hg ⟨k, hk⟩
+      by_contra hX
+      push Not at hX
+      have hX' : ∀ j, g j ≠ f 0 ∧ g j ≠ f 2 := fun j => by
+        have := hX j; simp only [Finset.mem_insert, Finset.mem_singleton, not_or] at this
+        exact this
+      obtain ⟨m, -, hm⟩ := Finset.mem_image.mp hk
+      obtain ⟨g1, -, -, g3⟩ := IsC4Map.adj_at G hg k
+      have hg13 := IsC4Map.ne_at G hg k (a := 1) (b := 3) (by decide)
+      rw [← hm] at g1 g3
+      have h02 := hne 0 2 (by decide)
+      fin_cases m
+      · exact (hX' k).1 hm.symm
+      · have := four_le_degree_of_adj G h01.symm h12 g1 g3.symm h02 (hX' _).1.symm
+          (hX' _).1.symm (hX' _).2.symm (hX' _).2.symm hg13
+        have := hdeg 1; simp_all
+      · exact (hX' k).2 hm.symm
+      · have := four_le_degree_of_adj G h30 h23.symm g1 g3.symm h02 (hX' _).1.symm
+          (hX' _).1.symm (hX' _).2.symm (hX' _).2.symm hg13
+        have := hdeg 3; simp_all
+    have hcard : ({f 0, f 2} : Finset V).card = 2 := Finset.card_pair (hne 0 2 (by decide))
+    have := tau4_delete_vertices_le G (Finset.univ.image f) {f 0, f 2}
+      (by intro x hx; simp only [Finset.mem_insert, Finset.mem_singleton] at hx
+          rcases hx with rfl | rfl <;> exact Finset.mem_image_of_mem _ (Finset.mem_univ _)) hHit
+    omega
+  · have h1 := erase_edgeCount G (Finset.univ.image f)
+    have h2 := two_mul_edgeCount_induce G (Finset.univ.image f)
+    rw [Finset.sum_image fun x _ y _ h => hinj h] at h1 h2
+    simp only [hdeg, Finset.sum_const, Finset.card_univ, Fintype.card_fin, smul_eq_mul] at h1
+    simp only [Finset.sum_image fun x _ y _ h => hinj h] at h2
+    have hca : ¬ G.Adj (f 2) (f 0) := fun h => hac h.symm
+    have hdb : ¬ G.Adj (f 3) (f 1) := fun h => hbd h.symm
+    simp only [sum_fin_four, SimpleGraph.irrefl, h01, h12, h23, h30, h01.symm, h12.symm,
+      h23.symm, h30.symm, hac, hbd, hca, hdb, ite_true, ite_false] at h2
+    omega
 
 theorem subcubic_chord_reduction
     (hdeg : ∀ v, G.degree v ≤ 3)
