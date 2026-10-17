@@ -20,7 +20,9 @@ built project modules (literal argv in `CORRESPONDENCE.md` §10) exits 0. The pr
 is `Solution.lean` and its dependency closure (`lake build Solution`: zero `sorry` warnings); the
 default `lake build` also shows the five deliberate `Challenge.lean` warnings. Adversary pass 1
 and reviewer pass 1 ACCEPT_WITH_FIXES (fixes applied); independent statement reconstruction done;
-full CI comparator not run; lab status promotion not made, so not yet formally verified.
+CI comparator passed at `a988d32` (2026-10-17; con-ron, nanoda, Lean kernel accepted); lab
+status FORMALLY_VERIFIED (aiseminar claim_0004; scope A, B, C via two declarations, fixed-host D,
+E).
 
 ## Status
 

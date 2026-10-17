@@ -18,9 +18,12 @@ locally (leanchecker, 25 modules); formal adversary pass 1 and reviewer pass 1 b
 ACCEPT_WITH_FIXES (reviewer 0.98, 2026-10-17; fixes applied); independent statement
 reconstruction done (`CORRESPONDENCE.md` §13). The reviewer recommends FORMALLY_VERIFIED for A,
 B, C (via two declarations), D for the fixed host of CLAIM.md, and E; the endpoint-universal
-reading of D is not formalized. Lab status (aiseminar claim_0004, 2026-10-17): FORMALLY_VERIFIED with
-exactly that scope; CI comparator, `leanchecker --fresh` and NanoDa/con-ron remain unrun. Informal argument in `docs/PROOF.md`; plan in `docs/astra/`; audit
-record in `CORRESPONDENCE.md` §10. Theorem A is a corollary of Alon–Mubayi–Thomas (2001); the
+reading of D is not formalized. Lab status (aiseminar claim_0004, 2026-10-17): FORMALLY_VERIFIED
+with exactly that scope. CI comparator passed at `a988d32` (2026-10-17, GitHub Actions run
+https://github.com/benkeene/size-ramsey/actions/runs/39005389761): statement and axiom check
+passed, and con-ron, nanoda and the Lean default kernel accepted the solution; `leanchecker
+--fresh` remains not run (optional). Informal argument in `docs/PROOF.md`; plan in `docs/astra/`;
+audit record in `CORRESPONDENCE.md` §10. Theorem A is a corollary of Alon–Mubayi–Thomas (2001); the
 proposed new content is the equality classification B and, through it, the value 17 (novelty of B
 unestablished; no novelty claim is made).
 Template: `~/semigroup-betti` (Palomar entry PALOMAR-2026-10-07-000005).
@@ -44,7 +47,7 @@ lake build               # also builds Challenge.lean: five deliberate sorry war
 python3 scripts/check-lean-sources.py
 ruby scripts/validate-formalization.rb
 lake env lean SizeRamsey/AxiomAudit.lean   # [propext, Classical.choice, Quot.sound] for all five records
-./scripts/verify-comparator.sh          # Linux with bubblewrap only; not yet run
+./scripts/verify-comparator.sh          # Linux with bubblewrap only; passed in CI at a988d32
 ```
 
 Pinned toolchain `leanprover/lean4:v4.35.0-rc3`, Mathlib `v4.35.0-rc3`
@@ -52,9 +55,13 @@ Pinned toolchain `leanprover/lean4:v4.35.0-rc3`, Mathlib `v4.35.0-rc3`
 
 ## Submission
 Palomar submissions go through https://submit.palomar-registry.org/ with the full 40-character commit SHA. This repository is
-not ready for submission: the comparator has not been run (it needs Linux CI with bubblewrap),
-nor `leanchecker --fresh`, NanoDa or con-ron (local recursive Challenge/Solution comparison and
-axiom checking over the elaborated declarations did pass). Formal adversary pass 1 and reviewer
+ready for submission from the registry's side: the CI comparator passed at `a988d32`
+(2026-10-17, https://github.com/benkeene/size-ramsey/actions/runs/39005389761; con-ron, nanoda
+and the Lean default kernel accepted the solution). Remaining before submitting, all the owner's
+decisions: repository visibility (currently private; the registry must be able to clone), a
+human read of `CORRESPONDENCE.md`, and the optional packaging items in `CORRESPONDENCE.md` §8 and
+aiseminar claim_0004 `RESPONSE_CLAUDE.md` (`TODO(ben)`). `leanchecker --fresh` has not run
+(optional; the registry's comparator performs independent replay). Formal adversary pass 1 and reviewer
 pass 1 are done (ACCEPT_WITH_FIXES; fixes applied). The Corollary C record omits the separately
 proved transversal conclusion `SizeRamsey.connected_transversal_le_three`; adding it as a sixth
 record is optional packaging (`CORRESPONDENCE.md` §8, `TODO(ben)`). See `status.scope` and `known_gaps` in

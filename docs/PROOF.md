@@ -4,8 +4,9 @@ Lean (2026-10-17): proofs complete at commit `a73d95a`; the proof certificate is
 and its dependency closure (`lake build Solution`: zero `sorry` warnings; the default `lake build`
 also shows the five deliberate `Challenge.lean` warnings). Kernel-replayed locally (leanchecker,
 25 modules); formal adversary pass 1 and reviewer pass 1 ACCEPT_WITH_FIXES (fixes applied);
-independent statement reconstruction done (`CORRESPONDENCE.md` §13); full CI comparator not run
-(`CORRESPONDENCE.md` §10).
+independent statement reconstruction done (`CORRESPONDENCE.md` §13); CI comparator passed at
+`a988d32` (2026-10-17; con-ron, nanoda and the Lean default kernel accepted; `CORRESPONDENCE.md`
+§10). Lab status (aiseminar claim_0004): FORMALLY_VERIFIED, scope as in the final paragraph.
 
 Source: Astra threads of 2026-10-16 (`docs/astra/2026-10-16_workflow_ramsey.md` §2 and the
 scaffold plan); revised after the adversary (transcript 20261016T191015) and reviewer
@@ -155,5 +156,6 @@ colouring consequence only; it omits the separately proved three-vertex transver
 `connected_transversal_le_three` (`CORRESPONDENCE.md` §8). D is formalized for the fixed host of
 CLAIM.md's D (bridge from vertex 5 of the first copy to vertex 0 of the second); the
 endpoint-universal statement is not formalized. Formal adversary pass 1 and reviewer pass 1 are
-ACCEPT_WITH_FIXES (fixes applied); the full CI comparator has not run; the lab status promotion
-has not been made, so this is not yet a claim of formal verification.
+ACCEPT_WITH_FIXES (fixes applied); the CI comparator passed at `a988d32` (2026-10-17,
+https://github.com/benkeene/size-ramsey/actions/runs/39005389761). Lab status (aiseminar
+claim_0004, 2026-10-17): FORMALLY_VERIFIED for A, B, C (two declarations), fixed-host D and E.

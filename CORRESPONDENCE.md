@@ -6,9 +6,11 @@ warnings (§10). The default `lake build` also builds `Challenge.lean`, whose fi
 `sorry`s give five warnings; it is not described as sorry-free. Proofs complete at `a73d95a`,
 kernel-replayed locally (leanchecker, all 25 built project modules); formal adversary pass 1
 ACCEPT_WITH_FIXES (meaning 0.97, trust 0.98) and reviewer pass 1 ACCEPT_WITH_FIXES (0.98), fixes
-applied 2026-10-17; independent statement reconstruction done (§13); full CI comparator not run.
-The reviewer recommends FORMALLY_VERIFIED for A, B, C (two declarations), fixed-host D and E;
-the lab status promotion has not been made, so this is not yet a claim of formal verification.
+applied 2026-10-17; independent statement reconstruction done (§13); CI comparator passed at
+`a988d32` (2026-10-17, https://github.com/benkeene/size-ramsey/actions/runs/39005389761; con-ron,
+nanoda and the Lean default kernel accepted the solution; §10). The reviewer recommends
+FORMALLY_VERIFIED for A, B, C (two declarations), fixed-host D and E; lab status (aiseminar
+claim_0004, 2026-10-17): FORMALLY_VERIFIED with exactly that scope.
 Sections 1–7 are the correspondence argument as written at the scaffold, with the Corollary C
 record scope made explicit after adversary pass 1 (§1, §2, §8) and D's fixed host made explicit
 after reviewer pass 1 (§1); no statement or definition has
@@ -130,22 +132,24 @@ reviewer (pass 1) calls this optional packaging. CLAIM.md's C is formally proved
 declarations together; the record alone states only the colouring half.
 
 Comparator wording: the docstrings of `Solution.lean` (line 42) and `SizeRamsey/Defs.lean`
-(line 15) say "the comparator checks" agreement. That describes the comparator's function, not a
-completed run: the CI comparator has not run. The files are left unedited (Defs.lean is frozen).
+(line 15) say "the comparator checks" agreement. That describes the comparator's function; the
+CI comparator has since run and passed at `a988d32` (2026-10-17, §10). The files are left
+unedited (Defs.lean is frozen).
 The trust adversary separately ran the toolchain's `Lake.Check.compareAt` and `checkAxioms` on
 the existing Challenge and Solution environments (`Except.ok ()` for both); that is a check over
 existing `.olean`s, not the sandboxed CI comparator run. The reviewer (pass 1) independently
-reproduced both with a wrapper failing on any error (`Except.ok ()`). So: the full sandboxed CI
-comparator/export pipeline has not run; existing elaborated declarations passed recursive
-statement/definition comparison and axiom checking.
+reproduced both with a wrapper failing on any error (`Except.ok ()`). The full sandboxed CI
+comparator/export pipeline then passed at `a988d32` (2026-10-17, GitHub Actions run
+https://github.com/benkeene/size-ramsey/actions/runs/39005389761; §10).
 
-Gaps: the full sandboxed CI comparator/export pipeline has not run (the local recursive
-comparison and axiom check above passed); adversary pass 1 on the formal development is done
+Gaps: none from the comparator (the full sandboxed CI comparator/export pipeline passed at
+`a988d32`, §10); adversary pass 1 on the formal development is done
 (ACCEPT_WITH_FIXES; aiseminar
 `agents/astra/transcripts/20261017T001309_adversary-{meaning,trust}_claim_0004.md`), and so is
 reviewer pass 1 (ACCEPT_WITH_FIXES 0.98;
 `agents/astra/transcripts/20261017T002905_reviewer-formal_claim_0004.md`); the independent statement reconstruction is done and compared in §13 (not
-elaborated by its author); `leanchecker --fresh`, NanoDa and con-ron have not run.
+elaborated by its author); `leanchecker --fresh` has not run (optional; NanoDa and con-ron ran
+inside the CI comparator and accepted).
 `AxiomAudit.lean` prints axioms and does not fail on `sorryAx`, and `leanchecker` accepts
 declarations that depend on `sorryAx` (the trust adversary's synthetic test); both outputs must be
 inspected, as recorded in §10. Provenance (see `formalization.yaml` `automation.notes`):
@@ -182,6 +186,7 @@ manifest copied from PALOMAR-2026-10-07-000005 with the root renamed.
 | 2026-10-17 | `lake build Solution` (reviewer pass 1) | `134d223` | exit 0, 1225 jobs; zero sorry warnings |
 | 2026-10-17 | recursive `Lake.Check.compareAt` + `checkAxioms` (three-axiom allowlist), failing on error (reviewer pass 1) | `134d223` | `Except.ok ()` for both |
 | 2026-10-17 | `lake build Solution` (after reviewer fixes; Lean text unchanged since `134d223`) | `134d223` + docs | exit 0, 1225 jobs; `declaration uses 'sorry'`: 0 (linter warnings only) |
+| 2026-10-17 | CI `scripts/verify-comparator.sh` (GitHub Actions, Linux, bubblewrap; job "Check statement against solution", run https://github.com/benkeene/size-ramsey/actions/runs/39005389761; all four jobs success) | `a988d32` | build 1225 jobs; five records plus `propext`, `Quot.sound`, `Classical.choice` exported; con-ron accepted 8174 declarations (`--verified`), nanoda accepted, Lean default kernel accepted; `Your solution is okay!` |
 
 Literal replay (2026-10-17, HEAD `a470609`, after `lake build`): the module list is the root
 `SizeRamsey`, `Challenge`, `Solution`, and every `SizeRamsey.*` module with a `.olean` under
@@ -205,7 +210,8 @@ independently ran `lake env leanchecker -v SizeRamsey Solution Challenge`, exit 
 same 25 modules. Normal replay trusts imported Mathlib declarations; it does not replay from an
 empty environment (`--fresh`) and does not elaborate sources.
 
-Not run: full CI comparator pipeline (Linux, bubblewrap), `leanchecker --fresh`, NanoDa, con-ron.
+Not run: `leanchecker --fresh` (optional). Passed: full CI comparator pipeline with NanoDa and
+con-ron (row above, `a988d32`).
 Independent statement reconstruction: done 2026-10-17 (§13). Adversary pass 1 (meaning, trust):
 done 2026-10-17, ACCEPT_WITH_FIXES. Reviewer pass 1: done 2026-10-17, ACCEPT_WITH_FIXES 0.98. Lean sources differ between `a73d95a`
 and `a470609` only in the `Solution.lean` module docstring: one comment line ("currently
