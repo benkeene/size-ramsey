@@ -29,7 +29,8 @@ theorem avoiding_coloring_le_sixteen
     (hconn : F.Connected) (hle : edgeCount F ≤ 16) :
     ∃ R : SimpleGraph V,
       R ≤ F ∧ ¬ HasMatching4 R ∧ ¬ HasC4 (F \ R) := by
-  sorry
+  obtain ⟨S, hS, hcard⟩ := connected_transversal_le_three F hconn hle
+  exact avoiding_coloring_of_transversal F S hS hcard
 
 end Proof
 end SizeRamsey
