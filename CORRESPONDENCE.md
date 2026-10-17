@@ -1,7 +1,10 @@
-# Correspondence: informal theorem ↔ formal statement (scaffold, 2026-10-16)
+# Correspondence: informal theorem ↔ formal statement (2026-10-16; updated 2026-10-17)
 
-Status: SCAFFOLD. Nothing below is a verification record yet; sections 10–12 are filled as the
-checks are run.
+Status: sorry-free Lean development at `a73d95a`, kernel-replayed locally (per-module
+leanchecker), pending adversary and reviewer passes on the formal development, independent
+statement reconstruction, and the CI comparator. Not formally verified. Sections 1–7 are the
+correspondence argument as written at the scaffold; no statement or definition has changed since
+the stream base `b17d1fa`. §10 is the audit record.
 
 ## 1. Informal statements
 
@@ -66,12 +69,25 @@ support; B's `↔` includes the converse, which requires the four transversal nu
 
 `connectedSizeRamsey = sInf {m | ∃ n F, F.Connected ∧ edgeCount F = m ∧ ArrowsMatching4C4 F}`;
 `⟨12, F17, F17_spec⟩` shows 17 is in the set, `Nat.sInf_le` and `le_csInf` give both inequalities
-(the proof in Solution.lean is complete modulo C and D).
+(the proof in Solution.lean uses C and D, both proved in the development as of `a73d95a`).
 
 ## 8. Formalized scope and gaps
 
-Everything except E's wrapper and `F17_edgeCount` is admitted (see `status.sorry_count`).
-Novelty of A/B is not claimed.
+As of `a73d95a` (2026-10-17) every declaration of the development library and of `Solution.lean`
+is proved: the only `sorry`s in the project are the five deliberate ones in `Challenge.lean` (the
+statements of record), and `#print axioms` of the five records in `Solution.lean` is
+`[propext, Classical.choice, Quot.sound]`. No custom axioms, no `native_decide`.
+`Challenge.lean`, `SizeRamsey/Defs.lean`, `Shared.lean` and `AInterface.lean` are byte-identical
+to the stream base `b17d1fa`, which differs from the bootstrap `a979fb0` only by a status
+docstring edit; the statements of record and the frozen definitions are therefore unchanged.
+
+Gaps: the CI comparator (statement/definition agreement between Challenge and Solution) has not
+run; no adversary or reviewer pass has examined the formal development; the formal statements
+have not been independently reconstructed from the informal ones; `leanchecker --fresh`, NanoDa
+and con-ron have not run. Provenance (see `formalization.yaml` `automation.notes`): Tightness,
+Equality/Mixed, Equality/Cubic, Equality/TwoRegular, the body of `equality_classification` and
+`connected_transversal_le_three` were written by GPT-6 Astra and applied mechanically; the rest
+by Claude Opus 5.5 coding agents. Novelty of A/B is not claimed.
 
 ## 9. Toolchain
 
@@ -85,8 +101,21 @@ manifest copied from PALOMAR-2026-10-07-000005 with the root renamed.
 | 2026-10-16 | `lake build` | scaffold | success, 1043 jobs, sorry warnings only |
 | 2026-10-16 | `lake env lean SizeRamsey/AxiomAudit.lean` | scaffold | all five depend on `sorryAx` (expected) |
 | 2026-10-16 | `python3 scripts/check-lean-sources.py` | scaffold | satisfied |
+| before 2026-10-17 | `lake env leanchecker SizeRamsey.Deletion SizeRamsey.Components SizeRamsey.Reductions SizeRamsey.Universal` | branch `lean/stream-A` | exit 0 |
+| before 2026-10-17 | `lake env leanchecker SizeRamsey.Upper SizeRamsey.ColoringBase SizeRamsey.Coloring` | branch `lean/stream-B` | exit 0 |
+| before 2026-10-17 | `lake env leanchecker SizeRamsey.Equality.Common SizeRamsey.Equality.Extension SizeRamsey.Equality.DegreeFour` | branch `lean/stream-B` | exit 0 |
+| 2026-10-17 | `lake build` | `a73d95a` | exit 0, 1228 jobs; `declaration uses sorry`: 5, all in `Challenge.lean`, 0 elsewhere |
+| 2026-10-17 | `lake env lean SizeRamsey/AxiomAudit.lean` | `a73d95a` | `[propext, Classical.choice, Quot.sound]` for all five records |
+| 2026-10-17 | `lake env leanchecker SizeRamsey.Tightness SizeRamsey.Equality.Mixed SizeRamsey.Equality.Cubic SizeRamsey.Equality.TwoRegular SizeRamsey.Equality SizeRamsey.Coloring SizeRamsey.Main Solution Challenge` | `a73d95a` | exit 0 |
+| 2026-10-17 | `python3 scripts/check-lean-sources.py` | `a73d95a` | satisfied |
+| 2026-10-17 | `ruby scripts/validate-formalization.rb` | `a73d95a` | passes |
+| 2026-10-17 | forbidden-construct scan of every applied diff | `a73d95a` | 0 findings |
+| 2026-10-17 | frozen-file comparison against `b17d1fa` (Challenge, Solution, Defs, Shared, AInterface) | `a73d95a` | byte-identical |
+| 2026-10-17 | `lake env leanchecker <all 24 built modules: Challenge, Solution, SizeRamsey.* incl. Equality.*>` | `a73d95a` | exit 0, 1 min 20 s wall |
 
-leanchecker, `--fresh`, Comparator, NanoDa, con-ron: not run.
+Not run: CI comparator (Linux, bubblewrap), `leanchecker --fresh`, NanoDa, con-ron; adversary
+and reviewer passes on the formal development; independent statement reconstruction.
+`Solution.lean` was afterwards edited in a docstring only (comment lines; no statement or proof).
 
 ## 11. Computations
 
@@ -96,4 +125,7 @@ have τ₄ ≤ 2. None of this is Lean evidence.
 
 ## 12. Review packet
 
-`~/aiseminar/agents/shared/claim_NNNN/` (to be created); history in `docs/STATUS_CHECK.md`.
+`~/aiseminar/agents/shared/claim_0004/` (informal proof VERIFIED; `STATUS.yaml` carries a
+`formalization:` key with the Lean state, `EVIDENCE.md` the 2026-10-17 Lean audit); history in
+`docs/STATUS_CHECK.md`. Astra run directory for the formal proofs:
+`~/aiseminar/agents/runs/2026-10-16_ramsey-astra/` (replies `reply_ramsey-{A7,B67,B89}-r1.md`).

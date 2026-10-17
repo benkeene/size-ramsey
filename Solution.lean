@@ -40,7 +40,8 @@ review protocol (ordinary theorem, not formally verified); this file states the 
 The five theorem statements of `Challenge.lean`, restated verbatim and proved. The definitions come
 from `SizeRamsey.Defs` (identical text); this module does not import `Challenge`, and the
 comparator checks that statements and definitions agree. Four theorems are thin calls into the
-development library (`SizeRamsey.Proof.*`, currently admitted); the fifth is proved from C and D. -/
+development library (`SizeRamsey.Proof.*`, sorry-free as of `a73d95a`); the fifth is proved from
+C and D. -/
 
 @[expose] public section
 
