@@ -32,7 +32,22 @@ theorem tau4_components :
 theorem edgeCount_components :
     edgeCount G =
       ∑ C : G.ConnectedComponent, edgeCount (compGraph G C) := by
-  sorry
+  have hC : ∀ C : G.ConnectedComponent, 2 * edgeCount (compGraph G C) =
+      ∑ v ∈ Finset.univ.filter (fun v => G.connectedComponentMk v = C), G.degree v := by
+    intro C
+    rw [edgeCount_eq_card, ← SimpleGraph.sum_degrees_eq_twice_card_edges,
+      Finset.sum_subtype (p := (· ∈ C.supp)) _ (fun v => by simp)]
+    exact Finset.sum_congr rfl fun v _ =>
+      SimpleGraph.degree_induce_of_neighborSet_subset fun w hw => (C.mem_supp_congr_adj hw).mp v.2
+  have hG : 2 * edgeCount G = ∑ v, G.degree v := by
+    rw [edgeCount_eq_card, SimpleGraph.sum_degrees_eq_twice_card_edges]
+  have hsum : ∑ v, G.degree v = ∑ C : G.ConnectedComponent,
+      ∑ v ∈ Finset.univ.filter (fun v => G.connectedComponentMk v = C), G.degree v :=
+    (Finset.sum_fiberwise_of_maps_to (fun _ _ => Finset.mem_univ _) _).symm
+  have : 2 * edgeCount G = 2 * ∑ C : G.ConnectedComponent, edgeCount (compGraph G C) := by
+    rw [hG, hsum, Finset.mul_sum]
+    exact Finset.sum_congr rfl fun C _ => (hC C).symm
+  omega
 
 omit [Fintype V] in
 theorem compGraph_connected (C : G.ConnectedComponent) :
