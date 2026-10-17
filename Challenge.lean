@@ -30,8 +30,8 @@ Statements of record (all with non-induced copies, graphs on `Fin n`):
   arrows `(4K₂, C₄)`.
 * `SizeRamsey.connectedSizeRamsey_eq_seventeen`: `r̂_c(4K₂, C₄) = 17`.
 
-Status 2026-10-16: PROOF_ATTEMPT. The informal structural argument (docs/PROOF.md) has not
-completed the review protocol; this file states the targets. Proofs are in `Solution.lean`.
+Status 2026-10-16: the informal structural argument (docs/PROOF.md) is verified by the aiseminar
+review protocol (ordinary theorem, not formally verified); this file states the targets. Proofs are in `Solution.lean`.
 -/
 
 @[expose] public section
