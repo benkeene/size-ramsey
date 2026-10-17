@@ -328,7 +328,24 @@ theorem tau4_delete_non_square_edge
 theorem tau4_delete_leaf_vertex
     (v : V) (hd : G.degree v ≤ 1) :
     tau4 (erase G {v}) = tau4 G := by
-  sorry
+  refine tau4_erase_eq_of G G {v} (fun f hf i hi => ?_) (fun _ _ _ _ => Iff.rfl)
+  rw [Finset.mem_singleton] at hi
+  obtain ⟨hinj, h01, -, -, h30⟩ := IsC4Map.rotate hf i
+  simp only [zero_add] at h01 h30
+  rw [hi] at h01 h30
+  have hne : f (1 + i) ≠ f (3 + i) := fun h13 => by
+    have : (1 : Fin 4) = 3 := hinj (a₁ := 1) (a₂ := 3) h13
+    exact absurd this (by decide)
+  have hsub : ({f (1 + i), f (3 + i)} : Finset V) ⊆ G.neighborFinset v := by
+    intro w hw
+    rw [Finset.mem_insert, Finset.mem_singleton] at hw
+    rw [SimpleGraph.mem_neighborFinset]
+    rcases hw with rfl | rfl
+    · exact h01
+    · exact h30.symm
+  have := Finset.card_le_card hsub
+  rw [Finset.card_pair hne, SimpleGraph.card_neighborFinset_eq_degree] at this
+  omega
 
 end FiniteGraph
 
