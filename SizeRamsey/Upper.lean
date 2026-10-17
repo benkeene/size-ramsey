@@ -3,13 +3,14 @@ Copyright (c) 2026 Ben Keene. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Ben Keene
 -/
-
 module
 
-public import SizeRamsey.SmallGraphs
+public import SizeRamsey.AInterface
 
-/-! Theorem D: `K₃,₃ − e → (2K₂, C₄)` (a pairwise-intersecting edge family in a bipartite graph is a
-star; deleting its centre leaves a square), and two copies joined by a bridge arrow `(4K₂, C₄)`. -/
+/-! Theorem D (Stream B): `K₃,₃ − e → (2K₂, C₄)` (a triangle-free graph without a 2-matching is
+empty or a star; deleting its centre leaves a square), and two copies joined by a bridge arrow
+`(4K₂, C₄)`. Uses from Stream A only the elementary `K₃,₃ − e` certificates, never `tau4`. This
+file has no classical instance override, so `decide` runs on the computable instances. -/
 
 @[expose] public section
 
@@ -19,21 +20,101 @@ namespace SizeRamsey
 def HasMatching2 {V : Type*} (G : SimpleGraph V) : Prop :=
   ∃ f : Fin 4 → V, Function.Injective f ∧ G.Adj (f 0) (f 1) ∧ G.Adj (f 2) (f 3)
 
-theorem F17_connected : F17.Connected := by
+end SizeRamsey
+
+namespace SizeRamsey.Plan
+
+theorem star_or_empty {V : Type*} (G : SimpleGraph V)
+    (htri : ∀ a b c,
+      G.Adj a b → G.Adj b c → ¬ G.Adj c a)
+    (hmatch : ¬ HasMatching2 G) :
+    G = ⊥ ∨
+      ∃ v, ∀ a b, G.Adj a b → a = v ∨ b = v := by
+  sorry
+
+def leftCopy (i : Fin 6) : Fin 12 :=
+  ⟨i.val, by omega⟩
+
+def rightCopy (i : Fin 6) : Fin 12 :=
+  ⟨i.val + 6, by omega⟩
+
+theorem leftCopy_injective :
+    Function.Injective leftCopy := by
+  intro a b h
+  apply Fin.ext
+  exact congrArg (fun x : Fin 12 => x.val) h
+
+theorem rightCopy_injective :
+    Function.Injective rightCopy := by
+  intro a b h
+  apply Fin.ext
+  have := congrArg Fin.val h
+  dsimp [rightCopy] at this
+  omega
+
+theorem copies_disjoint (i j : Fin 6) :
+    leftCopy i ≠ rightCopy j := by
+  intro h
+  have := congrArg Fin.val h
+  dsimp [leftCopy, rightCopy] at this
+  omega
+
+theorem leftCopy_adj (i j : Fin 6) :
+    F17.Adj (leftCopy i) (leftCopy j) ↔
+      k33MinusEdge.Adj i j := by
+  fin_cases i <;> fin_cases j <;> decide
+
+theorem rightCopy_adj (i j : Fin 6) :
+    F17.Adj (rightCopy i) (rightCopy j) ↔
+      k33MinusEdge.Adj i j := by
+  fin_cases i <;> fin_cases j <;> decide
+
+theorem hasC4_map {V W : Type*}
+    {G : SimpleGraph V} {H : SimpleGraph W}
+    (f : V → W) (hf : Function.Injective f)
+    (hadj : ∀ ⦃a b⦄,
+      G.Adj a b → H.Adj (f a) (f b)) :
+    HasC4 G → HasC4 H := by
+  rintro ⟨g, hg, h01, h12, h23, h30⟩
+  exact ⟨f ∘ g, hf.comp hg,
+    hadj h01, hadj h12, hadj h23, hadj h30⟩
+
+theorem matching2_union {V W : Type*}
+    {G H : SimpleGraph V} {F : SimpleGraph W}
+    (i j : V → W)
+    (hi : Function.Injective i)
+    (hj : Function.Injective j)
+    (hdis : ∀ a b, i a ≠ j b)
+    (hG : ∀ ⦃a b⦄,
+      G.Adj a b → F.Adj (i a) (i b))
+    (hH : ∀ ⦃a b⦄,
+      H.Adj a b → F.Adj (j a) (j b)) :
+    HasMatching2 G → HasMatching2 H → HasMatching4 F := by
+  sorry
+
+end SizeRamsey.Plan
+
+namespace SizeRamsey
+
+theorem F17_connected :
+    F17.Connected := by
   sorry
 
 theorem k33MinusEdge_arrows_matching2_c4 :
-    ∀ R : SimpleGraph (Fin 6), R ≤ k33MinusEdge → HasMatching2 R ∨ HasC4 (k33MinusEdge \ R) := by
+    ∀ R : SimpleGraph (Fin 6), R ≤ k33MinusEdge →
+      HasMatching2 R ∨ HasC4 (k33MinusEdge \ R) := by
   sorry
 
-theorem F17_arrows_matching4_c4 : ArrowsMatching4C4 F17 := by
+theorem F17_arrows_matching4_c4 :
+    ArrowsMatching4C4 F17 := by
   sorry
 
 namespace Proof
 
-theorem F17_spec : F17.Connected ∧ edgeCount F17 = 17 ∧ ArrowsMatching4C4 F17 :=
+theorem F17_spec :
+    F17.Connected ∧ edgeCount F17 = 17 ∧
+      ArrowsMatching4C4 F17 :=
   ⟨F17_connected, F17_edgeCount, F17_arrows_matching4_c4⟩
 
 end Proof
-
 end SizeRamsey

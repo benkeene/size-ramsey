@@ -1,17 +1,108 @@
 # Development notes
 
-| informal label (docs/PROOF.md) | Lean declaration | file | status |
+Plan of record: `docs/astra/2026-10-16_lean_plan.md` (two parallel streams). Stream A owns the
+structural library, Stream B owns D, colouring, equality and integration (plan §0). `Shared.lean`
+and `AInterface.lean` are frozen after bootstrap: names, types, definitions and instance
+conventions do not change; admitted bodies are replaced in place by their owner. B imports A only
+through `SizeRamsey.AInterface`. New declarations live in `SizeRamsey.Plan`; the four
+`SizeRamsey.Proof.*` interfaces consumed by `Solution.lean` keep their names.
+
+Status legend: **stub** = body is `sorry`; **proved** = no `sorryAx` in `#print axioms`;
+**assembled** = proved from stubs (term is complete, axioms still include `sorryAx`).
+Status as of the bootstrap commit.
+
+## Status
+
+| declaration | owner | file | status |
 |---|---|---|---|
-| Theorem A | `SizeRamsey.Proof.four_mul_tau4_le_edgeCount` | Universal.lean | admitted |
-| Theorem B | `SizeRamsey.Proof.equality_classification` | Equality.lean | admitted (review gate) |
-| Corollary C | `SizeRamsey.Proof.avoiding_coloring_le_sixteen` | Coloring.lean | admitted |
-| Theorem D | `SizeRamsey.Proof.F17_spec` | Upper.lean | assembled; parts admitted |
-| F17 edge count | `SizeRamsey.F17_edgeCount` | Basic.lean | proved (`decide`) |
-| endpoint | `SizeRamsey.connectedSizeRamsey_eq_seventeen` | Solution.lean | proved from C, D |
+| `IsC4Map`, `HasC4`, `HasMatching4`, `c4Transversal`, `tau4`, `edgeCount`, `ArrowsMatching4C4`, `graphOfEdges`, `wheel5`, `k33MinusEdge`, `octahedron`, `F17`, `connectedSizeRamsey` | frozen | Defs.lean | definitions (agree with Challenge) |
+| `Plan.erase`, `EdgeOnSquare`, `SquareSupported`, `Tight`, `Classified`, `SmallerClassified`, `PrescribedOptimal`, `compGraph`, `componentFintype`, `HitsDeleted`, `liftTransversal`, `componentVerts`, `attachmentEdges` | frozen | Shared.lean | definitions |
+| `edgeCount_eq_card` | A | Basic.lean | proved |
+| `F17_edgeCount` | A | Basic.lean | proved (`decide`) |
+| `tau4_le_card`, `exists_transversal_card_eq_tau4`, `tau4_mono`, `tau4_iso` | A | Basic.lean | stub |
+| `Plan.edgeCount_iso`, `Plan.tau4_eq_zero_iff`, `Plan.tau4_eq_of_certificates` | A | Basic.lean | stub |
+| decidability instances (`IsC4Map`, `HasC4`, `c4Transversal`, `wheel5`, `k33MinusEdge`, `octahedron`) | A | FiniteChecks.lean | defined |
+| `Plan.k33_square_avoids_vertex`, `Plan.k33_triangle_free` | A | FiniteChecks.lean | proved |
+| `Plan.small_graph_data`, `Plan.small_degrees`, `Plan.prescribedOptimal_iso` | A | SmallGraphs.lean | stub |
+| `Plan.classified_tight`, `Plan.classified_prescribed`, `Plan.classified_three_degree_two` | A | SmallGraphs.lean | stub |
+| `Plan.tau4_erase_lift`, `Plan.tau4_delete_vertices_le`, `Plan.transversal_iff_no_square_erase` | A | Deletion.lean | stub |
+| `Plan.erase_edgeCount`, `Plan.erase_singleton_counts`, `Plan.erase_degree`, `Plan.erase_card` | A | Deletion.lean | stub |
+| `Plan.tau4_delete_non_square_edge`, `Plan.tau4_delete_leaf_vertex` | A | Deletion.lean | stub |
+| `Plan.compGraph_connected` | A | Components.lean | proved |
+| `Plan.tau4_components`, `Plan.edgeCount_components`, `Plan.compGraph_degree`, `Plan.component_edgeCount_le` | A | Components.lean | stub |
+| `Plan.component_square_supported`, `Plan.connected_positive_degree`, `Plan.square_supported_no_bridge` | A | Components.lean | stub |
+| `Plan.component_attachment_card_ge_two`, `Plan.attachment_sum` | A | Components.lean | stub |
+| `Plan.square_supported_degree_ge_two`, `Plan.degree_four_reduction`, `Plan.mixed_reduction` | A | Reductions.lean | stub |
+| `Plan.two_regular_square_supported`, `Plan.cubic_chordless_reduction`, `Plan.subcubic_chord_reduction` | A | Reductions.lean | stub |
+| `Plan.degree_two_three_cases`, `Plan.square_component_reduction` | A | Reductions.lean | stub |
+| `Plan.universal` (Theorem A) | A | Universal.lean | stub |
+| `Proof.four_mul_tau4_le_edgeCount` | A | Universal.lean | assembled (`Plan.universal`) |
+| `Plan.equality_square_supported`, `Plan.equality_max_degree_le_four` | A | Tightness.lean | stub |
+| `Plan.equality_min_degree`, `Plan.equality_residual_components` | A | Tightness.lean | stub |
+| (import boundary) | A | AInterface.lean | public imports only |
+| `HasMatching2` | B | Upper.lean | definition |
+| `Plan.leftCopy`, `Plan.rightCopy` | B | Upper.lean | definitions |
+| `Plan.leftCopy_injective`, `Plan.rightCopy_injective`, `Plan.copies_disjoint` | B | Upper.lean | proved |
+| `Plan.leftCopy_adj`, `Plan.rightCopy_adj`, `Plan.hasC4_map` | B | Upper.lean | proved |
+| `Plan.star_or_empty`, `Plan.matching2_union` | B | Upper.lean | stub |
+| `F17_connected`, `k33MinusEdge_arrows_matching2_c4`, `F17_arrows_matching4_c4` | B | Upper.lean | stub |
+| `Proof.F17_spec` (Theorem D) | B | Upper.lean | assembled |
+| `incidentRed` | B | ColoringBase.lean | definition |
+| `Plan.incidentRed_adj` | B | ColoringBase.lean | proved |
+| `Plan.matching4_incident_card`, `Plan.transversal_no_blue_square`, `avoiding_coloring_of_transversal` | B | ColoringBase.lean | stub |
+| `Plan.tight_subcubic_chordless` | B | Equality/Common.lean | stub |
+| `Plan.k33_extension_tau_le_two` | B | Equality/Extension.lean | stub |
+| `Plan.equality_degree_four_case` | B | Equality/DegreeFour.lean | stub |
+| `Plan.equality_mixed_degree_case` | B | Equality/Mixed.lean | stub |
+| `Plan.mixed_reconstruction` | B | Equality/Mixed.lean | proved |
+| `Plan.two_squares_matching_transversal`, `Plan.equality_cubic_impossible` | B | Equality/Cubic.lean | stub |
+| `Plan.equality_two_regular_case` | B | Equality/TwoRegular.lean | stub |
+| `Plan.classification_of_step` | B | Equality.lean | proved |
+| `Proof.equality_classification` (Theorem B) | B | Equality.lean | stub |
+| `connected_transversal_le_three` | B | Coloring.lean | stub |
+| `Proof.avoiding_coloring_le_sixteen` (Corollary C) | B | Coloring.lean | stub |
+| (final exports) | B | Main.lean | public imports only |
+| five statements of record, `connectedSizeRamsey_eq_seventeen` | B | Solution.lean | assembled; endpoint proved from C and D |
+| axiom audit | B | AxiomAudit.lean | imports `Solution`; not imported by `SizeRamsey` |
 
-Conventions: every file starts with `module`; `public import` for exported dependencies;
+## Import DAG
+
+`Defs → Shared → Basic → {FiniteChecks → SmallGraphs, Deletion → Components}`;
+`Components + SmallGraphs → Reductions → Universal → Tightness`;
+`AInterface = Tightness + SmallGraphs`; `AInterface → Upper, Equality/{Common, Extension,
+TwoRegular}`; `Common + Extension → DegreeFour`; `Common → Mixed, Cubic`;
+four cases `→ Equality`; `Shared + Basic → ColoringBase`; `Equality + ColoringBase → Coloring`;
+`Coloring + Upper → Main → SizeRamsey → Solution → AxiomAudit`.
+
+## Contract deviations
+
+Recorded at bootstrap. None changes a declaration name, a statement, or the mathematics.
+
+1. `FiniteChecks.lean` additionally imports `Mathlib.Data.Fin.VecNotation`; without it the
+   plan's witnesses `![1,3,2,4]` parse as Boolean negation and fail. `Mathlib.Tactic.FinCases`
+   is imported there too (the plan asks for it); both are re-exported to B through `AInterface`.
+2. `compGraph_connected` is stated under `omit [Fintype V] in`, as the plan's §5 recommends, so
+   its type has no `Fintype V` argument (the interface harness had an unused one).
+3. `equality_residual_components`: `4*c` written `4 * c` (whitespace linter); same term.
+4. `small_degrees` (SmallGraphs.lean) has the plan's text, but because `FiniteChecks` is now
+   imported, the `degree` instances for `wheel5`, `k33MinusEdge` and `octahedron` elaborate to
+   the computable `DecidableRel` instances from `FiniteChecks` instead of
+   `Classical.propDecidable` as in the plan's one-file harness. The statements are
+   propositionally equal (`Fintype` is a subsingleton). Every other distributed declaration
+   elaborates to exactly the harness type (checked by comparing the elaborated types of all 43
+   interface theorems against a re-elaboration of the plan's initial `AInterface` text).
+5. Module doc-strings were added to `Shared.lean` and `AInterface.lean` (style linter), and the
+   repository's copyright header precedes `module` in every new file. The Lean text of both
+   frozen files is otherwise verbatim.
+
+Remaining linter warnings (frozen signatures, left as is): `linter.unusedFintypeInType` on
+`tau4_erase_lift`, `transversal_iff_no_square_erase`, `component_square_supported`,
+`square_supported_no_bridge`.
+
+## Conventions
+
+Every file starts with `module`; `public import` for exported dependencies;
 `@[expose] public section`; the library never imports `Challenge`; `Solution` imports the
-library publicly and restates the five theorems. No `native_decide`.
-
-Discharge order (scaffold plan §9): Basic → D → colouring from a transversal → Deletion and
-Components → A → SmallGraphs and FiniteChecks → B (after review gate) → C → Solution records.
+library publicly and restates the five theorems. No `native_decide`. Structural sections use
+`attribute [local instance] Classical.propDecidable`; certificate sections (`Basic` instances,
+`FiniteChecks`, `Upper`) do not, so that `decide` runs.
