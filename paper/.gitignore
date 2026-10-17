@@ -1,0 +1,13 @@
+# LaTeX build products (latexmk)
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.toc
+*.synctex.gz
+# compiled output and page renders are not tracked
+main.pdf
+page-*.png

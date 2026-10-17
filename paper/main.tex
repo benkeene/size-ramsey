@@ -1,0 +1,508 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage[margin=1.05in]{geometry}
+\usepackage{microtype}
+\setlength{\emergencystretch}{1em}
+\usepackage{xcolor}
+\definecolor{paperlink}{RGB}{0,0,114}
+\usepackage{booktabs}
+\usepackage{seqsplit}
+\usepackage{needspace}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linktoc=all,
+  linkcolor=paperlink,citecolor=paperlink,urlcolor=paperlink,pdfstartview=Fit,
+  pdftitle={The connected size-Ramsey number of a four-edge matching versus a quadrilateral},
+  pdfauthor={Ben Keene}}
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=2em,itemsep=0.25em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=2.25em,itemsep=0.25em,topsep=0.35em}
+\setlength{\parindent}{1.25em}
+\setlength{\parskip}{0pt}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small The connected size-Ramsey number of $4K_2$ versus $C_4$}
+\fancyhead[R]{\small\thepage}
+\setlength{\headheight}{14pt}
+\numberwithin{equation}{section}
+\setcounter{tocdepth}{1}
+\date{}
+
+% draft markers
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+% theorem environments
+\theoremstyle{plain}
+\newtheorem{mainthm}{Theorem}
+\renewcommand{\themainthm}{\Alph{mainthm}}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% notation
+\newcommand{\Kme}{K_{3,3}-e}
+\newcommand{\Oct}{K_{2,2,2}}
+\newcommand{\rc}{\hat r_{\mathrm{c}}}
+\newcommand{\Tfam}{\mathcal{T}}
+
+\title{The connected size-Ramsey number of a four-edge matching versus a quadrilateral}
+\author{Ben Keene\thanks{\red{[affiliation]}}}
+
+\begin{document}
+\maketitle
+\thispagestyle{plain}
+
+\begin{abstract}
+We show that the connected size-Ramsey number $\rc(4K_2,C_4)$ is~$17$: some connected graph with $17$ edges has the property that every red/blue colouring of its edges contains a red matching of four edges or a blue $4$-cycle, and no connected graph with at most $16$ edges has it. For the lower bound we show that every connected graph with at most $16$ edges has three vertices meeting all of its $4$-cycles; colouring red the edges at these vertices avoids both configurations. This follows from the inequality $4\tau_4(G)\le|E(G)|$, where $\tau_4(G)$ is the least number of vertices meeting every $4$-cycle of~$G$, and a classification of its equality cases: a connected graph with at most $16$ edges satisfies $4\tau_4(G)=|E(G)|$ if and only if it is $C_4$, the wheel~$W_5$, $K_{3,3}$ minus an edge, or the octahedron~$K_{2,2,2}$. The inequality is proved by deleting a few vertices at a time, paying one transversal vertex for every four deleted edges; in an equality case every deletion must be exact, and strong induction rebuilds the graph from smaller equality cases. The inequality, the classification, the transversal and colouring statements, the explicit $17$-edge host and the value~$17$ are formally verified in Lean~4 with Mathlib.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+
+For graphs $F$, $G_1$ and~$G_2$ one writes $F\to(G_1,G_2)$ if every colouring of the edges of~$F$ in red and blue contains a red copy of~$G_1$ or a blue copy of~$G_2$. The \emph{size-Ramsey number} $\hat r(G_1,G_2)$, introduced by Erd\H{o}s, Faudree, Rousseau and Schelp~\cite{EFRS78}, is the least number of edges of a graph~$F$ with $F\to(G_1,G_2)$. Its \emph{connected} variant $\rc(G_1,G_2)$ requires the host~$F$ to be connected. The two can differ when $G_1$ is disconnected, as for the matching~$nK_2$ of $n$ disjoint edges below.
+
+For matchings against the $4$-cycle, Erd\H{o}s and Faudree~\cite[Theorem~3]{EF84} proved $\hat r(nK_2,C_4)=4n$, which gives the lower bound $\rc(nK_2,C_4)\ge4n$. Rahadjeng, Baskoro and Assiyatun~\cite[Lemma~2.4]{RBA17} showed $\rc(3K_2,C_4)=13$, so that here the connected number exceeds the ordinary one, $\hat r(3K_2,C_4)=12$; their later correction~\cite{RBA18} concerns a result on stars and leaves this value unchanged. Wang, Song, Zhang and Zhang~\cite[Theorem~1.3]{WSZZ25} proved $\rc(nK_2,C_4)\le\lfloor(9n-1)/2\rfloor$ and conjectured that this bound is the true value~\cite[Conjecture~1]{WSZZ25}. For $n=4$ these results give $16\le\rc(4K_2,C_4)\le17$. We show that the upper bound is the truth, in agreement with the conjecture: no connected graph with $16$ edges arrows $(4K_2,C_4)$.
+
+\paragraph{Transversals of $4$-cycles.} The lower bound is a statement about transversals. A \emph{square} of a graph is a $4$-cycle in it, not necessarily induced, and $\tau_4(G)$ denotes the least number of vertices of~$G$ meeting every square. If $\tau_4(F)\le3$, then $F\not\to(4K_2,C_4)$: colour red the edges at a transversal of at most three vertices and the other edges blue. Every square contains red edges, and a red matching of four edges would need four distinct transversal vertices. Our main tool is the following inequality.
+
+\begin{mainthm}\label{thm:A}
+For every graph~$G$ we have $4\tau_4(G)\le|E(G)|$.
+\end{mainthm}
+
+Theorem~\ref{thm:A} is not new. A theorem of Alon, Mubayi and Thomas~\cite[Theorem~1.5]{AMT01} bounds, in terms of the number of edges, how many vertices are needed to meet all cycles of a graph of maximum degree three without a copy of~$K_4$, up to an additional term for an explicit family of exceptional components. Together with the deletion of vertices of degree at least four and a direct check of~$K_4$ and of those exceptional components, it yields Theorem~\ref{thm:A}. We give a self-contained proof instead, because its reductions are what drives the next theorem. A graph~$G$ is \emph{tight} if $4\tau_4(G)=|E(G)|$. In Theorem~\ref{thm:B}, $W_5$ is the wheel formed by a $4$-cycle and a vertex adjacent to all of its vertices, $\Kme$ is the complete bipartite graph $K_{3,3}$ with one edge removed, and the octahedron~$\Oct$ is the complete tripartite graph with three parts of size two.
+
+
+\begin{mainthm}\label{thm:B}
+Let $G$ be a connected graph with $1\le|E(G)|\le16$. Then $4\tau_4(G)=|E(G)|$ if and only if $G$ is isomorphic to one of $C_4$, $W_5$, $\Kme$ and~$\Oct$.
+\end{mainthm}
+
+We are not aware of a prior statement of Theorem~\ref{thm:B}. Connectivity is needed: the disjoint union of four squares is tight, has $16$ edges, and arrows $(4K_2,C_4)$, because a colouring without a blue square has a red edge in each of the four squares. Theorems~\ref{thm:A} and~\ref{thm:B} show that a connected graph with at most $16$ edges has $\tau_4\le3$, because $\tau_4=4$ would force a tight graph with $16$ edges, and the tight graphs of Theorem~\ref{thm:B} have at most~$12$. With the colouring described above this gives the following.
+
+\begin{mainthm}\label{thm:C}
+Let $F$ be a connected graph with $|E(F)|\le16$.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item\label{C:trans} Some set of at most three vertices of~$F$ meets every square of~$F$.
+\item\label{C:col} $F\not\to(4K_2,C_4)$: some red/blue colouring of~$F$ has no red copy of~$4K_2$ and no blue square.
+\end{enumerate}
+\end{mainthm}
+
+The matching upper bound comes from an explicit host. Wijaya, Yulianti, Baskoro, Assiyatun and Suprijanto~\cite[Theorem~2.6]{WYBAS15} showed that every red/blue colouring of~$\Kme$ contains two disjoint red edges or a blue square; two disjoint copies of~$\Kme$ joined by one edge therefore force four disjoint red edges or a blue square. At $n=4$ the construction of Wang, Song, Zhang and Zhang~\cite[Theorem~1.3]{WSZZ25} consists of two copies of~$\Kme$ joined by an edge, and the graph~$F_{17}$ below is one such graph. We state Theorem~\ref{thm:D} for one fixed connecting edge; Remark~\ref{rem:bridge} explains that the proof applies to any connecting edge.
+
+\begin{mainthm}\label{thm:D}
+Take two vertex-disjoint copies of~$\Kme$, the first with parts $\{a_0,a_1,a_2\}$, $\{b_0,b_1,b_2\}$ and missing edge~$a_0b_0$, the second with parts $\{a_0',a_1',a_2'\}$, $\{b_0',b_1',b_2'\}$ and missing edge~$a_0'b_0'$, and let $F_{17}$ be the graph obtained by adding the edge~$b_2a_0'$. Then $F_{17}$ is connected, has $17$ edges, and $F_{17}\to(4K_2,C_4)$.
+\end{mainthm}
+
+\begin{mainthm}\label{thm:E}
+$\rc(4K_2,C_4)=17$.
+\end{mainthm}
+
+\paragraph{Proof strategy.} Theorem~\ref{thm:A} is proved by strong induction on the number of edges with a charging argument: we delete a small vertex set~$D$ and charge to the transversal a subset $X\subseteq D$ meeting every square through~$D$, and each charged vertex must pay for four deleted edges. Five local configurations always provide such a deletion (Table~\ref{tab:reductions}).
+
+For Theorem~\ref{thm:B}, tightness forces every deletion to be exact, that is, to remove exactly $4|X|$ edges and raise the transversal number by exactly~$|X|$. The residual components with an edge are then smaller tight graphs, hence by strong induction among the four listed graphs, and the graph is reassembled from them. Section~\ref{sec:B} explains the three facts that control this reassembly. A short case analysis remains. A vertex of degree four gives $W_5$ or~$\Oct$, after one explicit check that $\Kme$ plus a vertex of degree four has a transversal of size two. An edge joining degrees two and three gives~$\Kme$. A parity argument on the edges between two disjoint squares excludes cubic graphs, and $2$-regular graphs give~$C_4$.
+
+\paragraph{Formal verification.} Theorems~\ref{thm:A}--\ref{thm:E} have been verified in Lean~4 with Mathlib, and the proofs were re-checked by Lean's kernel and by two independent kernels; Section~\ref{sec:lean} describes the formal statements and their scope.
+
+\section{Definitions and conventions}\label{sec:defs}
+
+All graphs are finite and simple; the vertex set may be empty. For a graph~$G$ we write $V(G)$ and $E(G)$ for its vertex and edge sets, $d_G(v)$ for the degree of a vertex~$v$, and $\Delta(G)$ for the maximum degree. A graph is \emph{connected} if it has at least one vertex and any two vertices are joined by a path; in particular the one-vertex graph is connected. An isomorphism is a bijection between the whole vertex sets preserving adjacency; in particular isolated vertices count.
+
+\paragraph{Squares and matchings.} A \emph{square} in~$G$ is a sequence $v_1v_2v_3v_4$ of four distinct vertices such that $v_1v_2$, $v_2v_3$, $v_3v_4$ and $v_4v_1$ are edges of~$G$. These four edges are the edges of the square, and an edge \emph{lies on} the square if it is one of them. Squares need not be induced: the pairs $v_1v_3$ and $v_2v_4$ may be edges of~$G$, in which case they are called \emph{chords}, and a square without chords is \emph{chordless}. Rotating or reversing the sequence gives a square with the same vertices and edges, and we use whichever form is convenient. A square is thus a copy of~$C_4$ in~$G$. Similarly, a copy of~$4K_2$ in~$G$ is a set of four edges with eight distinct endpoints; edges of~$G$ among these endpoints are allowed.
+
+\paragraph{Transversals.} A set $S\subseteq V(G)$ \emph{meets} a square if it contains one of its vertices, and $S$ is a \emph{square transversal} of~$G$ if it meets every square of~$G$. The \emph{square transversal number} is
+\begin{equation}\label{eq:tau}
+\tau_4(G)=\min\{|S| : S\subseteq V(G) \text{ is a square transversal of } G\}\,.
+\end{equation}
+The minimum exists because $V(G)$ is a square transversal. Every square transversal~$S$ gives $\tau_4(G)\le|S|$, we have $\tau_4(G)=0$ exactly when $G$ has no square, and isomorphic graphs have the same square transversal number because an isomorphism maps squares to squares. We call $G$ \emph{tight} if $4\tau_4(G)=|E(G)|$, and \emph{square-supported} if every edge of~$G$ lies on a square.
+
+\paragraph{Deletion.} For $D\subseteq V(G)$ let $G-D$ be the subgraph induced by $V(G)\setminus D$, and write $G-v$ for $G-\{v\}$; for an edge~$e$, the graph $G-e$ is obtained by removing~$e$ and keeping all vertices. Because $G-D$ is induced, its squares are exactly the squares of~$G$ with no vertex in~$D$. Counting the edges with at least one end in~$D$ gives
+\begin{equation}\label{eq:edgecount}
+|E(G-D)|=|E(G)|-\sum_{u\in D}d_G(u)+|E(G[D])|\,,
+\end{equation}
+where $G[D]$ is the subgraph induced by~$D$, whose edges are counted twice in the sum of degrees. We say that an edge \emph{joins} two disjoint vertex sets if it has one end in each.
+
+\paragraph{Components.} We regard each connected component~$C$ of~$G$ as the subgraph induced by its vertex set. A square is connected, so it lies inside a single component. Isolated vertices are components with no edges and no squares.
+
+\begin{lemma}[component additivity]\label{lem:components}
+For every graph~$G$ we have \mbox{$\tau_4(G)=\sum_C\tau_4(C)$} and \mbox{$|E(G)|=\sum_C|E(C)|$}, where $C$ runs over the connected components of~$G$.
+\end{lemma}
+
+\begin{proof}
+The edge sets of the components partition~$E(G)$. Since each square of~$G$ lies in one component, and the squares of a component~$C$ are exactly the squares of~$G$ inside~$C$, a set $S\subseteq V(G)$ is a square transversal of~$G$ if and only if $S\cap V(C)$ is a square transversal of~$C$ for every~$C$. Taking an optimal transversal in each component and their union gives $\tau_4(G)\le\sum_C\tau_4(C)$; restricting an optimal transversal of~$G$ to the disjoint vertex sets of the components gives the reverse inequality.
+\end{proof}
+
+\paragraph{Colourings.} A \emph{red/blue colouring} of a graph~$F$ is a partition of~$E(F)$ into a red set and a blue set, and a red copy of~$4K_2$ or a blue square is one all of whose edges have that colour. We write $F\to(4K_2,C_4)$ if every red/blue colouring of~$F$ has a red copy of~$4K_2$ or a blue square. The \emph{connected size-Ramsey number} is
+\begin{equation}\label{eq:rc}
+\rc(4K_2,C_4)=\min\{|E(F)| : F \text{ is connected and } F\to(4K_2,C_4)\}\,.
+\end{equation}
+The set in~\eqref{eq:rc} is nonempty by Theorem~\ref{thm:D}, so the minimum exists.
+
+\paragraph{Four small graphs.} The four graphs of Theorem~\ref{thm:B} carry the following labels throughout. The square~$C_4$ has four vertices and four edges. The \emph{wheel}~$W_5$ consists of a square $r_0r_1r_2r_3$, its \emph{rim}, together with a \emph{hub}~$h$ adjacent to the four rim vertices; it has five vertices and eight edges. The graph $\Kme$ is the complete bipartite graph with parts $A=\{a_0,a_1,a_2\}$ and $B=\{b_0,b_1,b_2\}$ minus the edge $a_0b_0$; it has six vertices and eight edges. The \emph{octahedron}~$\Oct$ is the complete tripartite graph with three parts of size two; it has six vertices and twelve edges. We write $\Tfam=\{C_4,W_5,\Kme,\Oct\}$. Their degrees are as follows: every vertex of~$C_4$ has degree~$2$; the hub of~$W_5$ has degree~$4$ and the rim vertices degree~$3$; in~$\Kme$ the vertices $a_0$ and~$b_0$ have degree~$2$ and the other four have degree~$3$; every vertex of~$\Oct$ has degree~$4$.
+
+\section{The universal bound}\label{sec:A}
+
+Theorem~\ref{thm:A} is proved by deleting a set~$D$ of vertices and charging to the transversal a subset $X\subseteq D$ that meets every square through~$D$ (Lemma~\ref{lem:deletion}). If at least $4|X|$ edges are deleted, the inequality passes from $G-D$ to~$G$. This section supplies such a deletion for every local configuration that can occur once all edges off squares have been discarded.
+
+\begin{lemma}[deletion]\label{lem:deletion}
+Let $D\subseteq V(G)$ and let $X\subseteq D$ meet every square of~$G$ that has a vertex in~$D$. Then $\tau_4(G)\le\tau_4(G-D)+|X|$.
+\end{lemma}
+
+\begin{proof}
+Let $T$ be a square transversal of $G-D$ with $|T|=\tau_4(G-D)$. A square of~$G$ with no vertex in~$D$ is a square of $G-D$ and meets~$T$; a square with a vertex in~$D$ meets~$X$. Hence $T\cup X$ is a square transversal of~$G$, of size at most $\tau_4(G-D)+|X|$.
+\end{proof}
+
+An edge that lies on no square costs nothing to remove, which is why the reductions below may assume that the graph is square-supported.
+
+\begin{lemma}[edges off squares]\label{lem:offsquare}
+If an edge~$e$ of~$G$ lies on no square, then $G$ and $G-e$ have the same squares. In particular $\tau_4(G-e)=\tau_4(G)$ and $|E(G-e)|=|E(G)|-1$.
+\end{lemma}
+
+\begin{proof}
+Every square of $G-e$ is a square of~$G$, and a square of~$G$ does not use~$e$, so it is a square of $G-e$. The two graphs have the same vertex set and the same squares, hence the same square transversals.
+\end{proof}
+
+\subsection{Five reductions}
+
+Each reduction below deletes a set~$D$ and charges a set $X\subseteq D$ to the transversal, and Table~\ref{tab:reductions} records the trade. A vertex of degree at least four pays for itself. At a vertex of degree two, both square edges are forced, so a square through it also passes through its neighbours, and a neighbour of degree three can be charged for the squares through both vertices. Around a square whose vertices have degree three, every vertex has at most one edge leaving the square, which is what lets two opposite corners, or one vertex of a chord, cover all squares through the deleted set.
+
+\begin{lemma}[reductions]\label{lem:reductions}
+Let $G$ be a graph.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item\label{red:deg4} If $d_G(v)\ge4$, then $\tau_4(G)\le\tau_4(G-v)+1$ and $|E(G-v)|=|E(G)|-d_G(v)\le|E(G)|-4$.
+\item\label{red:mixed} If $uv\in E(G)$ with $d_G(u)=2$ and $d_G(v)=3$, then, with $D=\{u,v\}$, we have $\tau_4(G)\le\tau_4(G-D)+1$ and $|E(G-D)|=|E(G)|-4$.
+\item\label{red:comp} If a component~$C$ of~$G$ is isomorphic to~$C_4$, then, with $D=V(C)$, we have $\tau_4(G)=\tau_4(G-D)+1$ and $|E(G-D)|=|E(G)|-4$.
+\item\label{red:chordless} If $abcd$ is a chordless square of~$G$ whose four vertices have degree~$3$, then, with $D=\{a,b,c,d\}$, we have $\tau_4(G)\le\tau_4(G-D)+2$ and $|E(G-D)|=|E(G)|-8$.
+\item\label{red:chord} If $\Delta(G)\le3$ and $abcd$ is a square of~$G$ with chord~$ac$, then $d_G(b)\ge2$, and with $D=\{a,b,c\}$ we have $\tau_4(G)\le\tau_4(G-D)+1$ and $|E(G-D)|=|E(G)|-d_G(b)-3$.
+\end{enumerate}
+\end{lemma}
+
+\begin{table}[b]
+\centering
+\begin{tabular}{@{}lllll@{}}
+\toprule
+& configuration & deleted set $D$ & charged set $X$ & edges removed \\
+\midrule
+\ref{red:deg4} & $d_G(v)\ge4$ & $\{v\}$ & $\{v\}$ & $d_G(v)\ge4$ \\
+\ref{red:mixed} & $uv\in E(G)$, $d_G(u)=2$, $d_G(v)=3$ & $\{u,v\}$ & $\{v\}$ & $4$ \\
+\ref{red:comp} & a component isomorphic to $C_4$ & its vertex set & one vertex & $4$ \\
+\ref{red:chordless} & chordless square $abcd$, all degrees $3$ & $\{a,b,c,d\}$ & $\{a,c\}$ & $8$ \\
+\ref{red:chord} & $\Delta(G)\le3$, square $abcd$ with chord $ac$ & $\{a,b,c\}$ & $\{b\}$ & $d_G(b)+3\ge5$ \\
+\bottomrule
+\end{tabular}
+\caption{The five reductions of Lemma~\ref{lem:reductions}. In each row at least $4|X|$ edges are removed, and in row~\ref{red:chord} strictly more.}
+\label{tab:reductions}
+\end{table}
+
+\begin{proof}
+In each case the edge count follows from~\eqref{eq:edgecount}, and the transversal bound from Lemma~\ref{lem:deletion} once we check that~$X$, as in Table~\ref{tab:reductions}, meets every square with a vertex in~$D$.
+
+\ref{red:deg4} Here $X=D=\{v\}$, so the condition on~$X$ is trivial, and $G[\{v\}]$ has no edge.
+
+\ref{red:mixed} A square through~$u$ contains both neighbours of~$u$, one of which is~$v$; so every square meeting $D=\{u,v\}$ contains~$v$. The only edge inside~$D$ is~$uv$, so $2+3-1=4$ edges are removed.
+
+\ref{red:comp} The components of $G-D$ are the components of~$G$ other than~$C$. By Lemma~\ref{lem:components} it suffices that $\tau_4(C_4)=1$ and $|E(C_4)|=4$; the first holds because $C_4$ has a square and each of its squares uses all four vertices, so any one vertex is a square transversal.
+
+\ref{red:chordless} The vertex~$b$ is adjacent to $a$ and~$c$ and, having degree~$3$, to exactly one further vertex. A square through~$b$ contains two neighbours of~$b$, so it contains $a$ or~$c$. The same holds for~$d$. Hence every square meeting~$D$ meets $X=\{a,c\}$. As the square is chordless, $G[D]$ has exactly the four edges of the square, and $4\cdot3-4=8$ edges are removed.
+
+\ref{red:chord} The vertex~$a$ has the three distinct neighbours $b$, $c$, $d$, and $d_G(a)\le3$, so these are all of its neighbours; likewise the neighbours of~$c$ are exactly $a$, $b$, $d$. Also $d_G(b)\ge2$, as $b$ is adjacent to $a$ and~$c$. Consider a square meeting~$D$ but avoiding~$b$; by the symmetry between $a$ and~$c$ it contains~$a$. The two neighbours of~$a$ on the square lie in $\{c,d\}$, so they are $c$ and~$d$, and the fourth vertex of the square is a common neighbour of $c$ and~$d$ other than~$a$. The only neighbour of~$c$ besides $a$ and~$d$ is~$b$, a contradiction. Hence $X=\{b\}$ meets every square meeting~$D$. The edges inside~$D$ are $ab$, $bc$ and $ac$, so $3+d_G(b)+3-3=d_G(b)+3$ edges are removed.
+\end{proof}
+
+\subsection{Square-supported graphs and the induction}
+
+The reductions apply to the configurations that a square-supported graph of maximum degree three must contain, as the next lemma shows.
+
+\begin{lemma}\label{lem:structure}
+Let $C$ be a connected square-supported graph with at least one edge.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item\label{str:mindeg} Every vertex of~$C$ has degree at least~$2$.
+\item\label{str:cycle} If every vertex of~$C$ has degree~$2$, then $C$ is isomorphic to~$C_4$.
+\item\label{str:cases} If every vertex of~$C$ has degree $2$ or~$3$, then $C$ is $2$-regular, or $C$ is cubic, or $C$ has an edge~$uv$ with $d_C(u)=2$ and $d_C(v)=3$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+\ref{str:mindeg} Since $C$ is connected and has an edge, it has at least two vertices and every vertex has a neighbour. An edge at a vertex~$v$ lies on a square, and that square supplies two neighbours of~$v$.
+
+\ref{str:cycle} A connected $2$-regular graph is a cycle~$C_k$ with $k\ge3$: walk from a vertex~$x$, always leaving a vertex by the edge not used to enter it. The first vertex to repeat is~$x$, because both edges at any other visited vertex are already used. So the walk closes a cycle through~$x$, every vertex of which has both its edges on the cycle, and by connectedness this cycle is the whole graph. A square in~$C_k$ is a cycle of length four in~$C_k$, and the only cycle in~$C_k$ is~$C_k$ itself; since $C$ has an edge and that edge lies on a square, $k=4$.
+
+\ref{str:cases} If both degrees occur, follow a path from a vertex of degree~$2$ to a vertex of degree~$3$; some edge of the path joins a vertex of degree~$2$ to a vertex of degree~$3$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:A}]
+We use strong induction on~$|E(G)|$. If $G$ has no edges, it has no squares and $\tau_4(G)=0$. If some edge~$e$ lies on no square, then by Lemma~\ref{lem:offsquare} and the induction hypothesis for $G-e$,
+\begin{equation*}
+4\tau_4(G)=4\tau_4(G-e)\le|E(G-e)|<|E(G)|\,.
+\end{equation*}
+
+Assume therefore that $G$ has an edge and is square-supported. We find a set~$D$ and a reduction of Lemma~\ref{lem:reductions} with charged set~$X$, so that $X\neq\emptyset$, hence $|E(G-D)|<|E(G)|$, and
+\begin{equation}\label{eq:charge}
+\tau_4(G)\le\tau_4(G-D)+|X| \quad \mbox{and} \quad |E(G-D)|\le|E(G)|-4|X|\,.
+\end{equation}
+If $G$ has a vertex of degree at least~$4$, reduction~\ref{red:deg4} applies. Otherwise $\Delta(G)\le3$. Let $C$ be a component of~$G$ containing an edge. The squares through edges of~$C$ lie in~$C$, so $C$ is square-supported, and degrees in~$C$ are degrees in~$G$; by Lemma~\ref{lem:structure}\ref{str:mindeg} every vertex of~$C$ has degree $2$ or~$3$. By Lemma~\ref{lem:structure}\ref{str:cases} one of three cases occurs. If $C$ is $2$-regular, it is isomorphic to~$C_4$ by Lemma~\ref{lem:structure}\ref{str:cycle}, and reduction~\ref{red:comp} applies. If $C$ has an edge~$uv$ with $d_G(u)=2$ and $d_G(v)=3$, reduction~\ref{red:mixed} applies. If $C$ is cubic, take an edge of~$C$ and a square $abcd$ through it; its vertices lie in~$C$ and have degree~$3$. If $abcd$ has a chord, we may relabel it, by rotation, so that the chord is~$ac$, and reduction~\ref{red:chord} applies because $\Delta(G)\le3$. If $abcd$ is chordless, reduction~\ref{red:chordless} applies.
+
+In every case~\eqref{eq:charge} holds by Table~\ref{tab:reductions}. The induction hypothesis for $G-D$ gives
+\begin{equation*}
+4\tau_4(G)\le4\tau_4(G-D)+4|X|\le|E(G-D)|+4|X|\le|E(G)|\,. \qedhere
+\end{equation*}
+\end{proof}
+
+\section{The equality cases}\label{sec:B}
+
+In a tight graph the inequalities in the proof of Theorem~\ref{thm:A} have no slack. Call a reduction of Lemma~\ref{lem:reductions} \emph{exact} if it removes exactly $4|X|$ edges and raises the transversal number by exactly~$|X|$. Every reduction applied to a tight graph must be exact, and then every component of the residual graph is again tight (Lemma~\ref{lem:tight}). The components with an edge are smaller connected tight graphs, so by strong induction they belong to the list~$\Tfam$, and $G$ is reassembled from them and the deleted vertices; isolated vertices are tight as well but are excluded by the positive edge count in Theorem~\ref{thm:B}. Three facts limit the reassembly. In a connected square-supported graph each residual component is attached to the deleted set by at least two edges, which bounds the number of components (Lemma~\ref{lem:cut}). Each member of~$\Tfam$ has an optimal transversal through any prescribed vertex (Lemma~\ref{lem:small}), which rules out a split into two components. And reduction~\ref{red:chord} is never exact, so tight graphs of maximum degree three have only chordless squares.
+
+\needspace{12\baselineskip}
+\subsection{Tight graphs}
+
+\begin{lemma}[tightness]\label{lem:tight}
+Let $G$ be a tight graph.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item\label{tight:supp} $G$ is square-supported.
+\item\label{tight:max} $\Delta(G)\le4$.
+\item\label{tight:min} If $G$ is connected and has an edge, every vertex of~$G$ has degree at least~$2$.
+\item\label{tight:chordless} If $\Delta(G)\le3$, every square of~$G$ is chordless.
+\item\label{tight:residual} If $D\subseteq V(G)$ and an integer $c\ge0$ satisfy $\tau_4(G)\le\tau_4(G-D)+c$ and $|E(G-D)|=|E(G)|-4c$, then $\tau_4(G)=\tau_4(G-D)+c$ and every component of $G-D$ is tight.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Parts \ref{tight:supp}, \ref{tight:max}, \ref{tight:chordless} and~\ref{tight:residual} compare~$G$ with a smaller graph to which Theorem~\ref{thm:A} applies.
+
+\ref{tight:supp} If an edge~$e$ lies on no square, Lemma~\ref{lem:offsquare} and Theorem~\ref{thm:A} for $G-e$ give $4\tau_4(G)=4\tau_4(G-e)\le|E(G)|-1$, contradicting tightness.
+
+\ref{tight:max} If $d_G(v)\ge5$, reduction~\ref{red:deg4} and Theorem~\ref{thm:A} for $G-v$ give $4\tau_4(G)\le4\tau_4(G-v)+4\le|E(G)|-d_G(v)+4<|E(G)|$.
+
+\ref{tight:min} This follows from~\ref{tight:supp} and Lemma~\ref{lem:structure}\ref{str:mindeg}.
+
+\ref{tight:chordless} If a square has a chord, relabel it as $abcd$ with chord~$ac$. Reduction~\ref{red:chord} and Theorem~\ref{thm:A} for $G-\{a,b,c\}$ give $4\tau_4(G)\le|E(G)|-d_G(b)-3+4\le|E(G)|-1$, since $d_G(b)\ge2$.
+
+\ref{tight:residual} By Theorem~\ref{thm:A} for $G-D$,
+\begin{equation*}
+|E(G)|=4\tau_4(G)\le4\tau_4(G-D)+4c\le|E(G-D)|+4c=|E(G)|\,,
+\end{equation*}
+so both inequalities are equalities; in particular $G-D$ is tight. By Lemma~\ref{lem:components},
+\begin{equation*}
+\sum_C\bigl(|E(C)|-4\tau_4(C)\bigr)=|E(G-D)|-4\tau_4(G-D)=0\,,
+\end{equation*}
+where $C$ runs over the components of $G-D$. Every summand is nonnegative by Theorem~\ref{thm:A}, so every summand vanishes.
+\end{proof}
+
+The next lemma counts edges, not endpoints: the two edges it provides may share their end in~$C$ or their end in~$D$.
+
+\begin{lemma}[cut]\label{lem:cut}
+Let $G$ be a connected square-supported graph, let $D$ be a nonempty proper subset of~$V(G)$, and let $C$ be a component of $G-D$. Then at least two edges of~$G$ join $V(C)$ to~$D$.
+\end{lemma}
+
+\begin{proof}
+We first show that every path~$P$ in~$G$ from a vertex of~$C$ to a vertex of~$D$ contains an edge joining $V(C)$ to~$D$. Let $z$ be the first vertex of~$P$ outside~$V(C)$ and $w$ its predecessor on~$P$. If $z$ were not in~$D$, it would be a vertex of $G-D$ adjacent to~$w$, hence in~$C$; so $z\in D$ and $wz$ joins $V(C)$ to~$D$.
+
+Since $G$ is connected and $C$ and~$D$ are nonempty, such a path exists, and some edge $wz$ with $w\in V(C)$ and $z\in D$ joins them. This edge lies on a square $wzpq$. The path $wqpz$ runs from~$C$ to~$D$, so it contains an edge joining $V(C)$ to~$D$; its edges $wq$, $qp$, $pz$ all differ from~$wz$ because $w,z,p,q$ are distinct. This is a second such edge.
+\end{proof}
+
+\subsection{The four tight graphs}
+
+The members of~$\Tfam$ are tight, and they have a property that the induction uses when a residual graph splits into two components: an optimal transversal can be chosen through any prescribed vertex.
+
+\begin{lemma}\label{lem:small}
+The graphs $C_4$, $W_5$, $\Kme$ and $\Oct$ are connected and tight, with
+\begin{equation*}
+\tau_4(C_4)=1\,,\qquad \tau_4(W_5)=2\,,\qquad \tau_4(\Kme)=2\,,\qquad \tau_4(\Oct)=3\,.
+\end{equation*}
+Moreover, for each $G\in\Tfam$ and each vertex~$x$ of~$G$ there is a square transversal of~$G$ of size~$\tau_4(G)$ containing~$x$.
+\end{lemma}
+
+\begin{proof}
+Connectedness is clear, and the edge counts $4$, $8$, $8$, $12$ are four times the stated values. For each graph we exhibit transversals of the stated size through every vertex and show that smaller sets fail.
+
+\emph{The square.} Every square of~$C_4$ uses all four vertices, so each single vertex is a transversal, and the empty set is not.
+
+\emph{The wheel.} For each~$i$, the set $\{h,r_i\}$ is a transversal, since $W_5-\{h,r_i\}$ is a path on three vertices; these sets contain every vertex. No single vertex suffices: $W_5-h$ contains the rim square, and $W_5-r_i$ contains the square $hr_{i+1}r_{i+2}r_{i+3}$, indices modulo~$4$.
+
+\emph{The graph $\Kme$.} A square in a bipartite graph has two vertices in each part. Deleting two vertices of one part leaves a single vertex in that part, so any two vertices of~$A$, or any two of~$B$, form a transversal, and every vertex lies in such a pair. No single vertex suffices. Indeed $\Kme-a_0$ contains the square $a_1b_1a_2b_2$, and for $\{i,j\}=\{1,2\}$ the graph $\Kme-a_i$ contains the square $a_0b_1a_jb_2$. The map exchanging $a_k$ and~$b_k$ for each~$k$ is an automorphism of~$\Kme$, which settles the vertices of~$B$.
+
+\emph{The octahedron.} After deleting any three vertices only three remain, so every set of three vertices is a transversal. No two vertices suffice. If they lie in the same part, the other two parts span a complete bipartite graph $K_{2,2}$, which is a square. If they lie in different parts, there remain a whole part $\{p,p'\}$ and vertices $q$ and~$r$ of the two other parts, and $pqp'r$ is a square because each of $q$ and~$r$ is adjacent to both $p$ and~$p'$.
+\end{proof}
+
+When a vertex of degree four is added to~$\Kme$, the new graph has twelve edges but, as we now show, still has a square transversal of size two. This excludes the case $G-v\cong\Kme$ in Proposition~\ref{prop:deg4}, and it is the one place where the classification needs an explicit computation.
+
+\begin{lemma}\label{lem:extension}
+Let $G$ be a graph with a vertex~$z$ of degree~$4$ such that $G-z$ is isomorphic to~$\Kme$. Then $\tau_4(G)\le2$.
+\end{lemma}
+
+\begin{proof}
+Identify $G-z$ with~$\Kme$, so that $N(z)$, the set of neighbours of~$z$, is a $4$-element subset of $A\cup B$. A vertex of a square has two neighbours on that square. So if at most three vertices of a graph have two or more neighbours, the graph has no square. We exhibit a pair $X$ such that at most three vertices of $G-X$ have two or more neighbours in $G-X$; then $X$ is a square transversal of~$G$.
+
+Since $|N(z)|=4$ and $|A|=|B|=3$, the set $N(z)$ contains one, two or three vertices of~$A$. The map exchanging $a_k$ and~$b_k$ for each~$k$ is an automorphism of~$\Kme$, so we may assume that $N(z)$ contains at least two vertices of~$A$ (the exchange turns one vertex of~$A$ into three), and if it contains exactly two, that $a_0\notin N(z)$ or $b_0\in N(z)$ (the exchange turns $a_0\in N(z)$, $b_0\notin N(z)$ into $b_0\in N(z)$, and keeps two vertices of~$A$). Three cases remain.
+
+\emph{$A\subseteq N(z)$, and $N(z)\cap B=\{b_j\}$.} Take $X=\{a_1,a_2\}$. In $G-X$ the edges are $a_0b_1$, $a_0b_2$, $za_0$ and~$zb_j$, so only $a_0$, $z$ and possibly~$b_j$ have at least two neighbours.
+
+\emph{$|N(z)\cap A|=2$ and $b_0\in N(z)$.} Take $X=\{a_1,a_2\}$. Then $N(z)\cap B=\{b_0,b_k\}$ for some $k\in\{1,2\}$. In $G-X$ the vertex~$b_0$ is adjacent only to~$z$, and the vertex $b_{3-k}$ only to~$a_0$, so only $a_0$, $b_k$ and~$z$ can have at least two neighbours.
+
+\emph{$|N(z)\cap A|=2$ and $a_0,b_0\notin N(z)$.} Then $N(z)=\{a_1,a_2,b_1,b_2\}$. Take $X=\{a_1,b_1\}$. In $G-X$ the edges are $a_0b_2$, $a_2b_0$, $a_2b_2$, $za_2$ and~$zb_2$, so $a_0$ and~$b_0$ have one neighbour each, and only $a_2$, $b_2$ and~$z$ can have at least two neighbours.
+\end{proof}
+
+\subsection{The inductive step}
+
+Theorem~\ref{thm:B} is proved by strong induction on the number of edges. In the next three propositions $G$ is a connected tight graph with $1\le|E(G)|\le16$ satisfying the induction hypothesis
+\begin{equation}\label{eq:IH}
+H \text{ connected and tight, } 1\le|E(H)|<|E(G)| \ \Longrightarrow\ H \text{ is isomorphic to a member of } \Tfam\,.
+\end{equation}
+By Lemma~\ref{lem:tight}, $G$ is square-supported and its degrees lie in $\{2,3,4\}$. The propositions treat a vertex of degree four, an edge joining degrees two and three, and cubic graphs; the remaining case, a $2$-regular graph, is settled by Lemma~\ref{lem:structure}\ref{str:cycle}.
+
+\begin{proposition}[a vertex of degree four]\label{prop:deg4}
+Let $G$ be a connected tight graph with $1\le|E(G)|\le16$ satisfying~\eqref{eq:IH}. If $G$ has a vertex of degree~$4$, then $G$ is isomorphic to $W_5$ or to~$\Oct$.
+\end{proposition}
+
+\begin{proof}
+Let $v$ have degree~$4$ and put $H=G-v$. By reduction~\ref{red:deg4}, $\tau_4(G)\le\tau_4(H)+1$ and $|E(H)|=|E(G)|-4$, so Lemma~\ref{lem:tight}\ref{tight:residual} with $c=1$ gives
+\begin{equation}\label{eq:deg4tau}
+\tau_4(G)=\tau_4(H)+1\,,
+\end{equation}
+and every component of~$H$ is tight. Every vertex of~$H$ has degree at least~$2$ in~$G$ by Lemma~\ref{lem:tight}\ref{tight:min} and loses at most one edge, so every component of~$H$ has an edge; it also has fewer edges than~$G$, and by~\eqref{eq:IH} it is isomorphic to a member of~$\Tfam$. The set~$\{v\}$ is a nonempty proper subset of~$V(G)$, and the only edges joining it to~$H$ are the four edges at~$v$. By Lemma~\ref{lem:cut} each component of~$H$ receives at least two of them, so $H$ has one or two components.
+
+\emph{Two components.} Then each component~$C_i$, $i=1,2$, receives exactly two edges at~$v$, which end at two distinct vertices of~$C_i$. Choose a neighbour~$x_i$ of~$v$ in~$C_i$ and, by Lemma~\ref{lem:small}, a square transversal~$T_i$ of~$C_i$ of size~$\tau_4(C_i)$ containing~$x_i$. By Lemma~\ref{lem:components} and~\eqref{eq:deg4tau}, $T=T_1\cup T_2$ has $|T|=\tau_4(H)=\tau_4(G)-1$ elements. We show that $T$ is a square transversal of~$G$, which is a contradiction. A square avoiding~$v$ lies in one component~$C_i$ and meets~$T_i$. A square $vpqr$ through~$v$ gives a path $pqr$ in~$H$, which lies in one component~$C_i$; its ends $p$ and~$r$ are two distinct neighbours of~$v$ in~$C_i$, hence they are the only two, and one of them is~$x_i\in T$.
+
+\emph{One component.} Then $H$ is connected and isomorphic to a member of~$\Tfam$, and $v$ has four neighbours in~$H$. Recall that $\Delta(G)\le4$ by Lemma~\ref{lem:tight}\ref{tight:max}.
+\begin{itemize}
+\item If $H\cong C_4$, then $v$ is adjacent to all four vertices of~$H$, and $G\cong W_5$ with hub~$v$.
+\item If $H\cong W_5$, its hub~$h$ has degree~$4$ in~$H$, so it is not adjacent to~$v$, and $v$ is adjacent to the four rim vertices. The only nonadjacent pairs of~$G$ are then $vh$, $r_0r_2$ and $r_1r_3$, so $G$ is the complete tripartite graph with parts $\{v,h\}$, $\{r_0,r_2\}$, $\{r_1,r_3\}$, that is, $G\cong\Oct$.
+\item If $H\cong\Oct$, every vertex of~$H$ has degree~$4$ in~$H$, and a neighbour of~$v$ would have degree~$5$ in~$G$, which is impossible.
+\item If $H\cong\Kme$, then $|E(G)|=12$ and tightness gives $\tau_4(G)=3$, whereas Lemma~\ref{lem:extension} gives $\tau_4(G)\le2$. \qedhere
+\end{itemize}
+\end{proof}
+
+Without a vertex of degree four, $\Delta(G)\le3$, and Lemma~\ref{lem:tight}\ref{tight:chordless} forbids chords. This hypothesis matters: the wheel~$W_5$ is tight and contains squares with a chord.
+
+\needspace{8\baselineskip}
+\begin{proposition}[adjacent degrees two and three]\label{prop:mixed}
+Let $G$ be a connected tight graph with $1\le|E(G)|\le16$ satisfying~\eqref{eq:IH}, and suppose $\Delta(G)\le3$. If $G$ has an edge~$uv$ with $d_G(u)=2$ and $d_G(v)=3$, then $G\cong\Kme$.
+\end{proposition}
+
+\begin{proof}
+Write the neighbours of~$v$ as $u$, $a$, $b$ and those of~$u$ as $v$, $t$. By Lemma~\ref{lem:tight}, $G$ is square-supported, its degrees are at least~$2$, and its squares are chordless.
+
+\emph{The vertices $a$, $b$, $t$ are distinct.} The edge~$uv$ lies on a square, which must have the form $uvxt$ with $x\in\{a,b\}$ adjacent to~$t$ and $x\ne t$. If $t=a$, then $x=b$ and the square $uvba$ has the chord~$va$; so $t\ne a$, and likewise $t\ne b$.
+
+\emph{The residual graph is a square.} Put $D=\{u,v\}$ and $H=G-D$. By reduction~\ref{red:mixed} and Lemma~\ref{lem:tight}\ref{tight:residual} with $c=1$, every component of~$H$ is tight. The edges joining~$D$ to~$H$ are exactly $va$, $vb$ and~$ut$, with three distinct ends. Hence every vertex of~$H$ loses at most one edge and has degree at least~$1$ in~$H$; so every component of~$H$ has an edge and, having fewer edges than~$G$, is isomorphic to a member of~$\Tfam$ by~\eqref{eq:IH}. By Lemma~\ref{lem:cut} each component receives at least two of the three joining edges, so $H$ is connected. The vertices $a$, $b$, $t$ have degree at most $3-1=2$ in~$H$, while every member of~$\Tfam$ has minimum degree at least~$2$. So $H$ has three vertices of degree~$2$, and among the members of~$\Tfam$ only~$C_4$ has three such vertices (the degrees are listed in Section~\ref{sec:defs}). Thus $H$ is a chordless square on $a$, $b$, $t$ and a fourth vertex~$s$, and $V(G)=\{u,v,a,b,t,s\}$.
+
+\emph{The vertices $a$ and $b$ are opposite in~$H$.} Suppose that $ab$ is an edge. The edge~$va$ lies on a square $vayw$ with $w\in\{u,b\}$. If $w=b$, then $y\ne v$ is a common neighbour of $a$ and~$b$; it is not~$u$, since the neighbours of~$u$ are $v$ and~$t\ne a$, so it lies in~$H$, but two adjacent vertices of a chordless square have no common neighbour in it. Hence $w=u$, and $y$, a neighbour of~$u$ other than~$v$, is~$t$; so $at$ is an edge. By the same argument for~$vb$, also $bt$ is an edge, and $a$, $b$, $t$ form a triangle in the square~$H$, which is impossible.
+
+\emph{Reconstruction.} As $a$ and~$b$ are opposite in~$H$, the square~$H$ is $atbs$. The edges of~$G$ are therefore $uv$, $ut$, $va$, $vb$, $at$, $tb$, $bs$ and~$sa$. These are exactly the edges between $\{v,t,s\}$ and $\{u,a,b\}$ except~$su$, so $G\cong\Kme$.
+\end{proof}
+
+Proposition~\ref{prop:cubic} is stated under the same hypotheses as its neighbours, but its proof uses only that $G$ is cubic and tight with $1\le|E(G)|\le16$: the edge bound decides the size of~$G$. This is the only use of the bound $|E(G)|\le16$ in the inductive step.
+
+\begin{proposition}[cubic graphs]\label{prop:cubic}
+Let $G$ be a connected tight graph with $1\le|E(G)|\le16$ satisfying~\eqref{eq:IH}. Then $G$ is not cubic.
+\end{proposition}
+
+\begin{proof}
+Suppose that $G$ is cubic. Then $3|V(G)|=2|E(G)|$, so $3$ divides~$|E(G)|$, and tightness gives $|E(G)|=4\tau_4(G)$. Hence $12$ divides $|E(G)|\le16$, so $|E(G)|=12$, $|V(G)|=8$ and $\tau_4(G)=3$. We derive a contradiction by finding a square transversal with two vertices.
+
+\emph{Two disjoint squares.} Since $\tau_4(G)>0$, $G$ has a square $L=l_0l_1l_2l_3$, which is chordless by Lemma~\ref{lem:tight}\ref{tight:chordless}. Put $D=\{l_0,l_1,l_2,l_3\}$. By reduction~\ref{red:chordless}, $\tau_4(G-D)\ge\tau_4(G)-2=1$, so the four vertices of $G-D$ carry a square $R=r_0r_1r_2r_3$, again chordless. Thus $G$ is the union of two vertex-disjoint induced squares $L$ and~$R$ and the edges between them. Each vertex of~$L$ has two neighbours in~$L$, and its third neighbour, not being a chord, lies in~$R$; the same holds for~$R$. So the edges between $L$ and~$R$ form a perfect matching, and we write $\mu(x)$ for the partner of a vertex~$x$.
+
+\emph{Squares using the matching.} Let $Q$ be a square with vertices in both $L$ and~$R$. Going once around~$Q$, each matching edge switches sides, so $Q$ uses an even, positive number of matching edges. No vertex lies on two matching edges, so two matching edges of~$Q$ cannot be consecutive; hence $Q$ uses exactly two, which are opposite on~$Q$, and its other two edges are an edge $xy$ of~$L$ and the edge $\mu(x)\mu(y)$ of~$R$.
+
+\emph{A transversal with two vertices.} We show that $\{l_0,\mu(l_2)\}$ meets every square. A square inside~$L$ or inside~$R$ uses all four vertices of that side, so it contains $l_0$ or~$\mu(l_2)$. A square using the matching contains an edge $xy$ of~$L$ and the vertices $\mu(x)$ and~$\mu(y)$. Every edge of~$L$ contains $l_0$ or~$l_2$, and in the second case the square contains~$\mu(l_2)$. Hence $\tau_4(G)\le2$, a contradiction.
+\end{proof}
+
+\subsection{Proof of Theorem~\ref*{thm:B}}
+
+\begin{proof}[Proof of Theorem~\ref{thm:B}]
+If $G$ is isomorphic to a member of~$\Tfam$, it is tight by Lemma~\ref{lem:small}. For the converse we use strong induction on~$|E(G)|$. Let $G$ be connected and tight with $1\le|E(G)|\le16$. A connected tight graph~$H$ with $1\le|E(H)|<|E(G)|$ also satisfies $|E(H)|\le16$, so by the induction hypothesis $G$ satisfies~\eqref{eq:IH}. By Lemma~\ref{lem:tight}, $G$ is square-supported and every vertex has degree $2$, $3$ or~$4$. If some vertex has degree~$4$, then $G\cong W_5$ or $G\cong\Oct$ by Proposition~\ref{prop:deg4}. Otherwise every degree is $2$ or~$3$, and Lemma~\ref{lem:structure}\ref{str:cases} leaves three cases. If $G$ is $2$-regular, then $G\cong C_4$ by Lemma~\ref{lem:structure}\ref{str:cycle}. If $G$ has an edge joining a vertex of degree~$2$ to a vertex of degree~$3$, then $G\cong\Kme$ by Proposition~\ref{prop:mixed}. The cubic case is impossible by Proposition~\ref{prop:cubic}.
+\end{proof}
+
+\section{The value seventeen}\label{sec:CDE}
+
+For the lower bound $\rc(4K_2,C_4)\ge17$, colour red every edge at a square transversal of size three: each square gets red edges, and a red matching needs a distinct transversal vertex for each of its edges (Lemma~\ref{lem:colouring}). Theorem~\ref{thm:C}\ref{C:trans}, from Theorems~\ref{thm:A} and~\ref{thm:B}, supplies the transversal. The upper bound is the explicit host of Theorem~\ref{thm:D}.
+
+\subsection{Small hosts}
+
+\begin{lemma}\label{lem:colouring}
+If a graph~$F$ has a square transversal~$S$ with $|S|\le3$, then colouring red the edges of~$F$ with an end in~$S$ and blue all other edges gives a red/blue colouring of~$F$ with no red copy of~$4K_2$ and no blue square.
+\end{lemma}
+
+\begin{proof}
+Each square of~$F$ has a vertex in~$S$, and both square edges at that vertex are red, so no square is blue. Each red edge has an end in~$S$. Four red edges with eight distinct endpoints would therefore provide four distinct vertices of~$S$, which is impossible.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:C}]
+\ref{C:trans} By Theorem~\ref{thm:A}, $4\tau_4(F)\le|E(F)|\le16$, so $\tau_4(F)\le4$. If $\tau_4(F)=4$, then $|E(F)|=16$ and $F$ is tight, so $F$ is isomorphic to a member of~$\Tfam$ by Theorem~\ref{thm:B}; but these graphs have at most $12$ edges. Hence $\tau_4(F)\le3$, and a square transversal of size~$\tau_4(F)$ has at most three vertices.
+
+\ref{C:col} This follows from~\ref{C:trans} and Lemma~\ref{lem:colouring}.
+\end{proof}
+
+
+\subsection{The host with seventeen edges}
+
+The host~$F_{17}$ of Theorem~\ref{thm:D} consists of two copies of~$\Kme$ and one connecting edge. Each copy forces a red matching of two edges or a blue square, and the connecting edge only serves to make the host connected. In a triangle-free host, such as a copy of~$\Kme$, a colouring without a red matching of two edges has all its red edges at one vertex; the next lemma shows this.
+
+\begin{lemma}\label{lem:star}
+Let $R$ be a triangle-free graph with at least one edge in which every two edges share an end. Then some vertex of~$R$ lies on every edge of~$R$.
+\end{lemma}
+
+\begin{proof}
+If $R$ has only one edge, either of its ends will do. Otherwise take two distinct edges; they share an end, so they are $xy$ and~$xz$ with $y\ne z$. An edge not containing~$x$ must meet both $xy$ and~$xz$, so it is~$yz$, and then $xyz$ is a triangle. Hence every edge contains~$x$.
+\end{proof}
+
+\begin{lemma}[{\cite[Theorem~2.6]{WYBAS15}}]\label{lem:k33arrow}
+Every red/blue colouring of~$\Kme$ has two disjoint red edges or a blue square.
+\end{lemma}
+
+\begin{proof}
+Suppose there are no two disjoint red edges. If there is no red edge, the whole graph is blue and contains a square. Otherwise the red edges form a triangle-free graph, since $\Kme$ is bipartite, so by Lemma~\ref{lem:star} they all contain one vertex~$x$. By Lemma~\ref{lem:small}, a single vertex does not meet every square of~$\Kme$, so $\Kme-x$ contains a square, and all its edges are blue.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:D}]
+The graph~$F_{17}$ has $8+8+1=17$ edges. Each copy of~$\Kme$ is connected, and the edge $b_2a_0'$ joins them, so $F_{17}$ is connected. Consider a red/blue colouring of~$F_{17}$ with no blue square. Its restriction to each copy of~$\Kme$ has no blue square, so by Lemma~\ref{lem:k33arrow} each copy contains two disjoint red edges. The copies are vertex-disjoint, so these four red edges have eight distinct endpoints and form a red copy of~$4K_2$.
+\end{proof}
+
+\begin{remark}\label{rem:bridge}
+The proof uses only that $F_{17}$ consists of two vertex-disjoint copies of~$\Kme$ and one further edge making the graph connected. It therefore applies verbatim when the two copies are joined by an edge between any vertex of the first and any vertex of the second, and all these graphs are connected, have $17$ edges and arrow $(4K_2,C_4)$.
+\end{remark}
+
+\begin{proof}[Proof of Theorem~\ref{thm:E}]
+By Theorem~\ref{thm:D}, $F_{17}$ is a connected graph with $17$ edges and $F_{17}\to(4K_2,C_4)$, so the set in~\eqref{eq:rc} is nonempty and $\rc(4K_2,C_4)\le17$. By Theorem~\ref{thm:C}\ref{C:col}, no connected graph with at most $16$ edges arrows $(4K_2,C_4)$, so $\rc(4K_2,C_4)\ge17$.
+\end{proof}
+
+\section{Formal verification}\label{sec:lean}
+
+Theorems~\ref{thm:A}--\ref{thm:E} have been verified in the proof assistant Lean~4~\cite{Lean4} with the Mathlib library~\cite{Mathlib20}, using the toolchain \texttt{leanprover/lean4:v4.35.0-rc3} and Mathlib at commit \texttt{\seqsplit{c55e6e786f49471c72fbddbec5415808896aec1e}}. A statement file, \texttt{Challenge.lean}, contains the definitions and the five statements without proofs. A proof file, \texttt{Solution.lean}, restates them and proves them from a supporting library of about $3{,}700$ lines whose structure follows Sections~\ref{sec:A}--\ref{sec:CDE}. Table~\ref{tab:lean} lists the formal statements.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{@{}ll@{}}
+\toprule
+result & Lean declaration (namespace \texttt{SizeRamsey}) \\
+\midrule
+Theorem~\ref{thm:A} & \texttt{four\_mul\_tau4\_le\_edgeCount} \\
+Theorem~\ref{thm:B} & \texttt{equality\_classification} \\
+Theorem~\ref{thm:C}\ref{C:col} & \texttt{avoiding\_coloring\_le\_sixteen} \\
+Theorem~\ref{thm:C}\ref{C:trans} & \texttt{connected\_transversal\_le\_three} (supporting library) \\
+Theorem~\ref{thm:D} & \texttt{F17\_spec} \\
+Theorem~\ref{thm:E} & \texttt{connectedSizeRamsey\_eq\_seventeen} \\
+\bottomrule
+\end{tabular}
+\caption{Formal counterparts of the principal theorems. All but the fourth row are statements of \texttt{Challenge.lean}.}
+\label{tab:lean}
+\end{table}
+
+\paragraph{Definitions.} The five statements of \texttt{Challenge.lean} concern simple graphs on vertex sets $\{0,\dots,n-1\}$, which covers every finite graph up to relabelling; the library theorem for Theorem~\ref{thm:C}\ref{C:trans} in Table~\ref{tab:lean} is stated for graphs on an arbitrary finite vertex type. Squares and copies of~$4K_2$ are injective maps from four and eight indices with the required adjacencies, so neither needs to be induced. The numbers $\tau_4$ and $\rc(4K_2,C_4)$ are infima, the latter over connected arrowing graphs on $\{0,\dots,n-1\}$ for all~$n$, and a colouring is a red subgraph of the host, the remaining edges being blue. The square~$C_4$ is Mathlib's cycle graph on four vertices (\texttt{cycleGraph~4}). The other three members of~$\Tfam$ and~$F_{17}$ are explicit edge lists, with labels matching ours as follows: in~$W_5$ the rim is $0,1,2,3$ ($r_i=i$) and the hub is~$4$; in~$\Kme$ the parts are $\{0,1,2\}$ and $\{3,4,5\}$ ($a_i=i$, $b_i=3+i$) and the missing edge is $\{0,3\}$; the octahedron has parts $\{0,1\}$, $\{2,3\}$, $\{4,5\}$; and $F_{17}$ has its two copies on $0,\dots,5$ and $6,\dots,11$ ($a_i'=6+i$, $b_i'=9+i$), with missing edges $\{0,3\}$ and $\{6,9\}$ and the connecting edge $b_2a_0'=\{5,6\}$. The isomorphisms in Theorem~\ref{thm:B} are isomorphisms of whole graphs.
+
+\paragraph{Checks.} The proof file and its dependencies contain no unfinished proofs, and each of the five theorems depends only on the standard axioms \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}. Finite verifications, such as the edge count of~$F_{17}$, are carried out by the kernel through \texttt{decide}; no compiled code is trusted. All $25$ modules of the project were replayed by Lean's kernel checker. A separate comparison tool checked that the five theorems proved in \texttt{Solution.lean} have exactly the statements of \texttt{Challenge.lean}, allowed no axioms beyond these three, and re-checked the exported proofs with Lean's kernel and with the two independent kernels \texttt{nanoda} and \texttt{con-ron}; all three accepted them.
+
+\paragraph{Scope.} Two points of scope are deliberate. First, the statement file records Theorem~\ref{thm:C} through its colouring conclusion~\ref{C:col}. The transversal conclusion~\ref{C:trans} is proved in the supporting library as \texttt{connected\_transversal\_le\_three}, and the formal proof of~\ref{C:col} is derived from it. Part~\ref{C:trans} is therefore checked by the kernel as part of that proof, but its statement is not among those compared with the statement file. Second, Theorem~\ref{thm:D} is formalised for the single host~$F_{17}$; the extension to an arbitrary connecting edge in Remark~\ref{rem:bridge} lies outside the formal development. Neither point affects Theorem~\ref{thm:E}, which needs one host.
+
+\paragraph{Availability.} The Lean development is in the repository \url{https://github.com/benkeene/size-ramsey}, which is private at the time of writing; it is available from the author on request. \red{[visibility]}
+
+\paragraph{Use of AI.} The arguments of this paper, the Lean development and the text were produced with substantial assistance from GPT-6 Astra (OpenAI) and Claude models (Anthropic), which proposed proofs, reviewed one another adversarially and wrote most of the Lean code. That review is not the guarantee of correctness; the guarantee is the formal verification described above.
+
+%% NEXT
+
+\bibliographystyle{amsplain}
+\bibliography{refs}
+
+\end{document}
