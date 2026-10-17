@@ -302,7 +302,28 @@ theorem tau4_delete_non_square_edge
     (h : ¬ EdgeOnSquare G u v) :
     tau4 (G.deleteEdges {s(u, v)}) = tau4 G ∧
     edgeCount (G.deleteEdges {s(u, v)}) + 1 = edgeCount G := by
-  sorry
+  refine ⟨tau4_eq_of_same_squares fun f => ⟨fun hf => ?_, fun hf => ?_⟩, ?_⟩
+  · rw [isC4Map_iff_cyclic] at hf ⊢
+    exact ⟨hf.1, fun i => (SimpleGraph.deleteEdges_adj.mp (hf.2 i)).1⟩
+  · have hne : ∀ i, s(f i, f (i + 1)) ≠ s(u, v) := fun i heq => by
+      obtain ⟨h1, h2⟩ := IsC4Map.edgeOnSquare hf i
+      rcases Sym2.eq_iff.mp heq with ⟨ha, hb⟩ | ⟨ha, hb⟩
+      · exact h (ha ▸ hb ▸ h1)
+      · exact h (ha ▸ hb ▸ h2)
+    rw [isC4Map_iff_cyclic] at hf ⊢
+    refine ⟨hf.1, fun i => SimpleGraph.deleteEdges_adj.mpr ⟨hf.2 i, ?_⟩⟩
+    rw [Set.mem_singleton_iff]
+    exact hne i
+  · have hE : (G.deleteEdges {s(u, v)}).edgeFinset = G.edgeFinset.erase s(u, v) := by
+      ext e
+      simp only [SimpleGraph.mem_edgeFinset, SimpleGraph.edgeSet_deleteEdges, Set.mem_diff,
+        Set.mem_singleton_iff, Finset.mem_erase]
+      tauto
+    rw [edgeCount_eq_card, edgeCount_eq_card, hE, Finset.card_erase_of_mem
+      (SimpleGraph.mem_edgeFinset.mpr hadj)]
+    have : 0 < G.edgeFinset.card :=
+      Finset.card_pos.mpr ⟨s(u, v), SimpleGraph.mem_edgeFinset.mpr hadj⟩
+    omega
 
 theorem tau4_delete_leaf_vertex
     (v : V) (hd : G.degree v ≤ 1) :
