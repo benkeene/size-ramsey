@@ -9,8 +9,9 @@ graph with at most 16 edges has a set of at most three vertices meeting every 4-
 
 Status: informal proof VERIFIED by the aiseminar review protocol (2026-10-16; four Astra passes and an
 independent reconstruction). Lean: sorry-free Lean development at `a73d95a` (2026-10-17),
-kernel-replayed locally (per-module leanchecker), pending adversary and reviewer passes on the
-formal development, independent statement reconstruction, and the CI comparator. This is not a
+kernel-replayed locally (per-module leanchecker, 25 modules); adversary pass 1 on the formal
+development ACCEPT_WITH_FIXES (fixes applied); independent statement reconstruction done
+(`CORRESPONDENCE.md` §13); reviewer pass and CI comparator pending. This is not a
 claim of formal verification. The only `sorry`s are the deliberate ones in `Challenge.lean`; the
 five records in `Solution.lean` depend on `[propext, Classical.choice, Quot.sound]` only.
 Informal argument in `docs/PROOF.md`; plan in `docs/astra/`; audit record in `CORRESPONDENCE.md`
@@ -45,6 +46,7 @@ Pinned toolchain `leanprover/lean4:v4.35.0-rc3`, Mathlib `v4.35.0-rc3`
 ## Submission
 Palomar submissions go through https://submit.palomar-registry.org/ with the full 40-character commit SHA. This repository is
 not ready for submission: the comparator has not been run (it needs Linux CI with bubblewrap),
-nor `leanchecker --fresh`, NanoDa or con-ron, and the formal development has had no adversary or
-reviewer pass and no independent statement reconstruction. See `status.scope` and `known_gaps` in
+nor `leanchecker --fresh`, NanoDa or con-ron, and the formal development has had no reviewer pass
+(adversary pass 1 done, ACCEPT_WITH_FIXES). The Corollary C record covers only the colouring half
+of the informal C (`CORRESPONDENCE.md` §8, `TODO(ben)`). See `status.scope` and `known_gaps` in
 `formalization.yaml` and `CORRESPONDENCE.md` §10.

@@ -1,8 +1,9 @@
 # Informal proof (lab status VERIFIED as an ordinary theorem, 2026-10-16; not formally verified)
 
 Lean (2026-10-17): sorry-free Lean development at commit `a73d95a`, kernel-replayed locally
-(per-module leanchecker), pending adversary and reviewer passes on the formal development,
-independent statement reconstruction, and the CI comparator (`CORRESPONDENCE.md` §10).
+(per-module leanchecker, 25 modules); adversary pass 1 on the formal development
+ACCEPT_WITH_FIXES; independent statement reconstruction done (`CORRESPONDENCE.md` §13); reviewer
+pass and CI comparator pending (`CORRESPONDENCE.md` §10).
 
 Source: Astra threads of 2026-10-16 (`docs/astra/2026-10-16_workflow_ramsey.md` §2 and the
 scaffold plan); revised after the adversary (transcript 20261016T191015) and reviewer
@@ -141,4 +142,9 @@ a bridge give a red 4-matching with eight distinct endpoints. Bridge colour irre
 
 ## Endpoint
 `connectedSizeRamsey_eq_seventeen` from C and D: the Lean deduction in Solution.lean is complete
-but conditional on the admitted development interfaces for A–D (axiom audit lists sorryAx).
+and unconditional. As of commit `a73d95a` all five statements of record are proved sorry-free;
+`#print axioms` of each is `[propext, Classical.choice, Quot.sound]`, and every built project
+module (25) is kernel-replayed by `leanchecker` (`CORRESPONDENCE.md` §10). The C record is the
+colouring consequence only; the three-vertex transversal is `connected_transversal_le_three`
+(`CORRESPONDENCE.md` §8). Formal review is in progress (adversary pass 1 ACCEPT_WITH_FIXES;
+reviewer pass and CI comparator pending); this is not a claim of formal verification.
