@@ -225,7 +225,34 @@ theorem transversal_iff_no_square_erase (D : Finset V) :
 theorem erase_edgeCount (D : Finset V) :
     edgeCount (erase G D) + (∑ v ∈ D, G.degree v) =
       edgeCount G + edgeCount (G.induce (D : Set V)) := by
-  sorry
+  have hE : ∑ v ∈ Finset.univ.filter (· ∉ D), ((G.neighborFinset v).filter (· ∉ D)).card =
+      2 * edgeCount (erase G D) := by
+    rw [edgeCount_eq_card, ← SimpleGraph.sum_degrees_eq_twice_card_edges]
+    rw [Finset.sum_subtype (p := (· ∉ D)) _ (by simp)]
+    exact Finset.sum_congr rfl fun v _ => (erase_degree_eq G D v).symm
+  have hI : ∑ v ∈ D, ((G.neighborFinset v).filter (· ∈ D)).card =
+      2 * edgeCount (G.induce (D : Set V)) := by
+    rw [edgeCount_eq_card, ← SimpleGraph.sum_degrees_eq_twice_card_edges]
+    rw [Finset.sum_subtype (p := (· ∈ D)) _ (by simp)]
+    exact Finset.sum_congr rfl fun v _ => (induce_finset_degree_eq G D v).symm
+  have hG : ∑ v, G.degree v = 2 * edgeCount G := by
+    rw [edgeCount_eq_card, SimpleGraph.sum_degrees_eq_twice_card_edges]
+  have hsplit : ∀ v, G.degree v = ((G.neighborFinset v).filter (· ∈ D)).card +
+      ((G.neighborFinset v).filter (· ∉ D)).card := fun v => by
+    rw [← G.card_neighborFinset_eq_degree, Finset.card_filter_add_card_filter_not]
+  have hD : Finset.univ.filter (· ∈ D) = D := by ext; simp
+  have hU : ∑ v, G.degree v = ∑ v ∈ D, G.degree v +
+      ∑ v ∈ Finset.univ.filter (· ∉ D), G.degree v := by
+    rw [← Finset.sum_filter_add_sum_filter_not Finset.univ (· ∈ D), hD]
+  have hDs : ∑ v ∈ D, G.degree v = ∑ v ∈ D, ((G.neighborFinset v).filter (· ∈ D)).card +
+      ∑ v ∈ D, ((G.neighborFinset v).filter (· ∉ D)).card := by
+    rw [← Finset.sum_add_distrib]; exact Finset.sum_congr rfl fun v _ => hsplit v
+  have hNs : ∑ v ∈ Finset.univ.filter (· ∉ D), G.degree v =
+      ∑ v ∈ Finset.univ.filter (· ∉ D), ((G.neighborFinset v).filter (· ∈ D)).card +
+      ∑ v ∈ Finset.univ.filter (· ∉ D), ((G.neighborFinset v).filter (· ∉ D)).card := by
+    rw [← Finset.sum_add_distrib]; exact Finset.sum_congr rfl fun v _ => hsplit v
+  have hC := cross_count G D
+  omega
 
 theorem erase_singleton_counts (v : V) :
     edgeCount (erase G {v}) + G.degree v = edgeCount G ∧
