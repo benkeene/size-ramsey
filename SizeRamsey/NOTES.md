@@ -44,12 +44,12 @@ Status as of the bootstrap commit.
 | `Plan.leftCopy`, `Plan.rightCopy` | B | Upper.lean | definitions |
 | `Plan.leftCopy_injective`, `Plan.rightCopy_injective`, `Plan.copies_disjoint` | B | Upper.lean | proved |
 | `Plan.leftCopy_adj`, `Plan.rightCopy_adj`, `Plan.hasC4_map` | B | Upper.lean | proved |
-| `Plan.star_or_empty`, `Plan.matching2_union` | B | Upper.lean | stub |
-| `F17_connected`, `k33MinusEdge_arrows_matching2_c4`, `F17_arrows_matching4_c4` | B | Upper.lean | stub |
-| `Proof.F17_spec` (Theorem D) | B | Upper.lean | assembled |
+| `Plan.star_or_empty`, `Plan.matching2_union` | B | Upper.lean | proved |
+| `F17_connected`, `k33MinusEdge_arrows_matching2_c4`, `F17_arrows_matching4_c4` | B | Upper.lean | proved |
+| `Proof.F17_spec` (Theorem D) | B | Upper.lean | proved |
 | `incidentRed` | B | ColoringBase.lean | definition |
 | `Plan.incidentRed_adj` | B | ColoringBase.lean | proved |
-| `Plan.matching4_incident_card`, `Plan.transversal_no_blue_square`, `avoiding_coloring_of_transversal` | B | ColoringBase.lean | stub |
+| `Plan.matching4_incident_card`, `Plan.transversal_no_blue_square`, `avoiding_coloring_of_transversal` | B | ColoringBase.lean | proved |
 | `Plan.tight_subcubic_chordless` | B | Equality/Common.lean | stub |
 | `Plan.k33_extension_tau_le_two` | B | Equality/Extension.lean | stub |
 | `Plan.equality_degree_four_case` | B | Equality/DegreeFour.lean | stub |
@@ -60,7 +60,7 @@ Status as of the bootstrap commit.
 | `Plan.classification_of_step` | B | Equality.lean | proved |
 | `Proof.equality_classification` (Theorem B) | B | Equality.lean | stub |
 | `connected_transversal_le_three` | B | Coloring.lean | stub |
-| `Proof.avoiding_coloring_le_sixteen` (Corollary C) | B | Coloring.lean | stub |
+| `Proof.avoiding_coloring_le_sixteen` (Corollary C) | B | Coloring.lean | assembled (`connected_transversal_le_three`) |
 | (final exports) | B | Main.lean | public imports only |
 | five statements of record, `connectedSizeRamsey_eq_seventeen` | B | Solution.lean | assembled; endpoint proved from C and D |
 | axiom audit | B | AxiomAudit.lean | imports `Solution`; not imported by `SizeRamsey` |
