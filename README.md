@@ -19,7 +19,8 @@ ACCEPT_WITH_FIXES (reviewer 0.98, 2026-10-17; fixes applied); independent statem
 reconstruction done (`CORRESPONDENCE.md` §13). The reviewer recommends FORMALLY_VERIFIED for A,
 B, C (via two declarations), D for the fixed host of CLAIM.md, and E; the endpoint-universal
 reading of D is not formalized. Since 2026-10-17 (after `a988d32`) both halves of C are records:
-the transversal half `SizeRamsey.connected_transversal_le_three` is the sixth record. Lab status (aiseminar claim_0004, 2026-10-17): FORMALLY_VERIFIED
+the transversal half `SizeRamsey.connected_transversal_le_three` is the sixth record (`ab5d48c`);
+the CI comparator passed with six records at `21750f1` (https://github.com/benkeene/size-ramsey/actions/runs/39034260971). Lab status (aiseminar claim_0004, 2026-10-17): FORMALLY_VERIFIED
 with exactly that scope. CI comparator passed at `a988d32` (2026-10-17, GitHub Actions run
 https://github.com/benkeene/size-ramsey/actions/runs/39005389761): statement and axiom check
 passed, and con-ron, nanoda and the Lean default kernel accepted the solution; `leanchecker
@@ -49,7 +50,7 @@ lake build               # also builds Challenge.lean: six deliberate sorry warn
 python3 scripts/check-lean-sources.py
 ruby scripts/validate-formalization.rb
 lake env lean SizeRamsey/AxiomAudit.lean   # [propext, Classical.choice, Quot.sound] for all six records
-./scripts/verify-comparator.sh          # Linux with bubblewrap only; passed in CI at a988d32 (five records); re-run pending for six
+./scripts/verify-comparator.sh          # Linux with bubblewrap only; passed in CI at 21750f1 (six records)
 ```
 
 Pinned toolchain `leanprover/lean4:v4.35.0-rc3`, Mathlib `v4.35.0-rc3`
@@ -90,6 +91,5 @@ human read of `CORRESPONDENCE.md`, and the optional packaging items in `CORRESPO
 aiseminar claim_0004 `RESPONSE_CLAUDE.md` (`TODO(ben)`). `leanchecker --fresh` has not run
 (optional; the registry's comparator performs independent replay). Formal adversary pass 1 and reviewer
 pass 1 are done (ACCEPT_WITH_FIXES; fixes applied). The transversal half of Corollary C,
-`SizeRamsey.connected_transversal_le_three`, was added as the sixth record on 2026-10-17 after
-`a988d32`; local checks pass and the CI comparator must re-run on that commit
-(`CORRESPONDENCE.md` §8, §10). See `status.scope` and `known_gaps` in `formalization.yaml`.
+`SizeRamsey.connected_transversal_le_three`, was added as the sixth record on 2026-10-17
+(`ab5d48c`); the CI comparator passed with six records at `21750f1` (`CORRESPONDENCE.md` §8, §10). See `status.scope` and `known_gaps` in `formalization.yaml`.

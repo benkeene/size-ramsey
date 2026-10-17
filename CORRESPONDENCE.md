@@ -12,7 +12,7 @@ nanoda and the Lean default kernel accepted the solution; §10). The reviewer re
 FORMALLY_VERIFIED for A, B, C (two declarations), fixed-host D and E; lab status (aiseminar
 claim_0004, 2026-10-17): FORMALLY_VERIFIED with exactly that scope. **Sixth record (2026-10-17,
 after `a988d32`):** the transversal half of C, `SizeRamsey.connected_transversal_le_three`, is now
-a statement of record (§1, §2, §8, §10); the CI comparator has not yet re-run with six records.
+a statement of record (§1, §2, §8, §10); the CI comparator passed with six records at `21750f1` (https://github.com/benkeene/size-ramsey/actions/runs/39034260971, §10).
 Sections 1–7 are the correspondence argument as written at the scaffold, with the Corollary C
 record scope made explicit after adversary pass 1 (§1, §2, §8) and D's fixed host made explicit
 after reviewer pass 1 (§1); no statement or definition has
@@ -135,8 +135,8 @@ finding 2), the reconstruction (§13 item 5) and the reviewer (optional packagin
 sixth record `SizeRamsey.connected_transversal_le_three` was then added to `Challenge.lean`,
 `Solution.lean`, `comparator.json` and `AxiomAudit.lean`, and the library lemma was moved into
 namespace `SizeRamsey.Proof` to free the name (Coloring.lean; the frozen files `Defs`, `Shared`,
-`AInterface` are untouched). Both halves of CLAIM.md's C are now records. The CI comparator has
-not yet run with six records (§10).
+`AInterface` are untouched). Both halves of CLAIM.md's C are now records. The CI comparator passed with six records at
+`21750f1` (§10).
 
 Comparator wording: the docstrings of `Solution.lean` (line 42) and `SizeRamsey/Defs.lean`
 (line 15) say "the comparator checks" agreement. That describes the comparator's function; the
@@ -200,7 +200,7 @@ manifest copied from PALOMAR-2026-10-07-000005 with the root renamed.
 | 2026-10-17 | literal replay, same 25-module argv as below | `ab5d48c` | exit 0, no output; `time`: 1:37.78 wall |
 | 2026-10-17 | `#check @SizeRamsey.connected_transversal_le_three` under `set_option pp.all true` in two scratch files, one importing `Challenge`, one importing `Solution`; outputs diffed | `ab5d48c` | identical |
 | 2026-10-17 | `ruby scripts/validate-formalization.rb` (sixth record) | `ab5d48c` | passes |
-| pending | CI `scripts/verify-comparator.sh` with six records | commit adding the sixth record | not yet run |
+| 2026-10-17 | CI `scripts/verify-comparator.sh` (GitHub Actions, Linux, bubblewrap; job "Check statement against solution", run https://github.com/benkeene/size-ramsey/actions/runs/39034260971; all four jobs success) | `21750f1` (Lean text = `ab5d48c`) | build 1225 jobs; six records plus `propext`, `Quot.sound`, `Classical.choice` exported; con-ron accepted 8175 declarations (`--verified`), nanoda accepted, Lean default kernel accepted; `Your solution is okay!` |
 
 Literal replay (2026-10-17, HEAD `a470609`, after `lake build`): the module list is the root
 `SizeRamsey`, `Challenge`, `Solution`, and every `SizeRamsey.*` module with a `.olean` under
