@@ -2,15 +2,17 @@
 
 Status: the proof certificate is `Solution.lean` and its dependency closure (the `SizeRamsey`
 library), which does not import `Challenge.lean`: `lake build Solution` reports zero `sorry`
-warnings (§10). The default `lake build` also builds `Challenge.lean`, whose five deliberate
-`sorry`s give five warnings; it is not described as sorry-free. Proofs complete at `a73d95a`,
+warnings (§10). The default `lake build` also builds `Challenge.lean`, whose six deliberate
+`sorry`s give six warnings; it is not described as sorry-free. Proofs complete at `a73d95a`,
 kernel-replayed locally (leanchecker, all 25 built project modules); formal adversary pass 1
 ACCEPT_WITH_FIXES (meaning 0.97, trust 0.98) and reviewer pass 1 ACCEPT_WITH_FIXES (0.98), fixes
 applied 2026-10-17; independent statement reconstruction done (§13); CI comparator passed at
 `a988d32` (2026-10-17, https://github.com/benkeene/size-ramsey/actions/runs/39005389761; con-ron,
 nanoda and the Lean default kernel accepted the solution; §10). The reviewer recommends
 FORMALLY_VERIFIED for A, B, C (two declarations), fixed-host D and E; lab status (aiseminar
-claim_0004, 2026-10-17): FORMALLY_VERIFIED with exactly that scope.
+claim_0004, 2026-10-17): FORMALLY_VERIFIED with exactly that scope. **Sixth record (2026-10-17,
+after `a988d32`):** the transversal half of C, `SizeRamsey.connected_transversal_le_three`, is now
+a statement of record (§1, §2, §8, §10); the CI comparator has not yet re-run with six records.
 Sections 1–7 are the correspondence argument as written at the scaffold, with the Corollary C
 record scope made explicit after adversary pass 1 (§1, §2, §8) and D's fixed host made explicit
 after reviewer pass 1 (§1); no statement or definition has
@@ -26,9 +28,10 @@ necessarily induced) 4-cycle, and |E(G)| its number of edges.
   K₃,₃ − e, or K₂,₂,₂ (octahedron).
 * **C.** Every connected G with |E(G)| ≤ 16 has a C₄-transversal of at most three vertices and
   therefore R ⊆ E(G) with no red (R) matching of four edges and no blue (E(G) \ R) 4-cycle
-  (CLAIM.md wording). **The statement of record for C is only the colouring conclusion**; the
-  transversal conclusion is proved in the library as `SizeRamsey.connected_transversal_le_three`
-  but is not a statement of record (§2, §8).
+  (CLAIM.md wording). **Both conclusions are statements of record**: the transversal half
+  `SizeRamsey.connected_transversal_le_three` (sixth record, added 2026-10-17; before that it was
+  proved in the library but not registered) and the colouring half
+  `SizeRamsey.avoiding_coloring_le_sixteen` (§2, §8).
 * **D.** F₁₇ is connected and every red/blue colouring of its edges has a red 4-matching or a
   blue C₄, where F₁₇ is the fixed host of CLAIM.md's D (amended 2026-10-17 at the reviewer's
   request): two vertex-disjoint copies of K₃,₃ − e (parts {0,1,2}, {3,4,5}, missing edge {0,3})
@@ -46,26 +49,28 @@ necessarily induced) 4-cycle, and |E(G)| its number of edges.
 | A | `SizeRamsey.four_mul_tau4_le_edgeCount` | `SizeRamsey.Proof.four_mul_tau4_le_edgeCount` (Universal.lean) |
 | B | `SizeRamsey.equality_classification` | `SizeRamsey.Proof.equality_classification` (Equality.lean) |
 | C (colouring) | `SizeRamsey.avoiding_coloring_le_sixteen` | `SizeRamsey.Proof.avoiding_coloring_le_sixteen` (Coloring.lean) |
-| C (transversal) | none (not a statement of record) | `SizeRamsey.connected_transversal_le_three` (Coloring.lean) |
+| C (transversal) | `SizeRamsey.connected_transversal_le_three` (sixth record, 2026-10-17) | `SizeRamsey.Proof.connected_transversal_le_three` (Coloring.lean) |
 | D | `SizeRamsey.F17_spec` | `SizeRamsey.Proof.F17_spec` (Upper.lean) |
 | E | `SizeRamsey.connectedSizeRamsey_eq_seventeen` | proved in Solution.lean from C and D |
 
-`SizeRamsey.connected_transversal_le_three` is generic in a finite vertex type `V`:
-`G.Connected → edgeCount G ≤ 16 → ∃ S : Finset V, c4Transversal G S ∧ S.card ≤ 3`; its
+The library lemma `SizeRamsey.Proof.connected_transversal_le_three` (until 2026-10-17 named
+`SizeRamsey.connected_transversal_le_three`; proof text unchanged) is generic in a finite vertex
+type `V`: `G.Connected → edgeCount G ≤ 16 → ∃ S : Finset V, c4Transversal G S ∧ S.card ≤ 3`; its
 `#print axioms` is `[propext, Classical.choice, Quot.sound]` (adversary-meaning run, 2026-10-17).
-The C record omits the separately proved transversal conclusion
-(`SizeRamsey.connected_transversal_le_three`); CLAIM.md's C is covered by the two declarations
-together. (K₇ with every edge red avoids both colours yet no three vertices meet all its 4-cycles;
+The sixth record `SizeRamsey.connected_transversal_le_three` is its `Fin n` instance, proved in
+`Solution.lean` by one `exact`, as the records for A, B and C (colouring) are; CLAIM.md's C is
+covered by the two records. (K₇ with every edge red avoids both colours yet no three vertices meet all its 4-cycles;
 K₇ has 21 edges and lies outside C's hypotheses, so it separates only the unrestricted conclusion
 predicates, not the statements under C's hypotheses.)
 
-Scope of the five records against CLAIM.md (adversary pass 1 comparison, 2026-10-17):
+Scope of the records against CLAIM.md (adversary pass 1 comparison, 2026-10-17, five records;
+C row updated for the sixth record):
 
 | | record versus CLAIM.md |
 |---|---|
 | A | equal, after relabelling an arbitrary finite vertex type by `Fin n` (§4) |
 | B | stronger than CLAIM.md's literal "only for": the record is an iff (converse included); equal to §1's iff |
-| C | the record states the colouring conclusion only and omits the transversal conclusion, proved separately as `connected_transversal_le_three`; the two declarations together cover CLAIM.md's C |
+| C | two records, the transversal half (`connected_transversal_le_three`, sixth record since 2026-10-17) and the colouring half; together equal to CLAIM.md's C. At the adversary pass only the colouring half was a record |
 | D | equal to CLAIM.md's D as amended to the fixed host (2026-10-17); the endpoint-universal statement is not formalized |
 | E | equal to the stated finite connected size-Ramsey minimum |
 
@@ -113,23 +118,25 @@ support; B's `↔` includes the converse, which requires the four transversal nu
 ## 8. Formalized scope and gaps
 
 As of `a73d95a` (2026-10-17) every declaration of the development library and of `Solution.lean`
-is proved: the only `sorry`s in the project are the five deliberate ones in `Challenge.lean` (the
-statements of record), and `#print axioms` of the five records in `Solution.lean` is
-`[propext, Classical.choice, Quot.sound]`. No custom axioms, no `native_decide`. The proof
+is proved: the only `sorry`s in the project are the deliberate ones in `Challenge.lean` (the
+statements of record; five at `a73d95a`, six since the sixth record of 2026-10-17), and
+`#print axioms` of every record in `Solution.lean` is `[propext, Classical.choice, Quot.sound]`. No custom axioms, no `native_decide`. The proof
 certificate is `Solution.lean` and its dependency closure, which does not import `Challenge.lean`
-(`lake build Solution`: zero `sorry` warnings); the default `lake build` includes the five
+(`lake build Solution`: zero `sorry` warnings); the default `lake build` includes the six
 deliberate `Challenge.lean` warnings and is not called sorry-free.
 `Challenge.lean`, `SizeRamsey/Defs.lean`, `Shared.lean` and `AInterface.lean` are byte-identical
 to the stream base `b17d1fa`, which differs from the bootstrap `a979fb0` only by a status
 docstring edit; the statements of record and the frozen definitions are therefore unchanged.
 
-Corollary C record scope: the statement of record `SizeRamsey.avoiding_coloring_le_sixteen` is
-the colouring consequence only. The transversal statement of CLAIM.md's C is proved and named
-(`SizeRamsey.connected_transversal_le_three`, Coloring.lean, axiom-clean) but is in neither
-`Challenge.lean` nor `comparator.json`. `TODO(ben)`: packaging decision whether to add it as a
-sixth statement of record (Challenge.lean, Solution.lean, comparator.json, AxiomAudit.lean); the
-reviewer (pass 1) calls this optional packaging. CLAIM.md's C is formally proved by the two
-declarations together; the record alone states only the colouring half.
+Corollary C record scope (resolved 2026-10-17): until `a988d32` the only C record was the
+colouring half `SizeRamsey.avoiding_coloring_le_sixteen`; the transversal half was proved in the
+library but was in neither `Challenge.lean` nor `comparator.json`, which the adversary (meaning
+finding 2), the reconstruction (§13 item 5) and the reviewer (optional packaging) all noted. The
+sixth record `SizeRamsey.connected_transversal_le_three` was then added to `Challenge.lean`,
+`Solution.lean`, `comparator.json` and `AxiomAudit.lean`, and the library lemma was moved into
+namespace `SizeRamsey.Proof` to free the name (Coloring.lean; the frozen files `Defs`, `Shared`,
+`AInterface` are untouched). Both halves of CLAIM.md's C are now records. The CI comparator has
+not yet run with six records (§10).
 
 Comparator wording: the docstrings of `Solution.lean` (line 42) and `SizeRamsey/Defs.lean`
 (line 15) say "the comparator checks" agreement. That describes the comparator's function; the
@@ -187,6 +194,13 @@ manifest copied from PALOMAR-2026-10-07-000005 with the root renamed.
 | 2026-10-17 | recursive `Lake.Check.compareAt` + `checkAxioms` (three-axiom allowlist), failing on error (reviewer pass 1) | `134d223` | `Except.ok ()` for both |
 | 2026-10-17 | `lake build Solution` (after reviewer fixes; Lean text unchanged since `134d223`) | `134d223` + docs | exit 0, 1225 jobs; `declaration uses 'sorry'`: 0 (linter warnings only) |
 | 2026-10-17 | CI `scripts/verify-comparator.sh` (GitHub Actions, Linux, bubblewrap; job "Check statement against solution", run https://github.com/benkeene/size-ramsey/actions/runs/39005389761; all four jobs success) | `a988d32` | build 1225 jobs; five records plus `propext`, `Quot.sound`, `Classical.choice` exported; con-ron accepted 8174 declarations (`--verified`), nanoda accepted, Lean default kernel accepted; `Your solution is okay!` |
+| 2026-10-17 | `python3 scripts/check-lean-sources.py` (sixth record) | after `155b5a7` (working tree) | satisfied |
+| 2026-10-17 | `lake build` (sixth record) | after `155b5a7` (working tree) | exit 0, 1228 jobs; `declaration uses sorry`: 6, all in `Challenge.lean`, 0 elsewhere |
+| 2026-10-17 | `lake env lean SizeRamsey/AxiomAudit.lean` (six records) | after `155b5a7` (working tree) | exit 0; `[propext, Classical.choice, Quot.sound]` for all six records (output inspected) |
+| 2026-10-17 | literal replay, same 25-module argv as below | after `155b5a7` (working tree) | exit 0, no output; `time`: 1:37.78 wall |
+| 2026-10-17 | `#check @SizeRamsey.connected_transversal_le_three` under `set_option pp.all true` in two scratch files, one importing `Challenge`, one importing `Solution`; outputs diffed | after `155b5a7` (working tree) | identical |
+| 2026-10-17 | `ruby scripts/validate-formalization.rb` (sixth record) | after `155b5a7` (working tree) | passes |
+| pending | CI `scripts/verify-comparator.sh` with six records | commit adding the sixth record | not yet run |
 
 Literal replay (2026-10-17, HEAD `a470609`, after `lake build`): the module list is the root
 `SizeRamsey`, `Challenge`, `Solution`, and every `SizeRamsey.*` module with a `.olean` under
@@ -262,7 +276,7 @@ unavailable in its sandbox); the comparison below is by reading, plus the edge-l
 5. *C.* The reconstruction states **both** halves: a transversal of size at most three **and**
    an avoiding colouring. Our record states only the colouring half; the transversal half is
    `SizeRamsey.connected_transversal_le_three`. This independently confirms adversary-meaning
-   finding 2; same `TODO(ben)` as §8.
+   finding 2. Resolved 2026-10-17: the transversal half is the sixth record (§8).
 6. *D.* The reconstruction defines `F17 p q` on `Fin 2 × Fin 6` and quantifies over all bridge
    endpoints `p q : Fin 6`, noting a genuine ambiguity: bridging a degree-2 or a degree-3 vertex
    of K₃,₃ − e can give non-isomorphic hosts. Our `F17` is one host: copies on 0..5 and 6..11

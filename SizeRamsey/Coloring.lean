@@ -14,7 +14,9 @@ most three (Theorems A and B), hence an avoiding colouring (`ColoringBase`). -/
 @[expose] public section
 
 namespace SizeRamsey
+namespace Proof
 
+/-- Corollary C, transversal half: a `C₄`-transversal of at most three vertices. -/
 theorem connected_transversal_le_three
     {V : Type*} [Fintype V] (G : SimpleGraph V)
     (hconn : G.Connected) (hle : edgeCount G ≤ 16) :
@@ -43,8 +45,7 @@ theorem connected_transversal_le_three
     have hi := Plan.edgeCount_iso e
     omega
 
-namespace Proof
-
+/-- Corollary C, colouring half, from the transversal half. -/
 theorem avoiding_coloring_le_sixteen
     {V : Type*} [Fintype V] (F : SimpleGraph V)
     (hconn : F.Connected) (hle : edgeCount F ≤ 16) :

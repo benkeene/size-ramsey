@@ -12,7 +12,10 @@ project:
     construction from a three-vertex transversal, and an explicit twelve-vertex,
     seventeen-edge host. Proofs are complete as of commit a73d95a (2026-10-17); the proof
     certificate is Solution.lean and its dependency closure. Formal adversary pass 1 and reviewer
-    pass 1 are ACCEPT_WITH_FIXES (fixes applied); the CI comparator passed at a988d32 (2026-10-17).
+    pass 1 are ACCEPT_WITH_FIXES (fixes applied); the CI comparator passed at a988d32 (2026-10-17)
+    with five records. A sixth record, the transversal half of Corollary C
+    (SizeRamsey.connected_transversal_le_three), was registered on 2026-10-17 after a988d32; the
+    CI comparator has not yet re-run with six records.
   authors:
     - "Ben Keene"
   license: "Apache-2.0"
@@ -30,29 +33,37 @@ status:
   scope: >-
     The proof certificate is Solution.lean and its dependency closure (the SizeRamsey library),
     which does not import Challenge.lean: "lake build Solution" reports zero sorry warnings. The
-    default "lake build" also builds Challenge.lean, whose five deliberate sorry warnings are the
+    default "lake build" also builds Challenge.lean, whose six deliberate sorry warnings are the
     statements of record, so the default build is not described as sorry-free. Kernel-replayed
     locally (leanchecker, 25 modules); adversary pass 1 ACCEPT_WITH_FIXES (meaning 0.97, trust
     0.98) and reviewer pass 1 ACCEPT_WITH_FIXES (0.98), 2026-10-17, documentation fixes applied;
     independent statement reconstruction done (CORRESPONDENCE.md section 13). The reviewer
     recommends FORMALLY_VERIFIED for A, B, C (via two declarations), D for the fixed host and E;
-    the endpoint-universal reading of D is not formalized. Lab status (aiseminar claim_0004,
+    the endpoint-universal reading of D is not formalized. Since 2026-10-17 (after a988d32) both
+    halves of C are statements of record: the transversal half
+    SizeRamsey.connected_transversal_le_three is the sixth record (Challenge.lean, Solution.lean,
+    comparator.json, AxiomAudit.lean), proved by a one-line call to the library lemma
+    SizeRamsey.Proof.connected_transversal_le_three that the reviewers saw. Lab status (aiseminar claim_0004,
     2026-10-17): FORMALLY_VERIFIED with exactly that scope. Informal proof: lab status
     VERIFIED as an ordinary theorem (2026-10-16, aiseminar claim_0004). At commit a73d95a
-    (2026-10-17) the five statements of record in Challenge.lean (deliberate sorry) are restated
-    and proved in Solution.lean, and #print axioms of all five is [propext, Classical.choice,
-    Quot.sound]. sorry_count counts occurrences outside Challenge.lean, whose five sorry bodies
+    (2026-10-17) the five statements of record then in Challenge.lean (deliberate sorry) are
+    restated and proved in Solution.lean; with the sixth record added (2026-10-17) #print axioms
+    of all six is [propext, Classical.choice, Quot.sound] (local run, AxiomAudit.lean, output
+    inspected). sorry_count counts occurrences outside Challenge.lean, whose six sorry bodies
     are the statements of record and are excluded by convention. CI comparator at a988d32
     (2026-10-17, GitHub Actions run 39005389761): "Your solution is okay!"; con-ron (8174
-    declarations, --verified), nanoda and the Lean default kernel accepted the solution. Ready
-    for submission from the registry's side; remaining: repository visibility (currently
-    private), a human read of CORRESPONDENCE.md, optional packaging (TODO(ben)).
+    declarations, --verified), nanoda and the Lean default kernel accepted the five records then
+    registered. The sixth record's statement was checked locally (pp.all signature identical in
+    the Challenge and Solution environments; 25-module leanchecker replay exit 0); the CI
+    comparator must re-run on the commit that adds it. Remaining before submission: that CI run,
+    repository visibility (currently private), a human read of CORRESPONDENCE.md.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: ["propext", "Classical.choice", "Quot.sound"]
   main_results:
     - "SizeRamsey.four_mul_tau4_le_edgeCount"
     - "SizeRamsey.equality_classification"
+    - "SizeRamsey.connected_transversal_le_three"
     - "SizeRamsey.avoiding_coloring_le_sixteen"
     - "SizeRamsey.F17_spec"
     - "SizeRamsey.connectedSizeRamsey_eq_seventeen"
@@ -63,10 +74,11 @@ fidelity:
     quadrilateral are non-induced (injective vertex maps with the required adjacencies).
     Equality cases are whole-graph isomorphism classes (SimpleGraph.Iso). The connected
     size-Ramsey number is defined as a natural-number infimum over connected graphs on
-    some Fin n; the defining set is proved nonempty by the explicit witness. The Corollary C
-    record states only the avoiding-colouring conclusion; it omits the separately proved
-    three-vertex transversal conclusion SizeRamsey.connected_transversal_le_three, and the two
-    declarations together cover the informal C (sixth record optional, TODO(ben)). The informal
+    some Fin n; the defining set is proved nonempty by the explicit witness. Corollary C is
+    recorded as two statements, the transversal half SizeRamsey.connected_transversal_le_three
+    (sixth record, added 2026-10-17) and the colouring half SizeRamsey.avoiding_coloring_le_sixteen;
+    the library proves the transversal half for an arbitrary finite vertex type
+    (SizeRamsey.Proof.connected_transversal_le_three) and the record is its Fin n instance. The informal
     D (CLAIM.md, amended 2026-10-17) names a fixed host: two vertex-disjoint copies of K_{3,3}-e
     (parts {0,1,2}, {3,4,5}, missing edge {0,3}) joined by one bridge from vertex 5 of the first
     copy (degree 3 in its copy) to vertex 0 of the second copy (degree 2 in its copy); 12
@@ -140,7 +152,7 @@ automation:
     checked once by an independent Astra subagent; the scaffold plan is docs/astra/.
     Lean: GPT-6 Astra wrote SizeRamsey/Tightness.lean, Equality/Mixed.lean, Equality/Cubic.lean,
     Equality/TwoRegular.lean, the body of equality_classification (Equality.lean) and
-    connected_transversal_le_three (Coloring.lean) (three jobs, aiseminar
+    Proof.connected_transversal_le_three (Coloring.lean) (three jobs, aiseminar
     agents/runs/2026-10-16_ramsey-astra/, replies reply_ramsey-{A7,B67,B89}-r1.md), applied
     mechanically; Claude Opus 5.5 coding agents wrote the rest of the development (Stream A:
     Basic, SmallGraphs, FiniteChecks, Deletion, Components, Reductions, Universal; Stream B:
@@ -182,10 +194,18 @@ review:
     CI comparator passed at a988d32 (2026-10-17,
     https://github.com/benkeene/size-ramsey/actions/runs/39005389761): con-ron, nanoda and
     the Lean default kernel accepted. leanchecker --fresh not run (optional).
+    Sixth record (2026-10-17, after a988d32): SizeRamsey.connected_transversal_le_three added
+    to Challenge.lean, Solution.lean, comparator.json and AxiomAudit.lean; the library lemma
+    moved into namespace SizeRamsey.Proof (Coloring.lean, proof text unchanged). Local checks:
+    lake build exit 0 (1228 jobs; six deliberate Challenge.lean sorry warnings, none elsewhere),
+    AxiomAudit [propext, Classical.choice, Quot.sound] for all six records, literal 25-module
+    leanchecker replay exit 0 (1:37.78 wall), pp.all signature of the sixth record identical in
+    the Challenge and Solution environments, check-lean-sources and validate-formalization pass.
+    The adversary and reviewer passes and the CI comparator run predate the sixth record.
 
 known_gaps:
   - "Repository is private (owner's decision); the registry must be able to clone it before submission."
-  - "Corollary C statement of record omits the separately proved transversal conclusion (SizeRamsey.connected_transversal_le_three); a sixth record is optional packaging (TODO(ben))."
+  - "The sixth record (SizeRamsey.connected_transversal_le_three, transversal half of Corollary C, added 2026-10-17) postdates the CI comparator pass at a988d32 and the adversary/reviewer passes; the CI comparator must re-run on the commit that adds it (local checks pass)."
   - "Endpoint-universal Theorem D (arbitrary bridge endpoints) is not formalized; only the fixed host of CLAIM.md's D is."
   - "AxiomAudit.lean prints axioms without failing on sorryAx, and leanchecker accepts sorryAx-dependent declarations; their outputs must be inspected."
   - "leanchecker --fresh not run (optional; NanoDa and con-ron ran in the CI comparator at a988d32)."
@@ -203,10 +223,10 @@ alignment:
       lean: "SizeRamsey.four_mul_tau4_le_edgeCount"
     - source: "Theorem B: connected equality cases through 16 edges are C4, W5, K33-e, K222"
       lean: "SizeRamsey.equality_classification"
-    - source: "Corollary C (colouring half only): every connected graph with at most 16 edges has an avoiding colouring"
-      lean: "SizeRamsey.avoiding_coloring_le_sixteen"
-    - source: "Corollary C (transversal half, not a statement of record): every connected graph with at most 16 edges has a C4-transversal of at most three vertices"
+    - source: "Corollary C (transversal half): every connected graph with at most 16 edges has a C4-transversal of at most three vertices"
       lean: "SizeRamsey.connected_transversal_le_three"
+    - source: "Corollary C (colouring half): every connected graph with at most 16 edges has an avoiding colouring"
+      lean: "SizeRamsey.avoiding_coloring_le_sixteen"
     - source: "Theorem D (fixed host: two copies of K33-e, parts {0,1,2},{3,4,5}, missing edge {0,3}, bridge from vertex 5 of the first copy to vertex 0 of the second): the 12-vertex, 17-edge graph is connected and arrows (4K2, C4)"
       lean: "SizeRamsey.F17_spec"
     - source: "rhat_c(4K2, C4) = 17"
