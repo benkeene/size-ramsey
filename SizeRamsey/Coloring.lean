@@ -20,7 +20,28 @@ theorem connected_transversal_le_three
     (hconn : G.Connected) (hle : edgeCount G ≤ 16) :
     ∃ S : Finset V,
       c4Transversal G S ∧ S.card ≤ 3 := by
-  sorry
+  obtain ⟨S, hS, hcard⟩ := exists_transversal_card_eq_tau4 G
+  refine ⟨S, hS, ?_⟩
+  rw [hcard]
+  by_contra hnot
+  have hu := Proof.four_mul_tau4_le_edgeCount G
+  have hm : edgeCount G = 16 := by omega
+  have heq : 4 * tau4 G = edgeCount G := by omega
+  have hclass := (Proof.equality_classification G hconn (by omega) hle).mp heq
+  obtain ⟨hC, hW, hK, hO⟩ := Plan.small_graph_data
+  rcases hclass with hC4 | hW5 | hK33 | hOct
+  · obtain ⟨e⟩ := hC4
+    have hi := Plan.edgeCount_iso e
+    omega
+  · obtain ⟨e⟩ := hW5
+    have hi := Plan.edgeCount_iso e
+    omega
+  · obtain ⟨e⟩ := hK33
+    have hi := Plan.edgeCount_iso e
+    omega
+  · obtain ⟨e⟩ := hOct
+    have hi := Plan.edgeCount_iso e
+    omega
 
 namespace Proof
 
