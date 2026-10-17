@@ -67,19 +67,22 @@ theorem IsC4Map.comp_iso
   exact ⟨e.injective.comp hinj, e.map_adj_iff.mpr h01, e.map_adj_iff.mpr h12,
     e.map_adj_iff.mpr h23, e.map_adj_iff.mpr h30⟩
 
+theorem c4Transversal_map_iso
+    {V W : Type*} {G : SimpleGraph V} {H : SimpleGraph W}
+    (e : G ≃g H) {T : Finset W} (hT : c4Transversal H T) :
+    c4Transversal G (T.map e.symm.toEquiv.toEmbedding) := by
+  intro f hf
+  obtain ⟨i, hi⟩ := hT _ (IsC4Map.comp_iso e hf)
+  refine ⟨i, Finset.mem_map.mpr ⟨_, hi, ?_⟩⟩
+  simp
+
 theorem tau4_le_of_iso
     {V W : Type*} [Fintype V] [Fintype W]
     {G : SimpleGraph V} {H : SimpleGraph W}
     (e : G ≃g H) :
     tau4 G ≤ tau4 H := by
-  classical
   obtain ⟨T, hT, hcard⟩ := exists_transversal_card_eq_tau4 H
-  have hS : c4Transversal G (T.map e.symm.toEquiv.toEmbedding) := by
-    intro f hf
-    obtain ⟨i, hi⟩ := hT _ (IsC4Map.comp_iso e hf)
-    refine ⟨i, Finset.mem_map.mpr ⟨_, hi, ?_⟩⟩
-    simp
-  have := tau4_le_card hS
+  have := tau4_le_card (c4Transversal_map_iso e hT)
   rwa [Finset.card_map, hcard] at this
 
 theorem tau4_iso
