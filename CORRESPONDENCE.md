@@ -194,12 +194,12 @@ manifest copied from PALOMAR-2026-10-07-000005 with the root renamed.
 | 2026-10-17 | recursive `Lake.Check.compareAt` + `checkAxioms` (three-axiom allowlist), failing on error (reviewer pass 1) | `134d223` | `Except.ok ()` for both |
 | 2026-10-17 | `lake build Solution` (after reviewer fixes; Lean text unchanged since `134d223`) | `134d223` + docs | exit 0, 1225 jobs; `declaration uses 'sorry'`: 0 (linter warnings only) |
 | 2026-10-17 | CI `scripts/verify-comparator.sh` (GitHub Actions, Linux, bubblewrap; job "Check statement against solution", run https://github.com/benkeene/size-ramsey/actions/runs/39005389761; all four jobs success) | `a988d32` | build 1225 jobs; five records plus `propext`, `Quot.sound`, `Classical.choice` exported; con-ron accepted 8174 declarations (`--verified`), nanoda accepted, Lean default kernel accepted; `Your solution is okay!` |
-| 2026-10-17 | `python3 scripts/check-lean-sources.py` (sixth record) | after `155b5a7` (working tree) | satisfied |
-| 2026-10-17 | `lake build` (sixth record) | after `155b5a7` (working tree) | exit 0, 1228 jobs; `declaration uses sorry`: 6, all in `Challenge.lean`, 0 elsewhere |
-| 2026-10-17 | `lake env lean SizeRamsey/AxiomAudit.lean` (six records) | after `155b5a7` (working tree) | exit 0; `[propext, Classical.choice, Quot.sound]` for all six records (output inspected) |
-| 2026-10-17 | literal replay, same 25-module argv as below | after `155b5a7` (working tree) | exit 0, no output; `time`: 1:37.78 wall |
-| 2026-10-17 | `#check @SizeRamsey.connected_transversal_le_three` under `set_option pp.all true` in two scratch files, one importing `Challenge`, one importing `Solution`; outputs diffed | after `155b5a7` (working tree) | identical |
-| 2026-10-17 | `ruby scripts/validate-formalization.rb` (sixth record) | after `155b5a7` (working tree) | passes |
+| 2026-10-17 | `python3 scripts/check-lean-sources.py` (sixth record) | `ab5d48c` | satisfied |
+| 2026-10-17 | `lake build` (sixth record) | `ab5d48c` | exit 0, 1228 jobs; `declaration uses sorry`: 6, all in `Challenge.lean`, 0 elsewhere |
+| 2026-10-17 | `lake env lean SizeRamsey/AxiomAudit.lean` (six records) | `ab5d48c` | exit 0; `[propext, Classical.choice, Quot.sound]` for all six records (output inspected) |
+| 2026-10-17 | literal replay, same 25-module argv as below | `ab5d48c` | exit 0, no output; `time`: 1:37.78 wall |
+| 2026-10-17 | `#check @SizeRamsey.connected_transversal_le_three` under `set_option pp.all true` in two scratch files, one importing `Challenge`, one importing `Solution`; outputs diffed | `ab5d48c` | identical |
+| 2026-10-17 | `ruby scripts/validate-formalization.rb` (sixth record) | `ab5d48c` | passes |
 | pending | CI `scripts/verify-comparator.sh` with six records | commit adding the sixth record | not yet run |
 
 Literal replay (2026-10-17, HEAD `a470609`, after `lake build`): the module list is the root

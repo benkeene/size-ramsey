@@ -74,7 +74,7 @@ the record; `formalization.yaml` `automation.notes` states the same division of 
 | `a73d95a` | Tightness, Equality/Mixed, Equality/Cubic, Equality/TwoRegular, body of `equality_classification`, `connected_transversal_le_three` | GPT-6 Astra (three concurrent Codex jobs, `docs/verification/lean-jobs/`), applied mechanically | Claude Fable 5.1 |
 | `a470609` … `82cbe1f` | records: CORRESPONDENCE.md, formalization.yaml, README, fixes from the formal adversary and reviewer passes | Claude Fable 5.1, responding to GPT-6 Astra transcripts (`docs/verification/transcripts/`) | Claude Fable 5.1 (one by Claude Opus 5.5) |
 | `155b5a7` (`paper/`) | LaTeX writeup | Claude Fable 5.1, with two GPT-6 Astra reviews applied (`docs/verification/paper-reviews/`) | Claude Fable 5.1 |
-| after `155b5a7` | sixth statement of record, provenance section, `docs/verification/` | Claude Fable 5.1 | Claude Fable 5.1 |
+| `ab5d48c` | sixth statement of record, provenance section, `docs/verification/` | Claude Fable 5.1 | Claude Fable 5.1 |
 
 Agent agreement is never treated as evidence (`formalization.yaml` `automation.notes`); the
 guarantee is the Lean kernel and the CI comparator. Decisions of scope, promotion and submission
