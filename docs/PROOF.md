@@ -1,5 +1,9 @@
 # Informal proof (lab status VERIFIED as an ordinary theorem, 2026-10-16; not formally verified)
 
+Lean (2026-10-17): sorry-free Lean development at commit `a73d95a`, kernel-replayed locally
+(per-module leanchecker), pending adversary and reviewer passes on the formal development,
+independent statement reconstruction, and the CI comparator (`CORRESPONDENCE.md` §10).
+
 Source: Astra threads of 2026-10-16 (`docs/astra/2026-10-16_workflow_ramsey.md` §2 and the
 scaffold plan); revised after the adversary (transcript 20261016T191015) and reviewer
 (20261016T191635) passes; an independent reconstruction from the statement alone

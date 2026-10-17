@@ -10,8 +10,8 @@ project:
     4 tau_4(G) <= |E(G)|, a classification of the connected equality cases through sixteen
     edges (C4, the 4-wheel, K_{3,3} minus an edge, the octahedron), an avoiding-colouring
     construction from a three-vertex transversal, and an explicit twelve-vertex,
-    seventeen-edge host. The development is currently a scaffold: statements of record are
-    fixed and compile, the development library is admitted.
+    seventeen-edge host. The development library is sorry-free as of commit a73d95a
+    (2026-10-17); formal review and the CI comparator are pending.
   authors:
     - "Ben Keene"
   license: "Apache-2.0"
@@ -27,15 +27,18 @@ classification:
 
 status:
   scope: >-
-    SCAFFOLD; lab status VERIFIED as an ordinary theorem (2026-10-16), not formally verified. The five statements of record in Challenge.lean
-    compile; Solution.lean proves the numerical equality from Corollary C and Theorem D and
-    bridges the other four to admitted development interfaces. The informal structural
-    argument (docs/PROOF.md) has passed one adversarial pass but not the full review protocol
-    (adversary, response, reviewer, independent reconstruction). No complete formal proof,
-    Comparator acceptance or independent kernel replay is claimed.
-  sorry_count: 12
+    Sorry-free Lean development, kernel-replayed locally (per-module leanchecker), pending
+    adversary and reviewer passes on the formal development, independent statement
+    reconstruction, and the CI comparator; not formally verified. Informal proof: lab status
+    VERIFIED as an ordinary theorem (2026-10-16, aiseminar claim_0004). At commit a73d95a
+    (2026-10-17) the five statements of record in Challenge.lean (deliberate sorry) are restated
+    and proved in Solution.lean, and #print axioms of all five is [propext, Classical.choice,
+    Quot.sound]. sorry_count counts occurrences outside Challenge.lean, whose five sorry bodies
+    are the statements of record and are excluded by convention. No Comparator acceptance is
+    claimed.
+  sorry_count: 0
   sorry_in_definitions: 0
-  axioms: ["propext", "Classical.choice", "Quot.sound", "sorryAx"]
+  axioms: ["propext", "Classical.choice", "Quot.sound"]
   main_results:
     - "SizeRamsey.four_mul_tau4_le_edgeCount"
     - "SizeRamsey.equality_classification"
@@ -95,12 +98,14 @@ related_formalizations:
 automation:
   methods:
     - method: agent
-      models: ["GPT-6 Astra (OpenAI)", "Claude Fable 5.1 (Anthropic)"]
+      models: ["GPT-6 Astra (OpenAI)", "Claude Fable 5.1 (Anthropic)", "Claude Opus 5.5 (Anthropic)"]
       framework: "Codex app-server (for GPT-6 Astra); Claude Code"
       tool_setup: >-
         GPT-6 Astra as independent prover and adversarial reviewer of the informal argument
-        and as repository/Mathlib auditor (read-only); Claude Code writing the Lean scaffold
-        against a pinned local Lean/Mathlib toolchain with lake build feedback.
+        and as repository/Mathlib auditor (read-only), and as author of part of the Lean
+        development (Codex jobs from repository snapshots); Claude Code agents writing the Lean
+        scaffold and development against a pinned local Lean/Mathlib toolchain with lake build
+        feedback.
       cost:
         wall_time: "not tracked"
         spend_usd: "subscription-based"
@@ -112,8 +117,17 @@ automation:
   notes: >-
     The structural proof attempt was found by GPT-6 Astra (2026-10-16) and adversarially
     checked once by an independent Astra subagent; the scaffold plan is docs/astra/.
-    Lean source written by Claude Code under the direction of the author. Agent agreement
-    is not evidence; theorem status follows the review protocol of the aiseminar laboratory.
+    Lean: GPT-6 Astra wrote SizeRamsey/Tightness.lean, Equality/Mixed.lean, Equality/Cubic.lean,
+    Equality/TwoRegular.lean, the body of equality_classification (Equality.lean) and
+    connected_transversal_le_three (Coloring.lean) (three jobs, aiseminar
+    agents/runs/2026-10-16_ramsey-astra/, replies reply_ramsey-{A7,B67,B89}-r1.md), applied
+    mechanically; Claude Opus 5.5 coding agents wrote the rest of the development (Stream A:
+    Basic, SmallGraphs, FiniteChecks, Deletion, Components, Reductions, Universal; Stream B:
+    Upper, ColoringBase, Coloring assembly, Equality/Common, Extension, DegreeFour) on branches
+    lean/stream-A and lean/stream-B. Claude Fable 5.1 orchestrated and judged every applied
+    declaration by build, axiom audit, per-module leanchecker, signature and frozen-file
+    checks. Agent agreement is not evidence; theorem status follows the review protocol of the
+    aiseminar laboratory.
 
 review:
   status: self-assessed
@@ -125,16 +139,23 @@ review:
     reconstruction from the statement alone, a reviewer pass and two confirming reviews (the
     last a clean ACCEPT), recorded in the aiseminar claim_0004 packet. Small-case controls are
     retained in aiseminar experiments/local/2026-10-16_ramsey_e1_small_cases. No external human
-    review. Nothing is Lean-verified yet.
+    review. The Lean development was completed 2026-10-17 (commit a73d95a): lake build exit 0,
+    axiom audit [propext, Classical.choice, Quot.sound] for all five records, per-module
+    leanchecker exit 0 on every module, including a whole-project sweep of all 24 built modules
+    (exit 0, 1 min 20 s wall). No adversary or reviewer pass has examined the formal development
+    yet, and the formal statements have not been independently reconstructed; this is not a
+    claim of formal verification.
 
 known_gaps:
-  - "Theorems A, B, C and D are admitted in the development library (SizeRamsey.Proof.*)."
+  - "CI comparator (Linux, bubblewrap) not run: Challenge/Solution statement and definition agreement is not machine-checked yet."
+  - "No adversary or reviewer pass on the formal development; no independent reconstruction of the formal statements from the informal ones."
+  - "leanchecker --fresh, NanoDa and con-ron not run."
   - "The two 2025 computational papers by Dzido were seen only in abstract (scope: 3K2 and 2K2 versus cycles)."
   - "Novelty of the equality classification B is unestablished (literature audit 2026-10-16, confidence 0.75)."
 
 limitations:
   - "Theorem A follows from Alon-Mubayi-Thomas (2001); the K_{3,3}-e lemma and the 17-edge construction are known (Wijaya et al. 2015; Wang-Song-Zhang-Zhang 2025); the lower bound 16 is Erdős-Faudree (1984). Only B, and through it the value 17, is proposed as new."
-  - "No novelty claim is made by this scaffold."
+  - "No novelty claim is made by this formalization."
 
 alignment:
   namespace: "SizeRamsey"

@@ -3,13 +3,22 @@
 Plan of record: `docs/astra/2026-10-16_lean_plan.md` (two parallel streams). Stream A owns the
 structural library, Stream B owns D, colouring, equality and integration (plan §0). `Shared.lean`
 and `AInterface.lean` are frozen after bootstrap: names, types, definitions and instance
-conventions do not change; admitted bodies are replaced in place by their owner. B imports A only
+conventions do not change; admitted bodies were replaced in place by their owner. B imports A only
 through `SizeRamsey.AInterface`. New declarations live in `SizeRamsey.Plan`; the four
 `SizeRamsey.Proof.*` interfaces consumed by `Solution.lean` keep their names.
 
-Status legend: **stub** = body is `sorry`; **proved** = no `sorryAx` in `#print axioms`;
-**assembled** = proved from stubs (term is complete, axioms still include `sorryAx`).
-Status as of the bootstrap commit.
+Status legend: **proved** = no `sorry` in the body and no `sorryAx` in `#print axioms`.
+**(Astra)** = body written by GPT-6 Astra (aiseminar `agents/runs/2026-10-16_ramsey-astra/`,
+replies `reply_ramsey-{A7,B67,B89}-r1.md`) and applied mechanically in `a73d95a`; every other
+body was written by Claude Opus 5.5 coding agents on `lean/stream-A` / `lean/stream-B`.
+
+State as of `a73d95a` (2026-10-17): every development declaration is proved; no stub or
+assembled-from-stubs declaration remains. The only `sorry`s in the project are the five
+deliberate statements of record in `Challenge.lean`. `#print axioms` of the five records in
+`Solution.lean` is `[propext, Classical.choice, Quot.sound]`; `lake env leanchecker` on all 24
+built modules exits 0. Sorry-free Lean development, kernel-replayed locally (per-module
+leanchecker), pending adversary and reviewer passes on the formal development, independent
+statement reconstruction, and the CI comparator; not formally verified.
 
 ## Status
 
@@ -19,26 +28,26 @@ Status as of the bootstrap commit.
 | `Plan.erase`, `EdgeOnSquare`, `SquareSupported`, `Tight`, `Classified`, `SmallerClassified`, `PrescribedOptimal`, `compGraph`, `componentFintype`, `HitsDeleted`, `liftTransversal`, `componentVerts`, `attachmentEdges` | frozen | Shared.lean | definitions |
 | `edgeCount_eq_card` | A | Basic.lean | proved |
 | `F17_edgeCount` | A | Basic.lean | proved (`decide`) |
-| `tau4_le_card`, `exists_transversal_card_eq_tau4`, `tau4_mono`, `tau4_iso` | A | Basic.lean | stub |
-| `Plan.edgeCount_iso`, `Plan.tau4_eq_zero_iff`, `Plan.tau4_eq_of_certificates` | A | Basic.lean | stub |
+| `tau4_le_card`, `exists_transversal_card_eq_tau4`, `tau4_mono`, `tau4_iso` | A | Basic.lean | proved |
+| `Plan.edgeCount_iso`, `Plan.tau4_eq_zero_iff`, `Plan.tau4_eq_of_certificates` | A | Basic.lean | proved |
 | decidability instances (`IsC4Map`, `HasC4`, `c4Transversal`, `wheel5`, `k33MinusEdge`, `octahedron`) | A | FiniteChecks.lean | defined |
 | `Plan.k33_square_avoids_vertex`, `Plan.k33_triangle_free` | A | FiniteChecks.lean | proved |
-| `Plan.small_graph_data`, `Plan.small_degrees`, `Plan.prescribedOptimal_iso` | A | SmallGraphs.lean | stub |
-| `Plan.classified_tight`, `Plan.classified_prescribed`, `Plan.classified_three_degree_two` | A | SmallGraphs.lean | stub |
-| `Plan.tau4_erase_lift`, `Plan.tau4_delete_vertices_le`, `Plan.transversal_iff_no_square_erase` | A | Deletion.lean | stub |
-| `Plan.erase_edgeCount`, `Plan.erase_singleton_counts`, `Plan.erase_degree`, `Plan.erase_card` | A | Deletion.lean | stub |
-| `Plan.tau4_delete_non_square_edge`, `Plan.tau4_delete_leaf_vertex` | A | Deletion.lean | stub |
+| `Plan.small_graph_data`, `Plan.small_degrees`, `Plan.prescribedOptimal_iso` | A | SmallGraphs.lean | proved |
+| `Plan.classified_tight`, `Plan.classified_prescribed`, `Plan.classified_three_degree_two` | A | SmallGraphs.lean | proved |
+| `Plan.tau4_erase_lift`, `Plan.tau4_delete_vertices_le`, `Plan.transversal_iff_no_square_erase` | A | Deletion.lean | proved |
+| `Plan.erase_edgeCount`, `Plan.erase_singleton_counts`, `Plan.erase_degree`, `Plan.erase_card` | A | Deletion.lean | proved |
+| `Plan.tau4_delete_non_square_edge`, `Plan.tau4_delete_leaf_vertex` | A | Deletion.lean | proved |
 | `Plan.compGraph_connected` | A | Components.lean | proved |
-| `Plan.tau4_components`, `Plan.edgeCount_components`, `Plan.compGraph_degree`, `Plan.component_edgeCount_le` | A | Components.lean | stub |
-| `Plan.component_square_supported`, `Plan.connected_positive_degree`, `Plan.square_supported_no_bridge` | A | Components.lean | stub |
-| `Plan.component_attachment_card_ge_two`, `Plan.attachment_sum` | A | Components.lean | stub |
-| `Plan.square_supported_degree_ge_two`, `Plan.degree_four_reduction`, `Plan.mixed_reduction` | A | Reductions.lean | stub |
-| `Plan.two_regular_square_supported`, `Plan.cubic_chordless_reduction`, `Plan.subcubic_chord_reduction` | A | Reductions.lean | stub |
-| `Plan.degree_two_three_cases`, `Plan.square_component_reduction` | A | Reductions.lean | stub |
-| `Plan.universal` (Theorem A) | A | Universal.lean | stub |
-| `Proof.four_mul_tau4_le_edgeCount` | A | Universal.lean | assembled (`Plan.universal`) |
-| `Plan.equality_square_supported`, `Plan.equality_max_degree_le_four` | A | Tightness.lean | stub |
-| `Plan.equality_min_degree`, `Plan.equality_residual_components` | A | Tightness.lean | stub |
+| `Plan.tau4_components`, `Plan.edgeCount_components`, `Plan.compGraph_degree`, `Plan.component_edgeCount_le` | A | Components.lean | proved |
+| `Plan.component_square_supported`, `Plan.connected_positive_degree`, `Plan.square_supported_no_bridge` | A | Components.lean | proved |
+| `Plan.component_attachment_card_ge_two`, `Plan.attachment_sum` | A | Components.lean | proved |
+| `Plan.square_supported_degree_ge_two`, `Plan.degree_four_reduction`, `Plan.mixed_reduction` | A | Reductions.lean | proved |
+| `Plan.two_regular_square_supported`, `Plan.cubic_chordless_reduction`, `Plan.subcubic_chord_reduction` | A | Reductions.lean | proved |
+| `Plan.degree_two_three_cases`, `Plan.square_component_reduction` | A | Reductions.lean | proved |
+| `Plan.universal` (Theorem A) | A | Universal.lean | proved |
+| `Proof.four_mul_tau4_le_edgeCount` | A | Universal.lean | proved (from `Plan.universal`) |
+| `Plan.equality_square_supported`, `Plan.equality_max_degree_le_four` | A | Tightness.lean | proved (Astra) |
+| `Plan.equality_min_degree`, `Plan.equality_residual_components` | A | Tightness.lean | proved (Astra) |
 | (import boundary) | A | AInterface.lean | public imports only |
 | `HasMatching2` | B | Upper.lean | definition |
 | `Plan.leftCopy`, `Plan.rightCopy` | B | Upper.lean | definitions |
@@ -50,19 +59,21 @@ Status as of the bootstrap commit.
 | `incidentRed` | B | ColoringBase.lean | definition |
 | `Plan.incidentRed_adj` | B | ColoringBase.lean | proved |
 | `Plan.matching4_incident_card`, `Plan.transversal_no_blue_square`, `avoiding_coloring_of_transversal` | B | ColoringBase.lean | proved |
-| `Plan.tight_subcubic_chordless` | B | Equality/Common.lean | stub |
-| `Plan.k33_extension_tau_le_two` | B | Equality/Extension.lean | stub |
-| `Plan.equality_degree_four_case` | B | Equality/DegreeFour.lean | stub |
-| `Plan.equality_mixed_degree_case` | B | Equality/Mixed.lean | stub |
+| `Plan.tight_subcubic_chordless` | B | Equality/Common.lean | proved |
+| `Plan.k33_extension_tau_le_two` | B | Equality/Extension.lean | proved |
+| `Plan.equality_degree_four_case` | B | Equality/DegreeFour.lean | proved |
+| `Plan.equality_mixed_degree_case` | B | Equality/Mixed.lean | proved (Astra) |
 | `Plan.mixed_reconstruction` | B | Equality/Mixed.lean | proved |
-| `Plan.two_squares_matching_transversal`, `Plan.equality_cubic_impossible` | B | Equality/Cubic.lean | stub |
-| `Plan.equality_two_regular_case` | B | Equality/TwoRegular.lean | stub |
+| private helpers `b67_audit_cycle4_arrange`, `b67_audit_mixed_opposite`, `b67_audit_mixed_normalize`, `b67_mixed_final_labels` | B | Equality/Mixed.lean | proved (Astra) |
+| `Plan.two_squares_matching_transversal`, `Plan.equality_cubic_impossible` | B | Equality/Cubic.lean | proved (Astra) |
+| private helpers `cubic_chordless_adjacency_r1`, `cubic_third_neighbor_r1`, `cubic_square_unique_cross_r1` | B | Equality/Cubic.lean | proved (Astra) |
+| `Plan.equality_two_regular_case` | B | Equality/TwoRegular.lean | proved (Astra) |
 | `Plan.classification_of_step` | B | Equality.lean | proved |
-| `Proof.equality_classification` (Theorem B) | B | Equality.lean | stub |
-| `connected_transversal_le_three` | B | Coloring.lean | stub |
-| `Proof.avoiding_coloring_le_sixteen` (Corollary C) | B | Coloring.lean | assembled (`connected_transversal_le_three`) |
+| `Proof.equality_classification` (Theorem B) | B | Equality.lean | proved (Astra) |
+| `connected_transversal_le_three` | B | Coloring.lean | proved (Astra) |
+| `Proof.avoiding_coloring_le_sixteen` (Corollary C) | B | Coloring.lean | proved (from `connected_transversal_le_three`) |
 | (final exports) | B | Main.lean | public imports only |
-| five statements of record, `connectedSizeRamsey_eq_seventeen` | B | Solution.lean | assembled; endpoint proved from C and D |
+| five statements of record, `connectedSizeRamsey_eq_seventeen` | B | Solution.lean | proved; endpoint from C and D |
 | axiom audit | B | AxiomAudit.lean | imports `Solution`; not imported by `SizeRamsey` |
 
 ## Import DAG
