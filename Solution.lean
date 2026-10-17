@@ -44,7 +44,7 @@ start and is registered so that the comparator checks its statement too.
 The six theorem statements of `Challenge.lean`, restated verbatim and proved. The definitions come
 from `SizeRamsey.Defs` (identical text); this module does not import `Challenge`, and the
 comparator checks that statements and definitions agree. Five theorems are thin calls into the
-development library (`SizeRamsey.Proof.*`, sorry-free as of `a73d95a`); the sixth is proved from
+development library (`SizeRamsey.Proof.*`, sorry-free as of `c8d54e2`); the sixth is proved from
 C and D. -/
 
 @[expose] public section

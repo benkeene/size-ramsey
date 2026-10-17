@@ -3,20 +3,20 @@
 Status: the proof certificate is `Solution.lean` and its dependency closure (the `SizeRamsey`
 library), which does not import `Challenge.lean`: `lake build Solution` reports zero `sorry`
 warnings (§10). The default `lake build` also builds `Challenge.lean`, whose six deliberate
-`sorry`s give six warnings; it is not described as sorry-free. Proofs complete at `a73d95a`,
+`sorry`s give six warnings; it is not described as sorry-free. Proofs complete at `c8d54e2`,
 kernel-replayed locally (leanchecker, all 25 built project modules); formal adversary pass 1
 ACCEPT_WITH_FIXES (meaning 0.97, trust 0.98) and reviewer pass 1 ACCEPT_WITH_FIXES (0.98), fixes
 applied 2026-10-17; independent statement reconstruction done (§13); CI comparator passed at
-`a988d32` (2026-10-17, https://github.com/benkeene/size-ramsey/actions/runs/39005389761; con-ron,
+`38bd345` (2026-10-17, https://github.com/benkeene/size-ramsey/actions/runs/39005389761; con-ron,
 nanoda and the Lean default kernel accepted the solution; §10). The reviewer recommends
 FORMALLY_VERIFIED for A, B, C (two declarations), fixed-host D and E; lab status (aiseminar
 claim_0004, 2026-10-17): FORMALLY_VERIFIED with exactly that scope. **Sixth record (2026-10-17,
-after `a988d32`):** the transversal half of C, `SizeRamsey.connected_transversal_le_three`, is now
-a statement of record (§1, §2, §8, §10); the CI comparator passed with six records at `21750f1` (https://github.com/benkeene/size-ramsey/actions/runs/39034260971, §10).
+after `38bd345`):** the transversal half of C, `SizeRamsey.connected_transversal_le_three`, is now
+a statement of record (§1, §2, §8, §10); the CI comparator passed with six records at `46bf2d0` (https://github.com/benkeene/size-ramsey/actions/runs/39034260971, §10).
 Sections 1–7 are the correspondence argument as written at the scaffold, with the Corollary C
 record scope made explicit after adversary pass 1 (§1, §2, §8) and D's fixed host made explicit
 after reviewer pass 1 (§1); no statement or definition has
-changed since the stream base `b17d1fa`. §10 is the audit record.
+changed since the stream base `4adfd40`. §10 is the audit record.
 
 ## 1. Informal statements
 
@@ -113,22 +113,22 @@ support; B's `↔` includes the converse, which requires the four transversal nu
 
 `connectedSizeRamsey = sInf {m | ∃ n F, F.Connected ∧ edgeCount F = m ∧ ArrowsMatching4C4 F}`;
 `⟨12, F17, F17_spec⟩` shows 17 is in the set, `Nat.sInf_le` and `le_csInf` give both inequalities
-(the proof in Solution.lean uses C and D, both proved in the development as of `a73d95a`).
+(the proof in Solution.lean uses C and D, both proved in the development as of `c8d54e2`).
 
 ## 8. Formalized scope and gaps
 
-As of `a73d95a` (2026-10-17) every declaration of the development library and of `Solution.lean`
+As of `c8d54e2` (2026-10-17) every declaration of the development library and of `Solution.lean`
 is proved: the only `sorry`s in the project are the deliberate ones in `Challenge.lean` (the
-statements of record; five at `a73d95a`, six since the sixth record of 2026-10-17), and
+statements of record; five at `c8d54e2`, six since the sixth record of 2026-10-17), and
 `#print axioms` of every record in `Solution.lean` is `[propext, Classical.choice, Quot.sound]`. No custom axioms, no `native_decide`. The proof
 certificate is `Solution.lean` and its dependency closure, which does not import `Challenge.lean`
 (`lake build Solution`: zero `sorry` warnings); the default `lake build` includes the six
 deliberate `Challenge.lean` warnings and is not called sorry-free.
 `Challenge.lean`, `SizeRamsey/Defs.lean`, `Shared.lean` and `AInterface.lean` are byte-identical
-to the stream base `b17d1fa`, which differs from the bootstrap `a979fb0` only by a status
+to the stream base `4adfd40`, which differs from the bootstrap `4aaea11` only by a status
 docstring edit; the statements of record and the frozen definitions are therefore unchanged.
 
-Corollary C record scope (resolved 2026-10-17): until `a988d32` the only C record was the
+Corollary C record scope (resolved 2026-10-17): until `38bd345` the only C record was the
 colouring half `SizeRamsey.avoiding_coloring_le_sixteen`; the transversal half was proved in the
 library but was in neither `Challenge.lean` nor `comparator.json`, which the adversary (meaning
 finding 2), the reconstruction (§13 item 5) and the reviewer (optional packaging) all noted. The
@@ -136,21 +136,21 @@ sixth record `SizeRamsey.connected_transversal_le_three` was then added to `Chal
 `Solution.lean`, `comparator.json` and `AxiomAudit.lean`, and the library lemma was moved into
 namespace `SizeRamsey.Proof` to free the name (Coloring.lean; the frozen files `Defs`, `Shared`,
 `AInterface` are untouched). Both halves of CLAIM.md's C are now records. The CI comparator passed with six records at
-`21750f1` (§10).
+`46bf2d0` (§10).
 
 Comparator wording: the docstrings of `Solution.lean` (line 42) and `SizeRamsey/Defs.lean`
 (line 15) say "the comparator checks" agreement. That describes the comparator's function; the
-CI comparator has since run and passed at `a988d32` (2026-10-17, §10). The files are left
+CI comparator has since run and passed at `38bd345` (2026-10-17, §10). The files are left
 unedited (Defs.lean is frozen).
 The trust adversary separately ran the toolchain's `Lake.Check.compareAt` and `checkAxioms` on
 the existing Challenge and Solution environments (`Except.ok ()` for both); that is a check over
 existing `.olean`s, not the sandboxed CI comparator run. The reviewer (pass 1) independently
 reproduced both with a wrapper failing on any error (`Except.ok ()`). The full sandboxed CI
-comparator/export pipeline then passed at `a988d32` (2026-10-17, GitHub Actions run
+comparator/export pipeline then passed at `38bd345` (2026-10-17, GitHub Actions run
 https://github.com/benkeene/size-ramsey/actions/runs/39005389761; §10).
 
 Gaps: none from the comparator (the full sandboxed CI comparator/export pipeline passed at
-`a988d32`, §10); adversary pass 1 on the formal development is done
+`38bd345`, §10); adversary pass 1 on the formal development is done
 (ACCEPT_WITH_FIXES; aiseminar
 `agents/astra/transcripts/20261017T001309_adversary-{meaning,trust}_claim_0004.md`), and so is
 reviewer pass 1 (ACCEPT_WITH_FIXES 0.98;
@@ -179,30 +179,30 @@ manifest copied from PALOMAR-2026-10-07-000005 with the root renamed.
 | before 2026-10-17 | `lake env leanchecker SizeRamsey.Deletion SizeRamsey.Components SizeRamsey.Reductions SizeRamsey.Universal` | branch `lean/stream-A` | exit 0 |
 | before 2026-10-17 | `lake env leanchecker SizeRamsey.Upper SizeRamsey.ColoringBase SizeRamsey.Coloring` | branch `lean/stream-B` | exit 0 |
 | before 2026-10-17 | `lake env leanchecker SizeRamsey.Equality.Common SizeRamsey.Equality.Extension SizeRamsey.Equality.DegreeFour` | branch `lean/stream-B` | exit 0 |
-| 2026-10-17 | `lake build` | `a73d95a` | exit 0, 1228 jobs; `declaration uses sorry`: 5, all in `Challenge.lean`, 0 elsewhere |
-| 2026-10-17 | `lake env lean SizeRamsey/AxiomAudit.lean` | `a73d95a` | `[propext, Classical.choice, Quot.sound]` for all five records |
-| 2026-10-17 | `lake env leanchecker SizeRamsey.Tightness SizeRamsey.Equality.Mixed SizeRamsey.Equality.Cubic SizeRamsey.Equality.TwoRegular SizeRamsey.Equality SizeRamsey.Coloring SizeRamsey.Main Solution Challenge` | `a73d95a` | exit 0 |
-| 2026-10-17 | `python3 scripts/check-lean-sources.py` | `a73d95a` | satisfied |
-| 2026-10-17 | `ruby scripts/validate-formalization.rb` | `a73d95a` | passes |
-| 2026-10-17 | forbidden-construct scan of every applied diff | `a73d95a` | 0 findings |
-| 2026-10-17 | frozen-file comparison against `b17d1fa` (Challenge, Solution, Defs, Shared, AInterface) | `a73d95a` | byte-identical |
-| 2026-10-17 | `lake build` | `a470609` | exit 0, 1228 jobs |
-| 2026-10-17 | `lake env lean SizeRamsey/AxiomAudit.lean` | `a470609` | exit 0; `[propext, Classical.choice, Quot.sound]` for all five records (output inspected) |
-| 2026-10-17 | literal replay, argv below (25 modules) | `a470609` | exit 0, no output; `time`: 1:54.79 wall |
-| 2026-10-17 | `lake build` (reviewer pass 1) | `134d223` | exit 0, 1228 jobs; five deliberate `Challenge.lean` sorry warnings |
-| 2026-10-17 | `lake build Solution` (reviewer pass 1) | `134d223` | exit 0, 1225 jobs; zero sorry warnings |
-| 2026-10-17 | recursive `Lake.Check.compareAt` + `checkAxioms` (three-axiom allowlist), failing on error (reviewer pass 1) | `134d223` | `Except.ok ()` for both |
-| 2026-10-17 | `lake build Solution` (after reviewer fixes; Lean text unchanged since `134d223`) | `134d223` + docs | exit 0, 1225 jobs; `declaration uses 'sorry'`: 0 (linter warnings only) |
-| 2026-10-17 | CI `scripts/verify-comparator.sh` (GitHub Actions, Linux, bubblewrap; job "Check statement against solution", run https://github.com/benkeene/size-ramsey/actions/runs/39005389761; all four jobs success) | `a988d32` | build 1225 jobs; five records plus `propext`, `Quot.sound`, `Classical.choice` exported; con-ron accepted 8174 declarations (`--verified`), nanoda accepted, Lean default kernel accepted; `Your solution is okay!` |
-| 2026-10-17 | `python3 scripts/check-lean-sources.py` (sixth record) | `ab5d48c` | satisfied |
-| 2026-10-17 | `lake build` (sixth record) | `ab5d48c` | exit 0, 1228 jobs; `declaration uses sorry`: 6, all in `Challenge.lean`, 0 elsewhere |
-| 2026-10-17 | `lake env lean SizeRamsey/AxiomAudit.lean` (six records) | `ab5d48c` | exit 0; `[propext, Classical.choice, Quot.sound]` for all six records (output inspected) |
-| 2026-10-17 | literal replay, same 25-module argv as below | `ab5d48c` | exit 0, no output; `time`: 1:37.78 wall |
-| 2026-10-17 | `#check @SizeRamsey.connected_transversal_le_three` under `set_option pp.all true` in two scratch files, one importing `Challenge`, one importing `Solution`; outputs diffed | `ab5d48c` | identical |
-| 2026-10-17 | `ruby scripts/validate-formalization.rb` (sixth record) | `ab5d48c` | passes |
-| 2026-10-17 | CI `scripts/verify-comparator.sh` (GitHub Actions, Linux, bubblewrap; job "Check statement against solution", run https://github.com/benkeene/size-ramsey/actions/runs/39034260971; all four jobs success) | `21750f1` (Lean text = `ab5d48c`) | build 1225 jobs; six records plus `propext`, `Quot.sound`, `Classical.choice` exported; con-ron accepted 8175 declarations (`--verified`), nanoda accepted, Lean default kernel accepted; `Your solution is okay!` |
+| 2026-10-17 | `lake build` | `c8d54e2` | exit 0, 1228 jobs; `declaration uses sorry`: 5, all in `Challenge.lean`, 0 elsewhere |
+| 2026-10-17 | `lake env lean SizeRamsey/AxiomAudit.lean` | `c8d54e2` | `[propext, Classical.choice, Quot.sound]` for all five records |
+| 2026-10-17 | `lake env leanchecker SizeRamsey.Tightness SizeRamsey.Equality.Mixed SizeRamsey.Equality.Cubic SizeRamsey.Equality.TwoRegular SizeRamsey.Equality SizeRamsey.Coloring SizeRamsey.Main Solution Challenge` | `c8d54e2` | exit 0 |
+| 2026-10-17 | `python3 scripts/check-lean-sources.py` | `c8d54e2` | satisfied |
+| 2026-10-17 | `ruby scripts/validate-formalization.rb` | `c8d54e2` | passes |
+| 2026-10-17 | forbidden-construct scan of every applied diff | `c8d54e2` | 0 findings |
+| 2026-10-17 | frozen-file comparison against `4adfd40` (Challenge, Solution, Defs, Shared, AInterface) | `c8d54e2` | byte-identical |
+| 2026-10-17 | `lake build` | `a3a3f04` | exit 0, 1228 jobs |
+| 2026-10-17 | `lake env lean SizeRamsey/AxiomAudit.lean` | `a3a3f04` | exit 0; `[propext, Classical.choice, Quot.sound]` for all five records (output inspected) |
+| 2026-10-17 | literal replay, argv below (25 modules) | `a3a3f04` | exit 0, no output; `time`: 1:54.79 wall |
+| 2026-10-17 | `lake build` (reviewer pass 1) | `c7901d4` | exit 0, 1228 jobs; five deliberate `Challenge.lean` sorry warnings |
+| 2026-10-17 | `lake build Solution` (reviewer pass 1) | `c7901d4` | exit 0, 1225 jobs; zero sorry warnings |
+| 2026-10-17 | recursive `Lake.Check.compareAt` + `checkAxioms` (three-axiom allowlist), failing on error (reviewer pass 1) | `c7901d4` | `Except.ok ()` for both |
+| 2026-10-17 | `lake build Solution` (after reviewer fixes; Lean text unchanged since `c7901d4`) | `c7901d4` + docs | exit 0, 1225 jobs; `declaration uses 'sorry'`: 0 (linter warnings only) |
+| 2026-10-17 | CI `scripts/verify-comparator.sh` (GitHub Actions, Linux, bubblewrap; job "Check statement against solution", run https://github.com/benkeene/size-ramsey/actions/runs/39005389761; all four jobs success) | `38bd345` | build 1225 jobs; five records plus `propext`, `Quot.sound`, `Classical.choice` exported; con-ron accepted 8174 declarations (`--verified`), nanoda accepted, Lean default kernel accepted; `Your solution is okay!` |
+| 2026-10-17 | `python3 scripts/check-lean-sources.py` (sixth record) | `cc2aec2` | satisfied |
+| 2026-10-17 | `lake build` (sixth record) | `cc2aec2` | exit 0, 1228 jobs; `declaration uses sorry`: 6, all in `Challenge.lean`, 0 elsewhere |
+| 2026-10-17 | `lake env lean SizeRamsey/AxiomAudit.lean` (six records) | `cc2aec2` | exit 0; `[propext, Classical.choice, Quot.sound]` for all six records (output inspected) |
+| 2026-10-17 | literal replay, same 25-module argv as below | `cc2aec2` | exit 0, no output; `time`: 1:37.78 wall |
+| 2026-10-17 | `#check @SizeRamsey.connected_transversal_le_three` under `set_option pp.all true` in two scratch files, one importing `Challenge`, one importing `Solution`; outputs diffed | `cc2aec2` | identical |
+| 2026-10-17 | `ruby scripts/validate-formalization.rb` (sixth record) | `cc2aec2` | passes |
+| 2026-10-17 | CI `scripts/verify-comparator.sh` (GitHub Actions, Linux, bubblewrap; job "Check statement against solution", run https://github.com/benkeene/size-ramsey/actions/runs/39034260971; all four jobs success) | `46bf2d0` (Lean text = `cc2aec2`) | build 1225 jobs; six records plus `propext`, `Quot.sound`, `Classical.choice` exported; con-ron accepted 8175 declarations (`--verified`), nanoda accepted, Lean default kernel accepted; `Your solution is okay!` |
 
-Literal replay (2026-10-17, HEAD `a470609`, after `lake build`): the module list is the root
+Literal replay (2026-10-17, HEAD `a3a3f04`, after `lake build`): the module list is the root
 `SizeRamsey`, `Challenge`, `Solution`, and every `SizeRamsey.*` module with a `.olean` under
 `.lake/build/lib/lean` (22; `SizeRamsey/AxiomAudit.lean` is not a build target and has no
 `.olean`), 25 in all:
@@ -219,17 +219,17 @@ lake env leanchecker SizeRamsey Challenge Solution SizeRamsey.AInterface SizeRam
 
 (one argv, wrapped here for width). Exit 0, empty output; 36.30 s user, 125.32 s system,
 1:54.79 wall. This replaces an earlier row recording an unlisted "all 24 built modules" sweep at
-`a73d95a` (exit 0, 1 min 20 s wall), whose module list was not retained; the adversary trust pass
+`c8d54e2` (exit 0, 1 min 20 s wall), whose module list was not retained; the adversary trust pass
 independently ran `lake env leanchecker -v SizeRamsey Solution Challenge`, exit 0, replaying the
 same 25 modules. Normal replay trusts imported Mathlib declarations; it does not replay from an
 empty environment (`--fresh`) and does not elaborate sources.
 
 Not run: `leanchecker --fresh` (optional). Passed: full CI comparator pipeline with NanoDa and
-con-ron (row above, `a988d32`).
+con-ron (row above, `38bd345`).
 Independent statement reconstruction: done 2026-10-17 (§13). Adversary pass 1 (meaning, trust):
-done 2026-10-17, ACCEPT_WITH_FIXES. Reviewer pass 1: done 2026-10-17, ACCEPT_WITH_FIXES 0.98. Lean sources differ between `a73d95a`
-and `a470609` only in the `Solution.lean` module docstring: one comment line ("currently
-admitted") replaced by two comment lines ("sorry-free as of `a73d95a`"); no statement, definition
+done 2026-10-17, ACCEPT_WITH_FIXES. Reviewer pass 1: done 2026-10-17, ACCEPT_WITH_FIXES 0.98. Lean sources differ between `c8d54e2`
+and `a3a3f04` only in the `Solution.lean` module docstring: one comment line ("currently
+admitted") replaced by two comment lines ("sorry-free as of `c8d54e2`"); no statement, definition
 or proof changed.
 
 ## 11. Computations
@@ -291,3 +291,28 @@ unavailable in its sandbox); the comparison below is by reading, plus the edge-l
 7. *E.* Same domain (`Fin n` for all `n`, connected, arrowing) and infimum. Their E adds an
    explicit `connectedRamseySizes.Nonempty` conjunct; ours discharges nonemptiness inside the
    proof via the F₁₇ witness (§7). Equivalent content for the value 17.
+
+## 14. Attribution rewrite, 2026-10-17
+
+All 54 commits of this repository were rewritten on 2026-10-17 to add trailers naming GPT-6 Astra
+as co-author of the commits whose content it wrote; nothing else changed (every tree, author,
+committer and date is identical, and every other commit message is byte-identical). The trailers
+are `Astra-Job`, `Astra-Thread`, `Astra-Model`, `Astra-Snapshot`, `Astra-Reply` and
+`Co-authored-by: GPT-6 Astra <noreply@openai.com>` (OpenAI's own Codex attribution address).
+
+| before | after | Astra-written content |
+|---|---|---|
+| `3147493` | `48c43d5` | docs/astra workflow reply |
+| `0981429` | `70ed534` | docs/astra scaffold plan |
+| `b17d1fa` | `4adfd40` | docs/astra two-stream Lean plan |
+| `a73d95a` | `c8d54e2` | Lean proofs from three Codex jobs (Tightness, Mixed, Cubic, TwoRegular, equality_classification body, connected_transversal_le_three) |
+| `ab5d48c` | `cc2aec2` | verbatim transcripts and replies copied into docs/verification/ |
+
+Because the root commit was among them, every hash changed. The pre-rewrite history remains
+reachable under `refs/archive/pre-attribution/*` on the remote and locally, so every pre-rewrite hash
+cited anywhere still resolves (`git fetch origin 'refs/archive/*:refs/archive/*'`). The full map is
+`docs/verification/commit-map-2026-10-17.txt`. Hashes in this file and the other living records (README, formalization.yaml,
+NOTES, PROOF.md, Solution.lean docstring, the aiseminar claim packet) were converted with the map;
+the frozen documents (Astra transcripts and replies, `docs/astra/`, `docs/tooling/`, the briefs) keep the
+pre-rewrite hashes they were written against. GitHub Actions run pages name the pre-rewrite commit
+they ran on; the post-rewrite commit cited next to each run has the identical tree.

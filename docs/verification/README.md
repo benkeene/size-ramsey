@@ -16,27 +16,27 @@ the guarantee for the theorem is the Lean kernel and the CI comparator, not any 
 
 | file | role | verdict | acted on in |
 |---|---|---|---|
-| `20261016T191015_adversary_claim_0004.md` | adversary, informal proof | ACCEPT_WITH_FIXES 0.96 | `c6d5490` |
+| `20261016T191015_adversary_claim_0004.md` | adversary, informal proof | ACCEPT_WITH_FIXES 0.96 | `5124945` |
 | `20261016T191015_independent_prover_claim_0004.md` | independent reconstruction from the statement | agrees, 0.99 | `docs/PROOF.md` |
-| `20261016T191015_novelty_checker_claim_0004.md` | literature and novelty audit | novelty of B unestablished (0.75) | `cd222f2`, `docs/STATUS_CHECK.md` |
-| `20261016T191635_reviewer_claim_0004.md` | reviewer, informal proof | ACCEPT_WITH_FIXES 0.96 | `2ce4c15` |
-| `20261016T192131_reviewer2_claim_0004.md` | confirming reviewer after fixes | ACCEPT_WITH_FIXES 0.97 | `3315e17` |
-| `20261016T192456_reviewer3_claim_0004.md` | final confirming reviewer | ACCEPT 0.98 | `c577bce` (lab status VERIFIED) |
-| `20261017T001309_adversary-meaning_claim_0004.md` | formal adversary, meaning (do the Lean statements say what is claimed) | ACCEPT_WITH_FIXES 0.97 | `134d223` |
-| `20261017T001309_adversary-trust_claim_0004.md` | formal adversary, trust (can the verification chain be escaped) | ACCEPT_WITH_FIXES 0.98 | `134d223` |
+| `20261016T191015_novelty_checker_claim_0004.md` | literature and novelty audit | novelty of B unestablished (0.75) | `916031d`, `docs/STATUS_CHECK.md` |
+| `20261016T191635_reviewer_claim_0004.md` | reviewer, informal proof | ACCEPT_WITH_FIXES 0.96 | `f786091` |
+| `20261016T192131_reviewer2_claim_0004.md` | confirming reviewer after fixes | ACCEPT_WITH_FIXES 0.97 | `40928d4` |
+| `20261016T192456_reviewer3_claim_0004.md` | final confirming reviewer | ACCEPT 0.98 | `39afd8f` (lab status VERIFIED) |
+| `20261017T001309_adversary-meaning_claim_0004.md` | formal adversary, meaning (do the Lean statements say what is claimed) | ACCEPT_WITH_FIXES 0.97 | `c7901d4` |
+| `20261017T001309_adversary-trust_claim_0004.md` | formal adversary, trust (can the verification chain be escaped) | ACCEPT_WITH_FIXES 0.98 | `c7901d4` |
 | `20261017T002007_statement-recon_claim_0004.md` | independent Lean statement reconstruction from the informal claim alone | 0.97 | `CORRESPONDENCE.md` §13 |
-| `20261017T002905_reviewer-formal_claim_0004.md` | formal reviewer | ACCEPT_WITH_FIXES 0.98; recommends FORMALLY_VERIFIED | `c66151a`, `a988d32` |
+| `20261017T002905_reviewer-formal_claim_0004.md` | formal reviewer | ACCEPT_WITH_FIXES 0.98; recommends FORMALLY_VERIFIED | `713de5e`, `38bd345` |
 
 `review-briefs/` holds the briefs that produced the 2026-10-17 transcripts and the role prompts
 (`_system_*.md`) under which Astra was run. Astra was never told that an argument was probably right.
 
-## lean-jobs/ — the Lean proofs written by Astra (commit `a73d95a`)
+## lean-jobs/ — the Lean proofs written by Astra (commit `c8d54e2`)
 
-Three concurrent Codex jobs from repository snapshots `404f34b` (stream A) and `d1c156b`
+Three concurrent Codex jobs from repository snapshots `077b90f` (stream A) and `1e04b3e`
 (stream B); `run.json` is the job record, `briefs/` what Astra was given, `replies/` what it
-returned. The replies' `lean patch` blocks were applied mechanically onto `c2525c3` and judged
+returned. The replies' `lean patch` blocks were applied mechanically onto `832bb41` and judged
 (build, forbidden-construct scan, axiom audit, per-module leanchecker, signature and frozen-file
-checks) by the orchestrator; the commit message of `a73d95a` records the one refused target.
+checks) by the orchestrator; the commit message of `c8d54e2` records the one refused target.
 
 | job | targets | reply |
 |---|---|---|
@@ -44,7 +44,7 @@ checks) by the orchestrator; the commit message of `a73d95a` records the one ref
 | `ramsey-B67-r1` | `SizeRamsey/Equality/Mixed.lean`, `Equality/Cubic.lean` | `replies/reply_ramsey-B67-r1.md` |
 | `ramsey-B89-r1` | `Equality/TwoRegular.lean`, body of `equality_classification`, `connected_transversal_le_three` | `replies/reply_ramsey-B89-r1.md` |
 
-## paper-reviews/ — the two Astra reviews applied to `paper/main.tex` (commit `155b5a7`)
+## paper-reviews/ — the two Astra reviews applied to `paper/main.tex` (commit `d1fe5ba`)
 
 `ledger.md` (statement-by-statement ledger kept while writing), `review_ramsey_contract.md`
 (statement fidelity against the Lean records and `docs/PROOF.md`), `review_ramsey_exposition.md`.

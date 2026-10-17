@@ -9,10 +9,10 @@ through `SizeRamsey.AInterface`. New declarations live in `SizeRamsey.Plan`; the
 
 Status legend: **proved** = no `sorry` in the body and no `sorryAx` in `#print axioms`.
 **(Astra)** = body written by GPT-6 Astra (aiseminar `agents/runs/2026-10-16_ramsey-astra/`,
-replies `reply_ramsey-{A7,B67,B89}-r1.md`) and applied mechanically in `a73d95a`; every other
+replies `reply_ramsey-{A7,B67,B89}-r1.md`) and applied mechanically in `c8d54e2`; every other
 body was written by Claude Opus 5.5 coding agents on `lean/stream-A` / `lean/stream-B`.
 
-State as of `a73d95a` (2026-10-17): every development declaration is proved; no stub or
+State as of `c8d54e2` (2026-10-17): every development declaration is proved; no stub or
 assembled-from-stubs declaration remains. The only `sorry`s in the project are the five
 deliberate statements of record in `Challenge.lean`. `#print axioms` of the five records in
 `Solution.lean` is `[propext, Classical.choice, Quot.sound]`; `lake env leanchecker` on all 25
@@ -20,7 +20,7 @@ built project modules (literal argv in `CORRESPONDENCE.md` §10) exits 0. The pr
 is `Solution.lean` and its dependency closure (`lake build Solution`: zero `sorry` warnings); the
 default `lake build` also shows the five deliberate `Challenge.lean` warnings. Adversary pass 1
 and reviewer pass 1 ACCEPT_WITH_FIXES (fixes applied); independent statement reconstruction done;
-CI comparator passed at `a988d32` (2026-10-17; con-ron, nanoda, Lean kernel accepted); lab
+CI comparator passed at `38bd345` (2026-10-17; con-ron, nanoda, Lean kernel accepted); lab
 status FORMALLY_VERIFIED (aiseminar claim_0004; scope A, B, C via two declarations, fixed-host D,
 E).
 

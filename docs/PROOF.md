@@ -1,11 +1,11 @@
 # Informal proof (lab status VERIFIED as an ordinary theorem, 2026-10-16; not formally verified)
 
-Lean (2026-10-17): proofs complete at commit `a73d95a`; the proof certificate is `Solution.lean`
+Lean (2026-10-17): proofs complete at commit `c8d54e2`; the proof certificate is `Solution.lean`
 and its dependency closure (`lake build Solution`: zero `sorry` warnings; the default `lake build`
 also shows the deliberate `Challenge.lean` warnings, six since the sixth record of 2026-10-17). Kernel-replayed locally (leanchecker,
 25 modules); formal adversary pass 1 and reviewer pass 1 ACCEPT_WITH_FIXES (fixes applied);
 independent statement reconstruction done (`CORRESPONDENCE.md` §13); CI comparator passed at
-`a988d32` (2026-10-17; con-ron, nanoda and the Lean default kernel accepted; `CORRESPONDENCE.md`
+`38bd345` (2026-10-17; con-ron, nanoda and the Lean default kernel accepted; `CORRESPONDENCE.md`
 §10). Lab status (aiseminar claim_0004): FORMALLY_VERIFIED, scope as in the final paragraph.
 
 Source: Astra threads of 2026-10-16 (`docs/astra/2026-10-16_workflow_ramsey.md` §2 and the
@@ -147,7 +147,7 @@ a bridge give a red 4-matching with eight distinct endpoints. Bridge colour irre
 
 ## Endpoint
 `connectedSizeRamsey_eq_seventeen` from C and D: the Lean deduction in Solution.lean is complete
-and unconditional. As of commit `a73d95a` all five statements of record then registered are
+and unconditional. As of commit `c8d54e2` all five statements of record then registered are
 proved in `Solution.lean`, whose dependency closure contains no `sorry` (`lake build Solution`:
 zero `sorry` warnings; only `Challenge.lean` carries the deliberate ones);
 `#print axioms` of each is `[propext, Classical.choice, Quot.sound]`, and every built project
@@ -157,6 +157,6 @@ sixth statement of record, proved from the library lemma `Proof.connected_transv
 (`CORRESPONDENCE.md` §8). D is formalized for the fixed host of
 CLAIM.md's D (bridge from vertex 5 of the first copy to vertex 0 of the second); the
 endpoint-universal statement is not formalized. Formal adversary pass 1 and reviewer pass 1 are
-ACCEPT_WITH_FIXES (fixes applied); the CI comparator passed at `a988d32` (2026-10-17,
+ACCEPT_WITH_FIXES (fixes applied); the CI comparator passed at `38bd345` (2026-10-17,
 https://github.com/benkeene/size-ramsey/actions/runs/39005389761). Lab status (aiseminar
 claim_0004, 2026-10-17): FORMALLY_VERIFIED for A, B, C (two declarations), fixed-host D and E.
