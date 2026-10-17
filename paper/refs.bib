@@ -1,8 +1,10 @@
 % Bibliography for main.tex.
-% Data marked VERIFIED is taken from ../formalization.yaml (sources) and
-% ../docs/STATUS_CHECK.md, which record a literature audit.  Fields marked
-% \red{[check]} in the comment beside an entry were supplied from memory and
-% have not been confirmed against the publication.
+% Independent re-verification 2026-10-17 (second pass): every DOI below was resolved through
+% the Crossref API and the registered title, author list, container, volume, issue, year and
+% pages compared field by field; WYBAS15 was confirmed on the journal's own article page
+% (doi.org resolves 10.22059/jac.2015.7922 to it); EF84 on zbMATH; the LNCS volume of Lean4
+% on the Springer chapter page.  The attributed theorem/lemma/conjecture numbers were checked
+% against the source texts separately (see the commit message of this change).
 
 % VERIFIED (formalization.yaml, STATUS_CHECK.md): authors, title, journal,
 % volume 13(1), year 2025, pages 163--170, DOI; Theorem 1.3 and Conjecture 1.
@@ -63,25 +65,26 @@
   doi     = {10.1002/jgt.1028}
 }
 
-% VERIFIED: authors, title, journal, volume 46, year 2015, pages 9--25,
-% Theorem 2.6 (formalization.yaml, STATUS_CHECK.md).  No DOI recorded.
+% VERIFIED 2026-10-17 on the journal's article page (jac.ut.ac.ir/article_7922.html, reached
+% by resolving the DOI): authors, title, journal, volume 46, issue 1, year 2015, pages 9--25.
 @article{WYBAS15,
   author  = {Wijaya, Kristiana and Yulianti, Lyra and Baskoro, Edy Tri and Assiyatun, Hilda and Suprijanto, Djoko},
   title   = {All {R}amsey $(2{K}_2,{C}_4)$-minimal graphs},
   journal = {J. Algorithms Comput.},
   volume  = {46},
+  number  = {1},
   year    = {2015},
-  pages   = {9--25}
+  pages   = {9--25},
+  doi     = {10.22059/jac.2015.7922}
 }
 
-% VERIFIED: authors, title, series Colloq. Math. Soc. Janos Bolyai 37, year
-% 1984, pages 247--264, Theorem 3 (formalization.yaml, STATUS_CHECK.md).
-% \red{[check]}: book title, editors' omission, publisher and address
-% (from memory).
+% VERIFIED 2026-10-17 on zbMATH: "Finite and infinite sets, 6th Hung. Combin. Colloq.,
+% Eger/Hung. 1981, Vol. I, Colloq. Math. Soc. János Bolyai 37, 247-264 (1984)"; the volume
+% record gives the publisher as North-Holland, Amsterdam.  Editors omitted.
 @incollection{EF84,
   author    = {Erd{\H{o}}s, Paul and Faudree, Ralph J.},
   title     = {Size {R}amsey numbers involving matchings},
-  booktitle = {Finite and Infinite Sets ({E}ger, 1981)},
+  booktitle = {Finite and Infinite Sets ({E}ger, 1981), Vol.~I},
   series    = {Colloq. Math. Soc. J{\'a}nos Bolyai},
   volume    = {37},
   publisher = {North-Holland},
@@ -103,10 +106,9 @@
   doi     = {10.1007/BF02018930}
 }
 
-% Not in the audited source list.  Title, authors, book, series, pages,
-% year, publisher confirmed from Crossref (10.1007/978-3-030-79876-5_37,
-% fetched 2026-10-17).  \red{[check]}: LNCS volume 12699 (Crossref record
-% did not show it; from memory).
+% Title, authors, book, series, pages, year, publisher confirmed from Crossref
+% (10.1007/978-3-030-79876-5_37); LNCS volume 12699 confirmed on the Springer chapter page
+% ("Lecture Notes in Computer Science, vol 12699"), 2026-10-17.
 @inproceedings{Lean4,
   author    = {de Moura, Leonardo and Ullrich, Sebastian},
   title     = {The {L}ean 4 theorem prover and programming language},
