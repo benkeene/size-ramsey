@@ -27,7 +27,40 @@ variable {V : Type*} [Fintype V] (G : SimpleGraph V)
 theorem tau4_components :
     tau4 G =
       ∑ C : G.ConnectedComponent, tau4 (compGraph G C) := by
-  sorry
+  apply le_antisymm
+  · choose T hT hcard using fun C : G.ConnectedComponent =>
+      exists_transversal_card_eq_tau4 (compGraph G C)
+    let S : Finset V := Finset.univ.biUnion fun C => (T C).map (Function.Embedding.subtype _)
+    have hS : c4Transversal G S := by
+      intro f hf
+      set C := G.connectedComponentMk (f 0)
+      have hmem : ∀ i, f i ∈ C.supp := by
+        obtain ⟨_, h01, h12, h23, h30⟩ := hf
+        have m0 : f 0 ∈ C.supp := rfl
+        have m1 : f 1 ∈ C.supp := (C.mem_supp_congr_adj h01).mp m0
+        have m2 : f 2 ∈ C.supp := (C.mem_supp_congr_adj h12).mp m1
+        have m3 : f 3 ∈ C.supp := (C.mem_supp_congr_adj h23).mp m2
+        intro i; fin_cases i
+        exacts [m0, m1, m2, m3]
+      obtain ⟨i, hi⟩ := hT C _ (IsC4Map.induce_mk hf hmem)
+      refine ⟨i, Finset.mem_biUnion.mpr ⟨C, Finset.mem_univ _, ?_⟩⟩
+      exact Finset.mem_map.mpr ⟨_, hi, rfl⟩
+    refine (tau4_le_card hS).trans (Finset.card_biUnion_le.trans ?_)
+    exact (Finset.sum_congr rfl fun C _ => by rw [Finset.card_map, hcard C]).le
+  · obtain ⟨T, hT, hcard⟩ := exists_transversal_card_eq_tau4 G
+    have hC : ∀ C : G.ConnectedComponent, tau4 (compGraph G C) ≤
+        (T.filter (fun v => G.connectedComponentMk v = C)).card := by
+      intro C
+      have hTC : c4Transversal (compGraph G C) (T.subtype (· ∈ C.supp)) := by
+        intro f hf
+        obtain ⟨i, hi⟩ := hT _ (IsC4Map.induce_val hf)
+        exact ⟨i, Finset.mem_subtype.mpr hi⟩
+      refine (tau4_le_card hTC).trans (le_of_eq ?_)
+      rw [Finset.card_subtype]
+      rfl
+    rw [← hcard, Finset.card_eq_sum_card_fiberwise (f := G.connectedComponentMk)
+      (t := Finset.univ) (fun _ _ => Finset.mem_coe.mpr (Finset.mem_univ _))]
+    exact Finset.sum_le_sum fun C _ => hC C
 
 theorem edgeCount_components :
     edgeCount G =
