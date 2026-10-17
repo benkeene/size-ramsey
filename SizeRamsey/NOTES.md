@@ -15,10 +15,10 @@ body was written by Claude Opus 5.5 coding agents on `lean/stream-A` / `lean/str
 State as of `a73d95a` (2026-10-17): every development declaration is proved; no stub or
 assembled-from-stubs declaration remains. The only `sorry`s in the project are the five
 deliberate statements of record in `Challenge.lean`. `#print axioms` of the five records in
-`Solution.lean` is `[propext, Classical.choice, Quot.sound]`; `lake env leanchecker` on all 24
-built modules exits 0. Sorry-free Lean development, kernel-replayed locally (per-module
-leanchecker), pending adversary and reviewer passes on the formal development, independent
-statement reconstruction, and the CI comparator; not formally verified.
+`Solution.lean` is `[propext, Classical.choice, Quot.sound]`; `lake env leanchecker` on all 25
+built project modules (literal argv in `CORRESPONDENCE.md` §10) exits 0. Sorry-free Lean
+development, kernel-replayed locally; adversary pass 1 ACCEPT_WITH_FIXES; independent statement
+reconstruction done; reviewer pass and CI comparator pending; not formally verified.
 
 ## Status
 

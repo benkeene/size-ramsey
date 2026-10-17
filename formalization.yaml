@@ -11,7 +11,8 @@ project:
     edges (C4, the 4-wheel, K_{3,3} minus an edge, the octahedron), an avoiding-colouring
     construction from a three-vertex transversal, and an explicit twelve-vertex,
     seventeen-edge host. The development library is sorry-free as of commit a73d95a
-    (2026-10-17); formal review and the CI comparator are pending.
+    (2026-10-17); formal review is in progress (adversary pass 1 ACCEPT_WITH_FIXES) and the CI
+    comparator is pending.
   authors:
     - "Ben Keene"
   license: "Apache-2.0"
@@ -27,9 +28,10 @@ classification:
 
 status:
   scope: >-
-    Sorry-free Lean development, kernel-replayed locally (per-module leanchecker), pending
-    adversary and reviewer passes on the formal development, independent statement
-    reconstruction, and the CI comparator; not formally verified. Informal proof: lab status
+    Sorry-free Lean development, kernel-replayed locally (per-module leanchecker, 25 modules);
+    adversary pass 1 ACCEPT_WITH_FIXES (meaning 0.97, trust 0.98, 2026-10-17; documentation fixes
+    applied); independent statement reconstruction done (CORRESPONDENCE.md section 13); reviewer
+    pass and CI comparator pending; not formally verified. Informal proof: lab status
     VERIFIED as an ordinary theorem (2026-10-16, aiseminar claim_0004). At commit a73d95a
     (2026-10-17) the five statements of record in Challenge.lean (deliberate sorry) are restated
     and proved in Solution.lean, and #print axioms of all five is [propext, Classical.choice,
@@ -52,7 +54,12 @@ fidelity:
     quadrilateral are non-induced (injective vertex maps with the required adjacencies).
     Equality cases are whole-graph isomorphism classes (SimpleGraph.Iso). The connected
     size-Ramsey number is defined as a natural-number infimum over connected graphs on
-    some Fin n; the defining set is proved nonempty by the explicit witness.
+    some Fin n; the defining set is proved nonempty by the explicit witness. The Corollary C
+    record states only the avoiding-colouring conclusion; the three-vertex transversal
+    conclusion of the informal C is proved as SizeRamsey.connected_transversal_le_three but is
+    not a statement of record (TODO(ben): packaging decision). The Theorem D record is one
+    specific host (bridge from vertex 5, degree 3 in its copy, to vertex 6, degree 2 in its
+    copy); the informal D is read with these endpoints, which suffices for E.
 
 sources:
   - title: "Connected size Ramsey numbers of matchings versus a small path or cycle"
@@ -134,6 +141,7 @@ review:
   reviewers:
     - "Ben Keene"
     - "GPT-6 Astra (adversary, reviewer x3, independent prover; 2026-10-16)"
+    - "GPT-6 Astra (formal adversary pass 1: meaning, trust; statement reconstruction; 2026-10-17)"
   notes: >-
     The informal proof passed an adversary pass (objections answered), an independent
     reconstruction from the statement alone, a reviewer pass and two confirming reviews (the
@@ -141,14 +149,22 @@ review:
     retained in aiseminar experiments/local/2026-10-16_ramsey_e1_small_cases. No external human
     review. The Lean development was completed 2026-10-17 (commit a73d95a): lake build exit 0,
     axiom audit [propext, Classical.choice, Quot.sound] for all five records, per-module
-    leanchecker exit 0 on every module, including a whole-project sweep of all 24 built modules
-    (exit 0, 1 min 20 s wall). No adversary or reviewer pass has examined the formal development
-    yet, and the formal statements have not been independently reconstructed; this is not a
-    claim of formal verification.
+    leanchecker exit 0 on every module. Literal replay 2026-10-17 at HEAD a470609 after lake
+    build: "lake env leanchecker SizeRamsey Challenge Solution" followed by the 22 SizeRamsey.*
+    modules with a .olean under .lake/build/lib/lean (AxiomAudit has none), 25 modules in all
+    (argv in CORRESPONDENCE.md section 10); exit 0, empty output, 1:54.79 wall. This replaces an
+    earlier imprecise "all 24 built modules" record. Adversary pass 1 on the formal development
+    (GPT-6 Astra, meaning ACCEPT_WITH_FIXES 0.97, trust ACCEPT_WITH_FIXES 0.98, 2026-10-17) found
+    no mathematical counterexample and no verification-chain escape; its documentation fixes are
+    applied. Independent statement reconstruction (2026-10-17, confidence 0.97, not elaborated by
+    its author) is compared item by item in CORRESPONDENCE.md section 13. Reviewer pass pending;
+    this is not a claim of formal verification.
 
 known_gaps:
   - "CI comparator (Linux, bubblewrap) not run: Challenge/Solution statement and definition agreement is not machine-checked yet."
-  - "No adversary or reviewer pass on the formal development; no independent reconstruction of the formal statements from the informal ones."
+  - "No reviewer pass on the formal development yet (adversary pass 1 done, ACCEPT_WITH_FIXES; statement reconstruction done)."
+  - "Corollary C statement of record covers only the colouring half; the transversal half (SizeRamsey.connected_transversal_le_three) is proved but not recorded (TODO(ben))."
+  - "AxiomAudit.lean prints axioms without failing on sorryAx, and leanchecker accepts sorryAx-dependent declarations; their outputs must be inspected."
   - "leanchecker --fresh, NanoDa and con-ron not run."
   - "The two 2025 computational papers by Dzido were seen only in abstract (scope: 3K2 and 2K2 versus cycles)."
   - "Novelty of the equality classification B is unestablished (literature audit 2026-10-16, confidence 0.75)."
@@ -164,7 +180,7 @@ alignment:
       lean: "SizeRamsey.four_mul_tau4_le_edgeCount"
     - source: "Theorem B: connected equality cases through 16 edges are C4, W5, K33-e, K222"
       lean: "SizeRamsey.equality_classification"
-    - source: "Corollary C: every connected graph with at most 16 edges has an avoiding colouring"
+    - source: "Corollary C (colouring half only): every connected graph with at most 16 edges has an avoiding colouring"
       lean: "SizeRamsey.avoiding_coloring_le_sixteen"
     - source: "Theorem D: the explicit 17-edge graph is connected and arrows (4K2, C4)"
       lean: "SizeRamsey.F17_spec"
