@@ -175,6 +175,9 @@ review:
     comparison/axiom check, and recommends FORMALLY_VERIFIED for A, B, C (two declarations),
     fixed-host D and E; its documentation fixes are applied. The lab status promotion has not
     been made; this is not yet a claim of formal verification.
+    Lab status (aiseminar claim_0004 STATUS.yaml, 2026-10-17, commit f9cd162): FORMALLY_VERIFIED with
+    scope A, B, C via two declarations, fixed-host D, E; endpoint-universal D not claimed. CI comparator,
+    leanchecker --fresh and NanoDa/con-ron remain unrun (additional assurance, not required by AGENTS.md §3).
 
 known_gaps:
   - "The full sandboxed CI comparator/export pipeline has not run; existing elaborated declarations passed recursive statement/definition comparison and axiom checking."
