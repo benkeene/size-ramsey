@@ -87,6 +87,9 @@ theorem avoiding_coloring_of_transversal {V : Type*}
     (hS : c4Transversal F S) (hcard : S.card ≤ 3) :
     ∃ R : SimpleGraph V,
       R ≤ F ∧ ¬ HasMatching4 R ∧ ¬ HasC4 (F \ R) := by
-  sorry
+  refine ⟨incidentRed F S, fun u v h => ((Plan.incidentRed_adj F S u v).1 h).1,
+    fun hm => ?_, Plan.transversal_no_blue_square F S hS⟩
+  have := Plan.matching4_incident_card F S hm
+  omega
 
 end SizeRamsey
