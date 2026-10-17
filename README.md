@@ -93,6 +93,6 @@ default kernel accepted the solution), after earlier passes at `38bd345` (five r
 applied); they saw five records, and the sixth (`SizeRamsey.connected_transversal_le_three`, added
 at `cc2aec2`) is a one-line call into a library lemma they covered. Remaining before submitting,
 the owner's decisions: repository visibility (currently private; the registry must be able to
-clone) and a human read of `CORRESPONDENCE.md`. `leanchecker --fresh` has not run (optional; the
+clone). Ben Keene read `CORRESPONDENCE.md` in full on 2026-10-17. `leanchecker --fresh` has not run (optional; the
 registry's comparator performs independent replay). Submit the full SHA of the main head at
 submission time. See `status.scope` and `known_gaps` in `formalization.yaml`.

@@ -58,7 +58,7 @@ status:
     comparator then passed with six records at 46bf2d0 (2026-10-17, GitHub Actions run
     39034260971: con-ron accepted 8175 declarations with --verified, nanoda and the Lean default
     kernel accepted; "Your solution is okay!"). Remaining before submission: repository
-    visibility (currently private), a human read of CORRESPONDENCE.md.
+    visibility (currently private). CORRESPONDENCE.md was read in full by Ben Keene on 2026-10-17.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: ["propext", "Classical.choice", "Quot.sound"]
@@ -167,7 +167,7 @@ automation:
 review:
   status: self-assessed
   reviewers:
-    - "Ben Keene"
+    - "Ben Keene (read CORRESPONDENCE.md in full, 2026-10-17)"
     - "GPT-6 Astra (adversary, reviewer x3, independent prover; 2026-10-16)"
     - "GPT-6 Astra (formal adversary pass 1: meaning, trust; statement reconstruction; 2026-10-17)"
     - "GPT-6 Astra (formal reviewer pass 1, ACCEPT_WITH_FIXES 0.98; 2026-10-17)"
